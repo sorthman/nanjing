@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3f7b0c87-0545-4a24-ba9b-92b6d8631976" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="pzmall" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="C:\Program Files\Apache\maven-repository" />
+        <option name="mavenHome" value="C:/Program Files/Apache/maven" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1R01JhGLQoO9aMuSvROkrjQwbAO" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="ToolWindowMaven.ShowToolbar" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="spring.boot" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.linlinjava.litemall.db.service" />
+      <recent name="org.linlinjava.litemall.db.util" />
+      <recent name="org.linlinjava.litemall.wx.config" />
+      <recent name="org.linlinjava.litemall.admin.web" />
+      <recent name="org.linlinjava.litemall.admin.vo" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Maven.pzmall-admin-api [spring-boot:run]">
+    <configuration name="AdminTest" type="JUnit" factoryName="JUnit">
+      <module name="test2" />
+      <option name="PACKAGE_NAME" value="org.linlinjava.litemall.admin" />
+      <option name="MAIN_CLASS_NAME" value="org.linlinjava.litemall.admin.AdminConfigTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in test2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test2" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="org.linlinjava.litemall.admin in test2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.linlinjava.litemall.admin.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.linlinjava.litemall.admin" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pzmall-admin-api [spring-boot:run]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="spring-boot:run" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/pzmall-admin-api" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration name="pzmall-wx-api [spring-boot:run]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="spring-boot:run" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/pzmall-wx-api" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.AdminTest" />
+      <item itemvalue="JUnit.All in test2" />
+      <item itemvalue="JUnit.org.linlinjava.litemall.admin in test2" />
+      <item itemvalue="Maven.pzmall-wx-api [spring-boot:run]" />
+      <item itemvalue="Maven.pzmall-admin-api [spring-boot:run]" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.org.linlinjava.litemall.admin in test2" />
+        <item itemvalue="JUnit.All in test2" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3f7b0c87-0545-4a24-ba9b-92b6d8631976" name="Default Changelist" comment="" />
+      <created>1568789128672</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1568789128672</updated>
+      <workItem from="1568789132301" duration="68000" />
+      <workItem from="1568789239237" duration="33000" />
+      <workItem from="1568789293513" duration="468000" />
+      <workItem from="1568789893557" duration="875000" />
+      <workItem from="1568791554569" duration="8295000" />
+      <workItem from="1569229732155" duration="4428000" />
+      <workItem from="1569305031908" duration="10632000" />
+      <workItem from="1569376357879" duration="10524000" />
+      <workItem from="1569460299821" duration="21705000" />
+      <workItem from="1569742088397" duration="3764000" />
+      <workItem from="1569807470667" duration="9529000" />
+      <workItem from="1570497611034" duration="14472000" />
+      <workItem from="1570526185603" duration="7112000" />
+      <workItem from="1570672088103" duration="36378000" />
+      <workItem from="1570868444876" duration="16000" />
+      <workItem from="1570868492033" duration="25000" />
+      <workItem from="1570868535821" duration="238000" />
+      <workItem from="1570868792780" duration="3791000" />
+      <workItem from="1571015182650" duration="6963000" />
+      <workItem from="1572337646005" duration="199000" />
+      <workItem from="1572337865812" duration="4093000" />
+      <workItem from="1572349339531" duration="3203000" />
+      <workItem from="1572352765965" duration="30310000" />
+      <workItem from="1572830661726" duration="79504000" />
+      <workItem from="1573434279853" duration="21305000" />
+      <workItem from="1573550679761" duration="31749000" />
+      <workItem from="1573780949863" duration="16964000" />
+      <workItem from="1574041633414" duration="669000" />
+      <workItem from="1574215207807" duration="42428000" />
+      <workItem from="1574645277860" duration="57229000" />
+      <workItem from="1575250413160" duration="40196000" />
+      <workItem from="1575854023557" duration="5743000" />
+      <workItem from="1575871878131" duration="14449000" />
+      <workItem from="1575982214401" duration="1753000" />
+      <workItem from="1576114967465" duration="21343000" />
+      <workItem from="1576458795018" duration="884000" />
+      <workItem from="1576460603271" duration="36255000" />
+      <workItem from="1576718501573" duration="6524000" />
+      <workItem from="1576916278647" duration="1211000" />
+      <workItem from="1577063655653" duration="1572000" />
+      <workItem from="1577065464039" duration="14978000" />
+      <workItem from="1577236012724" duration="15271000" />
+      <workItem from="1577412939370" duration="4141000" />
+      <workItem from="1577431872605" duration="7376000" />
+      <workItem from="1577756721610" duration="1633000" />
+      <workItem from="1577949924920" duration="1857000" />
+      <workItem from="1578013850664" duration="5435000" />
+      <workItem from="1578274185713" duration="1486000" />
+      <workItem from="1578275994194" duration="31298000" />
+      <workItem from="1578640290245" duration="820000" />
+      <workItem from="1578643653015" duration="682000" />
+      <workItem from="1578644624311" duration="1793000" />
+      <workItem from="1578708357685" duration="3244000" />
+      <workItem from="1578879543024" duration="4369000" />
+      <workItem from="1579053067067" duration="12386000" />
+      <workItem from="1579140806515" duration="1941000" />
+      <workItem from="1579396421593" duration="7082000" />
+      <workItem from="1580265023223" duration="7010000" />
+      <workItem from="1580278697873" duration="9244000" />
+      <workItem from="1580346720100" duration="2719000" />
+      <workItem from="1580534154812" duration="3453000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

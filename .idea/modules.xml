@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pzmall-core/src/main/main.iml" filepath="$PROJECT_DIR$/pzmall-core/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-admin-api/src/main/main1.iml" filepath="$PROJECT_DIR$/pzmall-admin-api/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-wx-api/src/main/main2.iml" filepath="$PROJECT_DIR$/pzmall-wx-api/src/main/main2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-db/src/main/main3.iml" filepath="$PROJECT_DIR$/pzmall-db/src/main/main3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall.iml" filepath="$PROJECT_DIR$/pzmall.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-admin-api/pzmall-admin-api.iml" filepath="$PROJECT_DIR$/pzmall-admin-api/pzmall-admin-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-core/pzmall-core.iml" filepath="$PROJECT_DIR$/pzmall-core/pzmall-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-db/pzmall-db.iml" filepath="$PROJECT_DIR$/pzmall-db/pzmall-db.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-wx-api/pzmall-wx-api.iml" filepath="$PROJECT_DIR$/pzmall-wx-api/pzmall-wx-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-core/src/test/test.iml" filepath="$PROJECT_DIR$/pzmall-core/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-wx-api/src/test/test1.iml" filepath="$PROJECT_DIR$/pzmall-wx-api/src/test/test1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-admin-api/src/test/test2.iml" filepath="$PROJECT_DIR$/pzmall-admin-api/src/test/test2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pzmall-db/src/test/test3.iml" filepath="$PROJECT_DIR$/pzmall-db/src/test/test3.iml" />
+    </modules>
+  </component>
+</project>

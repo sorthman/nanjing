@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="pzmall-core" />
+        <module name="pzmall-wx-api" />
+        <module name="pzmall-db" />
+        <module name="pzmall-admin-api" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="pzmall" target="1.8" />
+      <module name="pzmall-admin-api" target="1.8" />
+      <module name="pzmall-core" target="1.8" />
+      <module name="pzmall-db" target="1.8" />
+      <module name="pzmall-wx-api" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="pzmall-admin-api" options="-parameters" />
+      <module name="pzmall-core" options="-parameters" />
+      <module name="pzmall-db" options="-parameters" />
+      <module name="pzmall-wx-api" options="-parameters" />
+    </option>
+  </component>
+</project>

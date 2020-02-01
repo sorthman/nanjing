@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: db, core, admin
+  messages:
+    encoding: UTF-8
+  servlet:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2000MB
+
+server:
+  port: 8082
+  session:
+    timeout: 86400
+
+logging:
+  level:
+    root:  ERROR
+    org.springframework:  ERROR
+    org.mybatis:  ERROR
+    org.linlinjava.litemall.admin:  DEBUG
+    org.linlinjava.litemall:  ERROR

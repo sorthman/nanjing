@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pzmall-wx-api-1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/pzmall-wx-api/target/pzmall-wx-api-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
