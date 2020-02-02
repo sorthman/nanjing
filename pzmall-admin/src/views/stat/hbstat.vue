@@ -87,7 +87,7 @@
 <script>
 import { statWH } from '@/api/stats'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-// import { formatDate } from '@/utils/time.js'
+import { formatDate } from '@/utils/time.js'
 export default {
   name: 'HBStat',
   components: { Pagination },
@@ -123,9 +123,17 @@ export default {
     getList() {
       this.listLoading = true
       this.list = []
-      this.listQuery.area = this.adminarea
-      this.listQuery.stime = this.time + ' 00:00:00'
-      this.listQuery.etime = this.time + ' 23:59:59'
+      if (this.time === '') {
+        var date = new Date()
+        var fdate = formatDate(date, 'yyyy-MM-dd')
+        this.listQuery.stime = fdate + ' 00:00:00'
+        this.listQuery.etime = fdate + ' 23:59:59'
+        this.time = fdate
+      } else {
+        this.listQuery.stime = this.time + ' 00:00:00'
+        this.listQuery.etime = this.time + ' 23:59:59'
+      }
+      this.listQuery.area = localStorage.getItem('adminarea')
       statWH(this.listQuery)
         .then(response => {
           this.list.push({ ...response.data.Data,
