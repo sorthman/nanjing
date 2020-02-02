@@ -1,7 +1,15 @@
 <template>
   <div class="app-container">
     <!-- 查询和其他操作 -->
-
+    <div class="filter-container">
+      <el-button
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="getList"
+      >刷新</el-button
+      >
+    </div>
     <!-- 查询结果 -->
     <el-table
       v-loading="listLoading"

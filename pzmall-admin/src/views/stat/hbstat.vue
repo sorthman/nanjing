@@ -18,6 +18,13 @@
         @click="handleFilter"
       >查询</el-button
       >
+      <el-button
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >导出</el-button
+      >
     </div>
 
     <!-- 查询结果 -->
@@ -51,11 +58,7 @@
               width="70"
               label="超过14天观察期解除管理累计人数"
             />
-            <el-table-column
-              prop="followSum"
-              width="70"
-              label="正在排查联系、追踪、联系等"
-            />
+            <el-table-column prop="followSum" width="70" label="待确认" />
           </el-table-column>
           <el-table-column :label="title3">
             <el-table-column prop="notinareaSum" width="70" label="小计" />
@@ -152,6 +155,24 @@ export default {
     },
     handleFilter() {
       this.getList()
+    },
+    handleDownload() {
+      let str = ''
+      for (let i = 0; i < document.getElementsByTagName('table').length; i++) {
+        str = str + document.getElementsByTagName('table')[i].outerHTML
+      }
+      str = str.replace('border="0"', 'border="1"').replace('border="0"', 'border="1"')
+      var html = "<html><head><meta charset='utf-8' /></head><body>" + str + '<style>table,tr,td{border: 1px solid gray} .el-table__row{border: 1px solid gray}</style></body></html>'
+      console.log(html)
+      // 实例化一个Blob对象，其构造函数的第一个参数是包含文件内容的数组，第二个参数是包含文件类型属性的对象
+      var blob = new Blob([html], { type: 'application/vnd.ms-excel' })
+      const link = document.createElement('a')
+      // 利用URL.createObjectURL()方法为a元素生成blob URL
+      link.href = URL.createObjectURL(blob)
+      // 设置文件名
+      link.download = '湖北' + this.time + '数据汇总.xls'
+      link.click()
+      URL.revokeObjectURL(blob)
     }
   }
 }
