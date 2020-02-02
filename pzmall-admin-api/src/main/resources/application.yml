@@ -20,3 +20,4 @@ logging:
     org.mybatis:  ERROR
     org.linlinjava.litemall.admin:  DEBUG
     org.linlinjava.litemall:  ERROR
+    org.linlinjava.litemall.dao:  DEBUG

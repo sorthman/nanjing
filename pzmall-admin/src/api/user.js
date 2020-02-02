@@ -8,6 +8,22 @@ export function fetchList(query) {
   })
 }
 
+export function listSign(query) {
+  return request({
+    url: '/user/listsign',
+    method: 'get',
+    params: query
+  })
+}
+
+export function updateUser(data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
+  })
+}
+
 export function download(query) {
   return request({
     url: '/user/download',

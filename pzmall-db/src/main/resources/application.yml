@@ -8,5 +8,6 @@ logging:
   level:
     root:  ERROR
     org.springframework:  ERROR
-    org.mybatis:  ERROR
+    org.mybatis:  INFO
     org.linlinjava.litemall.db:  DEBUG
+    org.linlinjava.litemall.dao:  DEBUG

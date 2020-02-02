@@ -94,10 +94,63 @@ export const asyncRouterMap = [
       {
         path: 'user',
         component: () => import('@/views/user/user'),
+        name: 'import',
+        meta: {
+          perms: ['GET /adminapi/user/list'],
+          title: '数据导入',
+          noCache: true
+        }
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/user/user'),
         name: 'user',
         meta: {
           perms: ['GET /adminapi/user/list'],
-          title: '登记列表',
+          title: '用户查询',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/stat',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'sysManage',
+    meta: {
+      title: '统计报表',
+      icon: 'config'
+    },
+    children: [
+      {
+        path: 'admin',
+        component: () => import('@/views/sys/admin'),
+        name: 'admin',
+        meta: {
+          perms: ['GET /adminapi/admin/list', 'POST /adminapi/admin/create', 'POST /adminapi/admin/update', 'POST /adminapi/admin/delete'],
+          title: '数据汇总',
+          noCache: true
+        }
+      },
+      {
+        path: 'log',
+        component: () => import('@/views/sys/log'),
+        name: 'log',
+        meta: {
+          perms: ['GET /adminapi/log/list'],
+          title: '武汉统计报表',
+          noCache: true
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/sys/role'),
+        name: 'role',
+        meta: {
+          perms: ['GET /adminapi/role/list', 'POST /adminapi/role/create', 'POST /adminapi/role/update', 'POST /adminapi/role/delete', 'GET /adminapi/role/permissions', 'POST /adminapi/role/permissions'],
+          title: '湖北统计报表',
           noCache: true
         }
       }

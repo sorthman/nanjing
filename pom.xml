@@ -22,7 +22,6 @@
     <modules>
         <module>pzmall-core</module>
         <module>pzmall-db</module>
-        <module>pzmall-wx-api</module>
         <module>pzmall-admin-api</module>
     </modules>
 
@@ -38,11 +37,7 @@
                 <artifactId>pzmall-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.linlinjava</groupId>
-                <artifactId>pzmall-wx-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.linlinjava</groupId>
                 <artifactId>pzmall-admin-api</artifactId>

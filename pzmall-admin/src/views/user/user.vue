@@ -2,20 +2,22 @@
   <div class="app-container">
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      年龄区间：<el-input
+      年龄区间：
+      <el-input
         v-model="listQuery.sage"
         clearable
         class="filter-item"
-        style="width: 120px;"
+        style="width: 150px;"
         placeholder="请输入开始年龄"
       />~
       <el-input
         v-model="listQuery.eage"
         clearable
         class="filter-item"
-        style="width: 120px;"
+        style="width: 150px;"
         placeholder="请输入结束年龄"
-      /><br/>
+      />
+      <br />
       <el-input
         v-model="listQuery.username"
         clearable
@@ -59,7 +61,7 @@
         v-model="listQuery.community"
         clearable
         class="filter-item"
-        style="width: 150px;"
+        style="width: 120px;"
         placeholder="请输入社区"
       />
       <!-- <el-select
@@ -79,17 +81,25 @@
         placeholder="请选择社区"
       >
         <el-option v-for="(key, value) in sexMap" :key="key" :label="key" :value="value" />
-      </el-select> -->
-
-      <br/>
+      </el-select>-->
 
       <el-date-picker
         v-model="listQuery.arrivedate"
         type="date"
-        style="width: 150px"
+        style="width: 120px"
         class="filter-item"
-        placeholder="来宁时间">
-      </el-date-picker>
+        value-format="yyyy-MM-ddTHH:mm:ss"
+        placeholder="来宁时间"
+      ></el-date-picker>
+      <br />
+
+      <!-- <el-input
+        v-model="listQuery.addsource"
+        clearable
+        class="filter-item"
+        style="width: 150px;"
+        placeholder="数据来源"
+      />-->
 
       <el-select
         v-model="listQuery.addsource"
@@ -138,24 +148,25 @@
         <el-option v-for="(key, value) in healthMap" :key="key" :label="key" :value="value" />
       </el-select>
       <el-select
+        v-model="listQuery.usertype"
+        clearable
+        style="width: 120px"
+        class="filter-item"
+        placeholder="用户类型"
+      >
+        <el-option v-for="(key, value) in userTypeMap" :key="key" :label="key" :value="value" />
+      </el-select>
+      <el-select
         v-model="listQuery.ifwh"
         clearable
         style="width: 120px"
         class="filter-item"
-        placeholder="去过武汉"
+        placeholder="是否去过"
       >
         <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
       </el-select>
-      <br/>
-      <el-select
-        v-model="listQuery.ifhb"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="去过湖北"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
+      <br />
+
       <el-select
         v-model="listQuery.ifleavenj"
         clearable
@@ -194,7 +205,13 @@
       </el-select>
 
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
-      <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
+      <el-button
+        :loading="downloadLoading"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >导出</el-button>
     </div>
 
     <!-- 查询结果 -->
@@ -213,13 +230,31 @@
       <el-table-column min-width="120px" align="center" label="手机号" prop="phone" />
       <el-table-column align="center" label="性别" prop="sex" />
       <el-table-column align="center" label="年龄" prop="age" />
+      <el-table-column min-width="200px" align="center" label="身份证号" prop="idcard" />
 
-      <el-table-column min-width="120px" align="center" label="身份证号" prop="idcard" />
       <el-table-column align="center" label="是否在行政区" prop="ifstay" />
       <el-table-column align="center" label="是否去过武汉" prop="ifwh" />
-      <el-table-column align="center" label="是否去过湖北" prop="ifhb" />
       <el-table-column align="center" label="是否离开南京" prop="ifleavenj" />
+      <el-table-column align="center" label="是否正在管理" prop="ismanage" />
+      <el-table-column align="center" label="是否超过14天" prop="ifover" />
+      <el-table-column align="center" label="是否追访不到" prop="iflose" />
+      <el-table-column align="center" label="追访不到原因" prop="loseinfo" />
+      <el-table-column align="center" label="街道" prop="street" />
+      <el-table-column align="center" label="社区" prop="njcommunity" />
 
+      <el-table-column align="center" label="常驻地址" min-width="300px" prop="liveaddress" />
+      <el-table-column align="center" label="停留武汉时间" prop="whtime" />
+      <el-table-column align="center" label="来宁时间" prop="arrivedate" />
+      <el-table-column align="center" label="目前症状" prop="healthinfo" />
+      <el-table-column align="center" label="就诊情况" prop="docinfo" />
+      <el-table-column align="center" label="数据来源" prop="addsource" />
+      <el-table-column align="center" label="备注" min-width="300px" prop="remark" />
+
+      <el-table-column align="center" label="街道领导" prop="jdname" />
+      <el-table-column align="center" label="街道干部" prop="gbname" />
+      <el-table-column align="center" label="社工" prop="sgname" />
+      <el-table-column align="center" label="社区民警" prop="mjname" />
+      <el-table-column align="center" label="医疗卫生员" prop="ylname" />
       <!-- <el-table-column align="center" label="目前居住区域" prop="currentaddress" />
       <el-table-column align="center" label="武汉居住区域" prop="whaddress" />
 
@@ -237,21 +272,18 @@
       <el-table-column align="center" label="是否咳嗽" prop="ifkesou" />
       <el-table-column align="center" label="是否接触发热人员" prop="ifcontactHot" />
       <el-table-column align="center" label="是否接触感染人员" prop="ifcontactSars" />
-      <el-table-column min-width="200px" align="center" label="健康信息" prop="healthinfo" /> -->
+      <el-table-column min-width="200px" align="center" label="健康信息" prop="healthinfo" />-->
 
       <el-table-column
         fixed="right"
         align="center"
         label="操作"
-        width="200"
+        width="250"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            @click="handleUpdate(scope.row)"
-          >详情查看</el-button>
-          
+          <el-button size="small" type="primary" @click="handleDetail(scope.row)">详情查看</el-button>
+          <el-button size="small" type="primary" @click="handleUpdate(scope.row)">编辑信息</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -263,11 +295,86 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
+
+    <!-- 添加或修改对话框 -->
+    <el-dialog width="70%" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="dataForm"
+        status-icon
+        label-position="left"
+        label-width="100px"
+        style="width: 600px; margin-left:50px;"
+      >
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="dataForm.name" />
+        </el-form-item>
+        <el-form-item label="身份证" prop="idcard">
+          <el-input v-model="dataForm.idcard" />
+        </el-form-item>
+        <el-form-item label="联系方式" prop="phone">
+          <el-input v-model="dataForm.phone" />
+        </el-form-item>
+        <el-form-item label="常驻地址" prop="liveaddress">
+          <el-input v-model="dataForm.liveaddress" />
+        </el-form-item>
+        <el-form-item label="停留武汉时间" prop="whtime">
+          <el-input v-model="dataForm.whtime" />
+        </el-form-item>
+        <el-form-item label="来宁时间" prop="arrivedate">
+          <el-date-picker
+            v-model="dataForm.arrivedate"
+            type="date"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="来宁时间"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="街道领导信息" prop="jdname">
+          <el-input v-model="dataForm.jdname" />
+        </el-form-item>
+        <el-form-item label="街道干部信息" prop="gbname">
+          <el-input v-model="dataForm.gbname" />
+        </el-form-item>
+        <el-form-item label="社工信息" prop="sgname">
+          <el-input v-model="dataForm.sgname" />
+        </el-form-item>
+        <el-form-item label="社区民警信息" prop="mjname">
+          <el-input v-model="dataForm.mjname" />
+        </el-form-item>
+        <el-form-item label="医疗卫生员信息" prop="ylname">
+          <el-input v-model="dataForm.ylname" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
+        <el-button v-else type="primary" @click="updateData">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog width="80%" title="详情查看" :visible.sync="dialogSignFormVisible">
+      <el-card class="box-card">
+        <h3>{{detailModel.name}} {{detailModel.sex}} {{detailModel.age}}</h3>
+        <br />
+        所在街道：{{detailModel.name}}
+        <br />
+        所在社区：{{detailModel.name}}
+        <br />
+        详细地址：{{detailModel.name}}
+        <br />
+      </el-card>
+      <el-card class="box-card" v-for="item in signlist" :key="item.id">
+        人在不在区域内：
+        
+      </el-card>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList,download } from "@/api/user";
+import { fetchList, download, listSign, updateUser } from "@/api/user";
 import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { formatDate } from "@/utils/time.js";
 
@@ -284,7 +391,14 @@ const statusMap = {
 const sourceMap = {
   自查: "自查",
   公安: "公安",
-  教育: "教育"
+  教育: "教育",
+  漫游: "漫游"
+};
+
+const userTypeMap = {
+  自查: "武汉",
+  公安: "湖北",
+  教育: "温州"
 };
 
 const healthMap = {
@@ -308,11 +422,13 @@ export default {
   data() {
     return {
       sexMap: sexMap,
-      statusMap:statusMap,
-      sourceMap:sourceMap,
-      healthMap:healthMap,
+      statusMap: statusMap,
+      sourceMap: sourceMap,
+      healthMap: healthMap,
+      userTypeMap: userTypeMap,
       list: null,
-      alllist:null,
+      alllist: null,
+      signlist: null,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -323,14 +439,24 @@ export default {
         sort: "id",
         order: "desc"
       },
-      listQueryAll: {
-        page: 1,
-        limit: 100000,
-        username: undefined,
-        mobile: undefined,
-        sort: "id",
-        order: "desc"
+      dataForm: {
+        id: undefined,
+        name: ""
       },
+      detailModel: {
+        id: undefined,
+        name: ""
+      },
+      textMap: {
+        update: "编辑",
+        create: "创建"
+      },
+      dialogFormVisible: false,
+      dialogStatus: "",
+      rules: {
+        name: [{ required: true, message: "姓名不能为空", trigger: "blur" }]
+      },
+      dialogSignFormVisible: false,
       downloadLoading: false,
       genderDic: ["未知", "男", "女"],
       levelDic: ["普通用户", "VIP用户", "高级VIP用户"],
@@ -357,8 +483,9 @@ export default {
         });
     },
     getListAll() {
-      
-      fetchList(this.listQueryAll)
+      let listQueryAll = Object.assign({}, this.listQuery);
+      listQueryAll.limit = 100000;
+      fetchList(listQueryAll)
         .then(response => {
           this.alllist = response.data.data.list;
         })
@@ -366,21 +493,139 @@ export default {
           this.alllist = [];
         });
     },
+    getSignList(id) {
+      let query = {
+        uid: id,
+        page: 1,
+        limit: 100,
+        sort: "id",
+        order: "desc"
+      };
+      listSign(query)
+        .then(response => {
+          this.signlist = response.data.data;
+        })
+        .catch(() => {
+          this.signlist = [];
+        });
+    },
     handleFilter() {
       this.listQuery.page = 1;
       this.getList();
+      this.getListAll();
+    },
+    handleDetail(row) {
+      this.getSignList(row.id);
+      this.dialogSignFormVisible = true;
+      this.detailModel = Object.assign({}, row);
+    },
+    handleUpdate(row) {
+      this.dataForm = Object.assign({}, row);
+      this.dialogStatus = "update";
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs["dataForm"].clearValidate();
+      });
+    },
+    updateData() {
+      this.$refs["dataForm"].validate(valid => {
+        if (valid) {
+          updateUser(this.dataForm)
+            .then(() => {
+              for (const v of this.list) {
+                if (v.id === this.dataForm.id) {
+                  const index = this.list.indexOf(v);
+                  this.list.splice(index, 1, this.dataForm);
+                  break;
+                }
+              }
+              this.dialogFormVisible = false;
+              this.$notify.success({
+                title: "成功",
+                message: "更新成功"
+              });
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: "失败",
+                message: response.data.msg
+              });
+            });
+        }
+      });
     },
     handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ["编号", "姓名", "身份证", "手机号", "民族", "性别", "生日", "目前居住地", "是否武汉", "交通方式", "交通班次", "出发地", "目的地", "离开日期", "武汉居住地", "停靠地点", "当前体温", "健康信息", "是否发热", "是否咳嗽", "是否接触发热人员", "是否接触感染人员", "同行人员姓名", "同行人员电话", "登记时间", "登记方式", "所属社区", "GPS定位信息", "登记账号"]
-        const filterVal = ['id', 'name', 'idcard', 'phone', 'nation', 'sex', 'birthday', 'currentaddress', 'ifwh','traffictype','trafficinfo','startaddress','endaddress','leavedate','whaddress','stopaddress','temperature','healthinfo','ifhot','ifkesou','ifcontactHot','ifcontactSars','contactName','contactPhone','addtime','addsource','njcommunity','gpsaddrrss','addaccount']
-        excel.export_json_to_excel2(tHeader, this.alllist, filterVal, '登记列表')
-        this.downloadLoading = false
-      })
+      this.downloadLoading = true;
+      import("@/vendor/Export2Excel").then(excel => {
+        const tHeader = [
+          "编号",
+          "姓名",
+          "性别",
+          "年龄",
+          "身份证",
+          "人在不在区内",
+          "是否去过武汉",
+          "是否离宁",
+          "当日正在管理",
+          "是否超过14天",
+          "是否追访不到",
+          "追访不到原因",
+          "街道",
+          "社区",
+          "户籍或常住地址",
+          "停留武汉时间",
+          "来宁时间",
+          "目前症状",
+          "就诊情况",
+          "联系方式",
+          "数据来源",
+          "备注",
+          "街道领导",
+          "街道干部",
+          "社工",
+          "社区民警",
+          "医疗卫生员"
+        ];
+        const filterVal = [
+          "id",
+          "name",
+          "sex",
+          "age",
+          "idcard",
+          "ifstay",
+          "ifwh",
+          "ifleavenj",
+          "ismanage",
+          "ifover",
+          "iflose",
+          "loseinfo",
+          "street",
+          "njcommunity",
+          "liveaddress",
+          "whtime",
+          "arrivedate",
+          "healthinfo",
+          "docinfo",
+          "phone",
+          "addsource",
+          "remark",
+          "jdname",
+          "gbname",
+          "sgname",
+          "mjname",
+          "ylname"
+        ];
+        excel.export_json_to_excel2(
+          tHeader,
+          this.alllist,
+          filterVal,
+          "登记列表"
+        );
+        this.downloadLoading = false;
+      });
     }
     // handleDownload() {
-      
+
     //   this.downloadLoading = true;
     //   download(this.listQuery).then(res => {
     //     this.downloadLoading = false;

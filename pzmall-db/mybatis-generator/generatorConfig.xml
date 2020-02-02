@@ -91,7 +91,19 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
+        <table tableName="usercheck">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
         <table tableName="njaccount">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="usertranster">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="userimportinfo">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

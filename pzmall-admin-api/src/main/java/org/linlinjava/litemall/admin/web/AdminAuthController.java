@@ -175,6 +175,7 @@ public class AdminAuthController {
         Map<String, Object> adminInfo = new HashMap<String, Object>();
         adminInfo.put("nickName", admin.getUsername());
         adminInfo.put("avatar", admin.getAvatar());
+        adminInfo.put("area", admin.getArea());
 
         Map<Object, Object> result = new HashMap<Object, Object>();
         result.put("token", currentUser.getSession().getId());

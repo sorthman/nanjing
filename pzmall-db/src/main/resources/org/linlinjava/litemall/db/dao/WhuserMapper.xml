@@ -68,6 +68,13 @@
     <result column="usertype" jdbcType="VARCHAR" property="usertype" />
     <result column="uphone" jdbcType="VARCHAR" property="uphone" />
     <result column="phoneremark" jdbcType="VARCHAR" property="phoneremark" />
+    <result column="signcount" jdbcType="INTEGER" property="signcount" />
+    <result column="lastsigntime" jdbcType="TIMESTAMP" property="lastsigntime" />
+    <result column="ismanage" jdbcType="VARCHAR" property="ismanage" />
+    <result column="endsigntime" jdbcType="TIMESTAMP" property="endsigntime" />
+    <result column="lefttime" jdbcType="INTEGER" property="lefttime" />
+    <result column="lefttimemodify" jdbcType="TIMESTAMP" property="lefttimemodify" />
+    <result column="modifytime" jdbcType="TIMESTAMP" property="modifytime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -147,7 +154,8 @@
     liveaddress, ifhb, whtime, arrivedate, jdname, jdphone, gbname, gbphone, sgname, 
     sgphone, mjname, mjphone, ylname, ylphone, remark, ifstay, ifleavenj, iflose, loseinfo, 
     docinfo, ifsafe, datatype, iftransferarea, iftransferstreet, jiguan, livetype, usertype, 
-    uphone, phoneremark
+    uphone, phoneremark, signcount, lastsigntime, ismanage, endsigntime, lefttime, lefttimemodify, 
+    modifytime
   </sql>
   <select id="selectByExample" parameterType="org.linlinjava.litemall.db.domain.WhuserExample" resultMap="BaseResultMap">
     <!--
@@ -269,7 +277,9 @@
       docinfo, ifsafe, datatype, 
       iftransferarea, iftransferstreet, jiguan, 
       livetype, usertype, uphone, 
-      phoneremark)
+      phoneremark, signcount, lastsigntime, 
+      ismanage, endsigntime, lefttime, 
+      lefttimemodify, modifytime)
     values (#{name,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{nation,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
       #{currentaddress,jdbcType=VARCHAR}, #{ifwh,jdbcType=VARCHAR}, #{traffictype,jdbcType=VARCHAR}, 
@@ -290,7 +300,9 @@
       #{docinfo,jdbcType=VARCHAR}, #{ifsafe,jdbcType=VARCHAR}, #{datatype,jdbcType=VARCHAR}, 
       #{iftransferarea,jdbcType=VARCHAR}, #{iftransferstreet,jdbcType=VARCHAR}, #{jiguan,jdbcType=VARCHAR}, 
       #{livetype,jdbcType=VARCHAR}, #{usertype,jdbcType=VARCHAR}, #{uphone,jdbcType=VARCHAR}, 
-      #{phoneremark,jdbcType=VARCHAR})
+      #{phoneremark,jdbcType=VARCHAR}, #{signcount,jdbcType=INTEGER}, #{lastsigntime,jdbcType=TIMESTAMP}, 
+      #{ismanage,jdbcType=VARCHAR}, #{endsigntime,jdbcType=TIMESTAMP}, #{lefttime,jdbcType=INTEGER}, 
+      #{lefttimemodify,jdbcType=TIMESTAMP}, #{modifytime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.Whuser">
     <!--
@@ -485,6 +497,27 @@
       <if test="phoneremark != null">
         phoneremark,
       </if>
+      <if test="signcount != null">
+        signcount,
+      </if>
+      <if test="lastsigntime != null">
+        lastsigntime,
+      </if>
+      <if test="ismanage != null">
+        ismanage,
+      </if>
+      <if test="endsigntime != null">
+        endsigntime,
+      </if>
+      <if test="lefttime != null">
+        lefttime,
+      </if>
+      <if test="lefttimemodify != null">
+        lefttimemodify,
+      </if>
+      <if test="modifytime != null">
+        modifytime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -669,6 +702,27 @@
       </if>
       <if test="phoneremark != null">
         #{phoneremark,jdbcType=VARCHAR},
+      </if>
+      <if test="signcount != null">
+        #{signcount,jdbcType=INTEGER},
+      </if>
+      <if test="lastsigntime != null">
+        #{lastsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ismanage != null">
+        #{ismanage,jdbcType=VARCHAR},
+      </if>
+      <if test="endsigntime != null">
+        #{endsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lefttime != null">
+        #{lefttime,jdbcType=INTEGER},
+      </if>
+      <if test="lefttimemodify != null">
+        #{lefttimemodify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifytime != null">
+        #{modifytime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -875,6 +929,27 @@
       <if test="record.phoneremark != null">
         phoneremark = #{record.phoneremark,jdbcType=VARCHAR},
       </if>
+      <if test="record.signcount != null">
+        signcount = #{record.signcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastsigntime != null">
+        lastsigntime = #{record.lastsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ismanage != null">
+        ismanage = #{record.ismanage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endsigntime != null">
+        endsigntime = #{record.endsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lefttime != null">
+        lefttime = #{record.lefttime,jdbcType=INTEGER},
+      </if>
+      <if test="record.lefttimemodify != null">
+        lefttimemodify = #{record.lefttimemodify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifytime != null">
+        modifytime = #{record.modifytime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -947,7 +1022,14 @@
       livetype = #{record.livetype,jdbcType=VARCHAR},
       usertype = #{record.usertype,jdbcType=VARCHAR},
       uphone = #{record.uphone,jdbcType=VARCHAR},
-      phoneremark = #{record.phoneremark,jdbcType=VARCHAR}
+      phoneremark = #{record.phoneremark,jdbcType=VARCHAR},
+      signcount = #{record.signcount,jdbcType=INTEGER},
+      lastsigntime = #{record.lastsigntime,jdbcType=TIMESTAMP},
+      ismanage = #{record.ismanage,jdbcType=VARCHAR},
+      endsigntime = #{record.endsigntime,jdbcType=TIMESTAMP},
+      lefttime = #{record.lefttime,jdbcType=INTEGER},
+      lefttimemodify = #{record.lefttimemodify,jdbcType=TIMESTAMP},
+      modifytime = #{record.modifytime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1142,6 +1224,27 @@
       <if test="phoneremark != null">
         phoneremark = #{phoneremark,jdbcType=VARCHAR},
       </if>
+      <if test="signcount != null">
+        signcount = #{signcount,jdbcType=INTEGER},
+      </if>
+      <if test="lastsigntime != null">
+        lastsigntime = #{lastsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ismanage != null">
+        ismanage = #{ismanage,jdbcType=VARCHAR},
+      </if>
+      <if test="endsigntime != null">
+        endsigntime = #{endsigntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lefttime != null">
+        lefttime = #{lefttime,jdbcType=INTEGER},
+      </if>
+      <if test="lefttimemodify != null">
+        lefttimemodify = #{lefttimemodify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifytime != null">
+        modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1211,7 +1314,14 @@
       livetype = #{livetype,jdbcType=VARCHAR},
       usertype = #{usertype,jdbcType=VARCHAR},
       uphone = #{uphone,jdbcType=VARCHAR},
-      phoneremark = #{phoneremark,jdbcType=VARCHAR}
+      phoneremark = #{phoneremark,jdbcType=VARCHAR},
+      signcount = #{signcount,jdbcType=INTEGER},
+      lastsigntime = #{lastsigntime,jdbcType=TIMESTAMP},
+      ismanage = #{ismanage,jdbcType=VARCHAR},
+      endsigntime = #{endsigntime,jdbcType=TIMESTAMP},
+      lefttime = #{lefttime,jdbcType=INTEGER},
+      lefttimemodify = #{lefttimemodify,jdbcType=TIMESTAMP},
+      modifytime = #{modifytime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectOneByExample" parameterType="org.linlinjava.litemall.db.domain.WhuserExample" resultMap="BaseResultMap">

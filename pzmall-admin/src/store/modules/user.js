@@ -56,6 +56,9 @@ const user = {
           const token = response.data.data.token
           commit('SET_TOKEN', token)
           setToken(token)
+          console.log("login")
+          //设置管理员
+          window.localStorage.setItem("adminarea", response.data.data.adminInfo.area)
           resolve()
         }).catch(error => {
           reject(error)

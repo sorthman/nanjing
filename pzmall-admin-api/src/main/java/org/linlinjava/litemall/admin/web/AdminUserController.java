@@ -6,29 +6,28 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.admin.vo.KnowledgeVo;
+import org.linlinjava.litemall.admin.vo.userVo;
 import org.linlinjava.litemall.core.util.ExcelUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
-import org.linlinjava.litemall.db.domain.LitemallAdmin;
-import org.linlinjava.litemall.db.domain.Usersign;
-import org.linlinjava.litemall.db.domain.Whuser;
+import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.service.LitemallUserService;
+import org.linlinjava.litemall.db.service.UserCheckService;
 import org.linlinjava.litemall.db.service.UserSignService;
+import org.linlinjava.litemall.db.service.UserTransferService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.WeakHashMap;
+
 import org.apache.shiro.SecurityUtils;
+//import sun.rmi.runtime.Log;
+import org.springframework.beans.BeanUtils;
 
 @RestController
 @RequestMapping("/adminapi/user")
@@ -40,13 +39,34 @@ public class AdminUserController {
     private LitemallUserService userService;
 
     @Autowired
-    private UserSignService userSignService;
+    private UserCheckService userCheckService;
 
+    @Autowired
+    private UserTransferService userTransferService;
 
     @RequiresPermissions("adminapi:user:list")
     @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "查询")
     @GetMapping("/list")
-    public Object list(String username, String mobile,
+    public Object list(String username, String phone,
+                       @RequestParam(defaultValue = "") String sex,
+                       @RequestParam(defaultValue = "0") Integer sage,
+                       @RequestParam(defaultValue = "0") Integer eage,
+                       @RequestParam(defaultValue = "") String idcard,
+                       @RequestParam(defaultValue = "") String street,
+                       @RequestParam(defaultValue = "") String community,
+                       @RequestParam(defaultValue = "") String arrivedate,
+                       @RequestParam(defaultValue = "") String addsource,
+                       @RequestParam(defaultValue = "") String iftransferarea,
+                       @RequestParam(defaultValue = "") String iftransferstreet,
+                       @RequestParam(defaultValue = "") String ifsafe,
+                       @RequestParam(defaultValue = "") String healthinfo,
+                       @RequestParam(defaultValue = "") String ifwh,
+                       @RequestParam(defaultValue = "") String ifhb,
+                       @RequestParam(defaultValue = "") String ifleavenj,
+                       @RequestParam(defaultValue = "") String ifadmin,
+                       @RequestParam(defaultValue = "") String ifover,
+                       @RequestParam(defaultValue = "") String iflose,
+
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit,
                        @RequestParam(defaultValue = "addtime") String sort,
@@ -55,26 +75,51 @@ public class AdminUserController {
         Subject currentUser = SecurityUtils.getSubject();
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
-        List<Whuser> userList = userService.querySelective(admin.getArea(), username, mobile, page, limit, sort, order);
+        List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard, street, community, arrivedate, addsource, iftransferarea,
+                iftransferstreet, ifsafe, healthinfo, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, page, limit, sort, order);
+        List<userVo> users = new ArrayList<>();
         for (Whuser user : userList) {
+            userVo u = new userVo();
+            BeanUtils.copyProperties(user, u);
+            users.add(u);
+            LocalDateTime sTime = LocalDateTime.now().minusDays(14);
+            if (user.getArrivedate() != null) {
+                if (user.getArrivedate().isBefore(sTime)) {
+                    u.setIfover("否");
+                } else {
+                    u.setIfover("是");
+                }
+            }
+
 //            String strMobile = user.getPhone().toString();
 //            strMobile = strMobile.replace(strMobile.substring(3, 9), "******");
 //            user.setPhone(Long.parseLong(strMobile));
         }
-        return ResponseUtil.okList(userList);
+        return ResponseUtil.okList(users);
     }
 
     @RequiresPermissions("adminapi:user:listsign")
-    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "打卡记录")
+    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "详情")
     @GetMapping("/listsign")
     public Object listsign(Integer uid,
-                       @RequestParam(defaultValue = "1") Integer page,
-                       @RequestParam(defaultValue = "10") Integer limit,
-                       @RequestParam(defaultValue = "addtime") String sort,
-                       @RequestParam(defaultValue = "desc") String order) {
-        List<Usersign> signList = userSignService.querySelective(uid, page, limit, sort, order);
+                           @RequestParam(defaultValue = "1") Integer page,
+                           @RequestParam(defaultValue = "10") Integer limit,
+                           @RequestParam(defaultValue = "addtime") String sort,
+                           @RequestParam(defaultValue = "desc") String order) {
+        List<Usercheck> signList = userCheckService.querySelective(uid, page, limit, sort, order);
+        return ResponseUtil.ok(signList);
+    }
 
-        return ResponseUtil.okList(signList);
+    @RequiresPermissions("adminapi:adminapi:update")
+    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "编辑")
+    @PostMapping("/update")
+    public Object update(@RequestBody Whuser user) {
+
+        if (userService.updateById(user) == 0) {
+            return ResponseUtil.updatedDataFailed();
+        }
+
+        return ResponseUtil.ok(user);
     }
 
     @RequiresPermissions("adminapi:user:download")
