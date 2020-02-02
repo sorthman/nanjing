@@ -21,7 +21,7 @@ service.interceptors.request.use(
     config.paramsSerializer = params => {
       // Qs is already included in the Axios package
       return qs.stringify(params, {
-        arrayFormat: "repeat",
+        arrayFormat: 'repeat',
         encode: false
       })
     }
@@ -37,16 +37,17 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
-
     // 导出
     const headers = response.headers
     if (headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8') {
       // return response.data
       return Promise.resolve({ data: response.data })
-
     }
 
     const res = response.data
+    if (res.ErrorCode && res.ErrorCode === '000000') {
+      return response
+    }
 
     if (res.code === 501) {
       MessageBox.alert('系统未登录，请重新登录', '错误', {
@@ -90,6 +91,8 @@ service.interceptors.response.use(
       return Promise.reject('error')
     } else if (res.code !== 0) {
       // 非5xx的错误属于业务错误，留给具体页面处理
+      return Promise.reject(response)
+    } else if (res.ErrorCode && res.ErrorCode !== '000000') {
       return Promise.reject(response)
     } else {
       return response
