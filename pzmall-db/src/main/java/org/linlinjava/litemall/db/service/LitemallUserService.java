@@ -2,9 +2,7 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.WhuserMapper;
-import org.linlinjava.litemall.db.domain.LitemallRole;
-import org.linlinjava.litemall.db.domain.Whuser;
-import org.linlinjava.litemall.db.domain.WhuserExample;
+import org.linlinjava.litemall.db.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +20,12 @@ public class LitemallUserService {
 
     public Whuser findById(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
+    }
+
+    public Whuser findByIdcard(String idcard) {
+        WhuserExample example = new WhuserExample();
+        example.or().andIdcardEqualTo(idcard);
+        return userMapper.selectOneByExample(example);
     }
 
     public List<Whuser> querySelective(String area,
@@ -64,6 +68,7 @@ public class LitemallUserService {
                                        String iftransferstreet,
                                        String ifsafe,
                                        String healthinfo,
+                                       String usertype,
                                        String ifwh,
                                        String ifhb,
                                        String ifleavenj,
@@ -125,6 +130,9 @@ public class LitemallUserService {
         if (!StringUtils.isEmpty(ifhb)) {
             criteria.andIfhbEqualTo(ifhb);
         }
+        if (!StringUtils.isEmpty(usertype)) {
+            criteria.andUsertypeEqualTo(usertype);
+        }
         if (!StringUtils.isEmpty(ifwh)) {
             criteria.andIfwhEqualTo(ifwh);
         }
@@ -156,7 +164,7 @@ public class LitemallUserService {
             healthinfo = healthinfo.replaceAll("咳嗽", "");
             healthinfo = healthinfo.replaceAll("发热", "");
 
-            String[] infos = healthinfo.split("、");
+            String[] infos = healthinfo.split(",");
             for (String s : infos) {
                 if (s.length() > 1) {
                     criteria.andHealthinfoLike("%" + s + "%");
@@ -191,6 +199,11 @@ public class LitemallUserService {
             criteria.andAddsourceEqualTo("社区");
         }
         return (int) userMapper.countByExample(example);
+    }
+
+    public void add(Whuser user) {
+        user.setAddtime(LocalDateTime.now());
+        userMapper.insertSelective(user);
     }
 
     public int updateById(Whuser user) {

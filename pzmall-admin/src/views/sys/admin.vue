@@ -44,7 +44,10 @@
           <el-input v-model="dataForm.username"/>
         </el-form-item>
         <el-form-item label="管理员密码" prop="password">
-          <el-input :disabled="textMap[dialogStatus]==='编辑'?true:false" v-model="dataForm.password" type="password" auto-complete="off"/>
+          <el-input  v-model="dataForm.password" type="password" auto-complete="off"/>
+        </el-form-item>
+        <el-form-item label="行政区" prop="area">
+          <el-input  v-model="dataForm.area" />
         </el-form-item>
         <el-form-item label="管理员头像" prop="avatar">
           <el-upload

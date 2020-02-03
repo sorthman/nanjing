@@ -133,14 +133,15 @@
         clearable
         style="width: 150px"
         class="filter-item"
-        placeholder="解除隔离"
+        placeholder="当前状态"
       >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in zhuantaiMap" :key="key" :label="key" :value="value" />
       </el-select>
       <el-select
         v-model="listQuery.healthinfo"
         multiple
         clearable
+        collapse-tags
         style="width: 150px"
         class="filter-item"
         placeholder="目前状况"
@@ -230,10 +231,13 @@
       <el-table-column min-width="120px" align="center" label="手机号" prop="phone" />
       <el-table-column align="center" label="性别" prop="sex" />
       <el-table-column align="center" label="年龄" prop="age" />
-      <el-table-column min-width="200px" align="center" label="身份证号" prop="idcard" />
+      <el-table-column min-width="200px" align="center" label="身份证号" prop="idcard">
+        <template slot-scope="scope">{{scope.row.idcard | idcardFilter}}</template>
+      </el-table-column>
 
       <el-table-column align="center" label="是否在行政区" prop="ifstay" />
-      <el-table-column align="center" label="是否去过武汉" prop="ifwh" />
+      <el-table-column align="center" label="用户类型" prop="usertype" />
+      <el-table-column align="center" label="是否去过" prop="ifwh" />
       <el-table-column align="center" label="是否离开南京" prop="ifleavenj" />
       <el-table-column align="center" label="是否正在管理" prop="ismanage" />
       <el-table-column align="center" label="是否超过14天" prop="ifover" />
@@ -245,7 +249,9 @@
       <el-table-column align="center" label="常驻地址" min-width="300px" prop="liveaddress" />
       <el-table-column align="center" label="停留武汉时间" prop="whtime" />
       <el-table-column align="center" label="来宁时间" prop="arrivedate" />
-      <el-table-column align="center" label="目前症状" prop="healthinfo" />
+      <el-table-column align="center" label="是否发热" prop="ifhot" />
+      <el-table-column align="center" label="是否咳嗽" prop="ifkesou" />
+      <el-table-column align="center" min-width="300px" label="目前症状" prop="healthinfo" />
       <el-table-column align="center" label="就诊情况" prop="docinfo" />
       <el-table-column align="center" label="数据来源" prop="addsource" />
       <el-table-column align="center" label="备注" min-width="300px" prop="remark" />
@@ -355,19 +361,95 @@
 
     <!-- 详情对话框 -->
     <el-dialog width="80%" title="详情查看" :visible.sync="dialogSignFormVisible">
-      <el-card class="box-card">
-        <h3>{{detailModel.name}} {{detailModel.sex}} {{detailModel.age}}</h3>
-        <br />
-        所在街道：{{detailModel.name}}
-        <br />
-        所在社区：{{detailModel.name}}
-        <br />
-        详细地址：{{detailModel.name}}
-        <br />
+      <el-card style="line-height:30px;" class="box-card">
+        <h3 style="color:orange">{{detailModel.name}} / {{detailModel.sex}} / {{detailModel.age}}</h3>
+
+        <el-row :gutter="40" class="panel-group">
+          <el-col :xs="12" :sm="20" :lg="12" class="card-panel-col">
+            联系电话：{{detailModel.phone}}
+            <br />
+            身份证：{{detailModel.idcard }}
+            <br />
+            所在街道：{{detailModel.street}}
+            <br />
+            所在社区：{{detailModel.njcommunity}}
+            <br />
+            详细地址：{{detailModel.liveaddress}}
+            <br />
+            人在不在{{area}}：{{detailModel.ifstay}}
+            <br />
+            是否去过武汉：{{detailModel.ifwh}}
+            <br />
+            是否离宁：{{detailModel.ifleavenj}}
+            <br />
+            是否管理：{{detailModel.ismanage}}
+          </el-col>
+          <el-col :xs="12" :sm="12" :lg="12" class="card-panel-col">
+            是否追访不到：{{detailModel.iflose}}
+            <br />
+            停留武汉时间：{{detailModel.whtime}}
+            <br />
+            来宁时间：{{detailModel.arrivedate}}
+            <br />
+            目前症状：{{detailModel.healthinfo}}
+            <br />
+            就诊情况：{{detailModel.liveaddress}}
+            <br />
+            数据来源：{{detailModel.addsource}}
+            <br />
+          </el-col>
+        </el-row>
+        备注信息：{{detailModel.remark}}
       </el-card>
-      <el-card class="box-card" v-for="item in signlist" :key="item.id">
-        人在不在区域内：
-        
+
+      <br />
+      <br />
+      <el-card style="line-height:30px;" class="box-card" v-for="item in signlist" :key="item.id">
+        <el-row :gutter="40" class="panel-group">
+          <el-col :xs="12" :sm="12" :lg="12" class="card-panel-col">
+            <b>
+              {{item.signtime.substring(0,10)}}申报信息
+              <br />
+            </b>
+            人在不在{{area}}：{{item.ifstay}}
+            <br />
+            是否追访不到：{{item.iflose}}
+            <br />
+            是否有发热：{{item.ifhot}}
+            <br />
+            是否有咳嗽：{{item.ifkesou}}
+            <br />
+            其他症状：{{item.healthinfo}}
+            <br />
+            就诊情况：{{item.docinfo}}
+            <br />
+            是否解除隔离：{{item.ifsafe}}
+            <br />
+          </el-col>
+          <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+            <br />
+            是否离宁：{{item.ifleavenj}}
+            <br />
+            原因：{{item.loseinfo}}
+            <br />
+            最高体温：{{item.temperature}}
+            <br />
+          </el-col>
+          <el-col
+            style="color:#555555;float:right"
+            :xs="12"
+            :sm="12"
+            :lg="6"
+            class="card-panel-col"
+          >
+            申报时间：{{item.signtime}}
+            <br />
+            申报人：{{item.reportname}}
+            <br />
+            申报人电话：{{item.reportphone}}
+            <br />
+          </el-col>
+        </el-row>
       </el-card>
     </el-dialog>
   </div>
@@ -396,9 +478,15 @@ const sourceMap = {
 };
 
 const userTypeMap = {
-  自查: "武汉",
-  公安: "湖北",
-  教育: "温州"
+  武汉: "武汉",
+  湖北: "湖北",
+  温州: "温州"
+};
+
+const zhuantaiMap = {
+  居家观察: "居家观察",
+  集中观察: "集中观察",
+  确诊: "确诊"
 };
 
 const healthMap = {
@@ -422,10 +510,12 @@ export default {
   data() {
     return {
       sexMap: sexMap,
+      area: "",
       statusMap: statusMap,
       sourceMap: sourceMap,
       healthMap: healthMap,
       userTypeMap: userTypeMap,
+      zhuantaiMap: zhuantaiMap,
       list: null,
       alllist: null,
       signlist: null,
@@ -466,6 +556,16 @@ export default {
   created() {
     this.getList();
     this.getListAll();
+    this.area = window.localStorage.getItem("adminarea");
+  },
+  filters: {
+    idcardFilter(idcard) {
+      if (idcard) {
+        return idcard.substring(0, 3) + "********" + idcard.substring(15);
+      } else {
+        return "";
+      }
+    }
   },
   methods: {
     getList() {
@@ -497,7 +597,7 @@ export default {
       let query = {
         uid: id,
         page: 1,
-        limit: 100,
+        limit: 10000,
         sort: "id",
         order: "desc"
       };
@@ -564,7 +664,8 @@ export default {
           "年龄",
           "身份证",
           "人在不在区内",
-          "是否去过武汉",
+          "用户类型",
+          "是否去过",
           "是否离宁",
           "当日正在管理",
           "是否超过14天",
@@ -593,6 +694,7 @@ export default {
           "age",
           "idcard",
           "ifstay",
+          "usertype",
           "ifwh",
           "ifleavenj",
           "ismanage",
@@ -653,3 +755,8 @@ export default {
   }
 };
 </script>
+<style rel="stylesheet/scss" lang="scss" scoped>
+.box-card {
+  line-height: 40px;
+}
+</style>

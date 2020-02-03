@@ -92,11 +92,11 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'user',
-        component: () => import('@/views/user/user'),
+        path: 'import',
+        component: () => import('@/views/user/import'),
         name: 'import',
         meta: {
-          perms: ['GET /adminapi/user/list'],
+          perms: ['GET /adminapi/user/import'],
           title: '数据导入',
           noCache: true
         }
@@ -110,6 +110,15 @@ export const asyncRouterMap = [
           title: '用户查询',
           noCache: true
         }
+      },
+      {
+        path: 'nostreet',
+        component: () => import('@/views/user/nostreet'),
+        name: 'nostreet',
+        meta: {
+          title: '无街道用户',
+          noCache: true
+        }
       }
     ]
   },
@@ -118,39 +127,36 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     alwaysShow: true,
-    name: 'sysManage',
+    name: 'statManage',
     meta: {
-      title: '统计报表',
-      icon: 'config'
+      title: '统计管理',
+      icon: 'chart'
     },
     children: [
       {
-        path: 'admin',
-        component: () => import('@/views/sys/admin'),
-        name: 'admin',
+        path: 'whstat',
+        component: () => import('@/views/stat/whstat'),
+        name: 'whstat',
         meta: {
-          perms: ['GET /adminapi/admin/list', 'POST /adminapi/admin/create', 'POST /adminapi/admin/update', 'POST /adminapi/admin/delete'],
-          title: '数据汇总',
-          noCache: true
-        }
-      },
-      {
-        path: 'log',
-        component: () => import('@/views/sys/log'),
-        name: 'log',
-        meta: {
-          perms: ['GET /adminapi/log/list'],
           title: '武汉统计报表',
           noCache: true
         }
       },
       {
-        path: 'role',
-        component: () => import('@/views/sys/role'),
-        name: 'role',
+        path: 'hbstat',
+        component: () => import('@/views/stat/hbstat'),
+        name: 'hbstat',
         meta: {
-          perms: ['GET /adminapi/role/list', 'POST /adminapi/role/create', 'POST /adminapi/role/update', 'POST /adminapi/role/delete', 'GET /adminapi/role/permissions', 'POST /adminapi/role/permissions'],
           title: '湖北统计报表',
+          noCache: true
+        }
+      },
+      {
+        path: 'wzstat',
+        component: () => import('@/views/stat/wzstat'),
+        name: 'wzstat',
+        meta: {
+          title: '温州统计报表',
           noCache: true
         }
       }
@@ -168,6 +174,16 @@ export const asyncRouterMap = [
       icon: 'config'
     },
     children: [
+      {
+        path: 'account',
+        component: () => import('@/views/sys/account'),
+        name: 'account',
+        meta: {
+          perms: ['GET /adminapi/account/list', 'POST /adminapi/account/create', 'POST /adminapi/account/update', 'POST /adminapi/account/delete'],
+          title: '街道管理员',
+          noCache: true
+        }
+      },
       {
         path: 'admin',
         component: () => import('@/views/sys/admin'),

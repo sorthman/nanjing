@@ -15,6 +15,7 @@ import org.linlinjava.litemall.db.service.UserCheckService;
 import org.linlinjava.litemall.db.service.UserSignService;
 import org.linlinjava.litemall.db.service.UserTransferService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,7 @@ public class AdminUserController {
                        @RequestParam(defaultValue = "") String iftransferstreet,
                        @RequestParam(defaultValue = "") String ifsafe,
                        @RequestParam(defaultValue = "") String healthinfo,
+                       @RequestParam(defaultValue = "") String usertype,
                        @RequestParam(defaultValue = "") String ifwh,
                        @RequestParam(defaultValue = "") String ifhb,
                        @RequestParam(defaultValue = "") String ifleavenj,
@@ -76,7 +78,7 @@ public class AdminUserController {
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
         List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard, street, community, arrivedate, addsource, iftransferarea,
-                iftransferstreet, ifsafe, healthinfo, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, page, limit, sort, order);
+                iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, page, limit, sort, order);
         List<userVo> users = new ArrayList<>();
         for (Whuser user : userList) {
             userVo u = new userVo();
@@ -85,9 +87,9 @@ public class AdminUserController {
             LocalDateTime sTime = LocalDateTime.now().minusDays(14);
             if (user.getArrivedate() != null) {
                 if (user.getArrivedate().isBefore(sTime)) {
-                    u.setIfover("否");
-                } else {
                     u.setIfover("是");
+                } else {
+                    u.setIfover("否");
                 }
             }
 
@@ -95,7 +97,7 @@ public class AdminUserController {
 //            strMobile = strMobile.replace(strMobile.substring(3, 9), "******");
 //            user.setPhone(Long.parseLong(strMobile));
         }
-        return ResponseUtil.okList(users);
+        return ResponseUtil.okList(users, userList);
     }
 
     @RequiresPermissions("adminapi:user:listsign")
@@ -110,7 +112,7 @@ public class AdminUserController {
         return ResponseUtil.ok(signList);
     }
 
-    @RequiresPermissions("adminapi:adminapi:update")
+    @RequiresPermissions("adminapi:user:update")
     @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "编辑")
     @PostMapping("/update")
     public Object update(@RequestBody Whuser user) {
@@ -120,6 +122,52 @@ public class AdminUserController {
         }
 
         return ResponseUtil.ok(user);
+    }
+
+    @RequiresPermissions("adminapi:user:upload")
+    @RequiresPermissionsDesc(menu = {"申报管理", "导入数据"}, button = "导入")
+    @GetMapping("/upload")
+    public Object upload(@RequestParam(defaultValue = "") String filename,
+                         @RequestParam(defaultValue = "") String addsource) {
+        Subject currentUser = SecurityUtils.getSubject();
+        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+        List<Whuser> users = new ArrayList<Whuser>();
+        if (!StringUtils.isEmpty(filename)) {
+            String rootPath = System.getProperty("user.dir");
+            String filePath = rootPath + "/storage/" + filename;
+//			logger.debug("文件路径2：" + filePath);
+            users = ExcelUtil.getList(filePath);
+
+            if (users == null) {
+                return ResponseUtil.fail(-2, "请上传正确的表格");
+            }
+        } else {
+            return ResponseUtil.fail(-2, "请上传表格");
+        }
+
+        // 插入用户表
+        int count = 0;
+        int totalCount = users.size();
+        String failUser = "";
+        for (Whuser user : users) {
+            Whuser suser = userService.findByIdcard(user.getIdcard());
+            if (suser == null) {
+                if (user.getHealthinfo().indexOf("发热") >= 0) {
+                    user.setIfhot("是");
+                }
+                if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
+                    user.setIfkesou("是");
+                }
+                user.setArea(admin.getArea());
+                user.setAddsource((addsource));
+                userService.add(user);
+                count++;
+            } else {
+                failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+            }
+        }
+
+        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
     }
 
     @RequiresPermissions("adminapi:user:download")

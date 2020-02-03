@@ -50,9 +50,9 @@ public class AdminAdminController {
         if (StringUtils.isEmpty(name)) {
             return ResponseUtil.badArgument();
         }
-        if (!RegexUtil.isUsername(name)) {
-            return ResponseUtil.fail(ADMIN_INVALID_NAME, "管理员名称不符合规定");
-        }
+//        if (!RegexUtil.isUsername(name)) {
+//            return ResponseUtil.fail(ADMIN_INVALID_NAME, "管理员名称不符合规定");
+//        }
         String password = admin.getPassword();
         if (StringUtils.isEmpty(password) || password.length() < 6) {
             return ResponseUtil.fail(ADMIN_INVALID_PASSWORD, "管理员密码长度不能小于6");
