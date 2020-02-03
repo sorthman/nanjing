@@ -24,6 +24,14 @@ export function updateUser(data) {
   })
 }
 
+export function importUser(query) {
+  return request({
+    url: '/user/upload',
+    method: 'get',
+    params: query
+  })
+}
+
 export function download(query) {
   return request({
     url: '/user/download',
