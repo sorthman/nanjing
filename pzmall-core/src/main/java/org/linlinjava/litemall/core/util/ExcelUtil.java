@@ -1,5 +1,7 @@
 package org.linlinjava.litemall.core.util;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -40,6 +42,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import ch.qos.logback.core.boolex.Matcher;
+import org.linlinjava.litemall.db.domain.Whuser;
 
 public class ExcelUtil<T> {
 
@@ -66,68 +69,111 @@ public class ExcelUtil<T> {
         return wb;
     }
 
-//    public static List<WordDetail> getList(String filePath) {
-//        try {
-////			logger.info("解析Excel：" + filePath);
-//
-//            File excelFile = new File(filePath); // 创建文件对象
-//            FileInputStream in = new FileInputStream(excelFile); // 文件流
-//            Workbook workbook = getWorkbok(in, excelFile);
-//            Sheet sheet = workbook.getSheetAt(0);
-//            List<WordDetail> words = new ArrayList<WordDetail>();
-//            int count = 0;
-//            for (Row row : sheet) {
-//                // 跳过第一行的目录
-//                if (count < 1) {
-//                    count++;
-//                    continue;
-//                }
-//
-//                WordDetail newword = new WordDetail();
-//
-//                int end = row.getLastCellNum();
-//
-//                Cell cell = row.getCell(0);
-//                newword.setWord(cell.getStringCellValue());
-//
-//                cell = row.getCell(1);
-//                newword.setTypeId((int) cell.getNumericCellValue());
-//
-//                cell = row.getCell(2);
-//                if (cell != null)
-//                    newword.setBritishPronunciation(cell.getStringCellValue());
-//
-//                cell = row.getCell(3);
-//                if (cell != null)
-//                    newword.setAmericanPronunciation(cell.getStringCellValue());
-//
-//                cell = row.getCell(4);
-//                if (cell != null)
-//                    newword.setExampleSentence(cell.getStringCellValue());
-//
-//                cell = row.getCell(5);
-//                if (cell != null)
-//                    newword.setConciseExplanation(cell.getStringCellValue());
-//
-//                cell = row.getCell(6);
-//                if (cell != null)
-//                    newword.setOxfordDictionary(cell.getStringCellValue());
-//
-//                cell = row.getCell(7);
-//                if (cell != null)
-//                    newword.setLangwenExplanation(cell.getStringCellValue());
-//
-//                words.add(newword);
-//
-//            }
-//            return words;
-//        } catch (Exception ex) {
-////			logger.info("解析Excel异常：" + ex.getMessage());
-////			System.out.println("解析Excel异常：" + ex.getMessage());
-//            return null;
-//        }
-//
-//    }
+    public static List<Whuser> getList(String filePath) {
+        try {
+            File excelFile = new File(filePath); // 创建文件对象
+            FileInputStream in = new FileInputStream(excelFile); // 文件流
+            Workbook workbook = getWorkbok(in, excelFile);
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Whuser> words = new ArrayList<Whuser>();
+            int count = 0;
+            for (Row row : sheet) {
+                // 跳过第一行的目录
+                if (count < 1) {
+                    count++;
+                    continue;
+                }
+
+                Whuser newword = new Whuser();
+
+                int end = row.getLastCellNum();
+
+                Cell cell = row.getCell(0);
+                newword.setDatatype(cell.getStringCellValue());
+
+                cell = row.getCell(2);
+                newword.setName(cell.getStringCellValue());
+
+                cell = row.getCell(3);
+                newword.setSex(cell.getStringCellValue());
+
+                try {
+                    cell = row.getCell(4);
+                    newword.setAge((int) cell.getNumericCellValue());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(5);
+                newword.setIdcard(cell.getStringCellValue());
+
+                cell = row.getCell(6);
+                newword.setIfstay(cell.getStringCellValue());
+                cell = row.getCell(7);
+                newword.setIfwh(cell.getStringCellValue());
+                cell = row.getCell(8);
+                newword.setIfleavenj(cell.getStringCellValue());
+                cell = row.getCell(9);
+                newword.setIsmanage(cell.getStringCellValue());
+                cell = row.getCell(11);
+                newword.setIflose(cell.getStringCellValue());
+                cell = row.getCell(12);
+                newword.setLoseinfo(cell.getStringCellValue());
+
+                cell = row.getCell(13);
+                newword.setStreet(cell.getStringCellValue());
+                cell = row.getCell(14);
+                newword.setNjcommunity(cell.getStringCellValue());
+                cell = row.getCell(15);
+                newword.setLiveaddress(cell.getStringCellValue());
+                cell = row.getCell(16);
+                newword.setWhtime(cell.getStringCellValue());
+
+                try {
+                    cell = row.getCell(17);
+                    Instant instant = cell.getDateCellValue().toInstant();
+                    ZoneId zoneId = ZoneId.systemDefault();
+                    newword.setArrivedate(instant.atZone(zoneId).toLocalDateTime());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(18);
+                newword.setHealthinfo(cell.getStringCellValue());
+                cell = row.getCell(19);
+                newword.setDocinfo(cell.getStringCellValue());
+                cell = row.getCell(20);
+                newword.setPhone(cell.toString());
+
+
+                cell = row.getCell(22);
+                newword.setRemark(cell.getStringCellValue());
+
+                cell = row.getCell(23);
+                newword.setJdname(cell.getStringCellValue());
+                cell = row.getCell(24);
+                newword.setGbname(cell.getStringCellValue());
+                cell = row.getCell(25);
+                newword.setSgname(cell.getStringCellValue());
+                cell = row.getCell(26);
+                newword.setMjname(cell.getStringCellValue());
+                cell = row.getCell(27);
+                newword.setYlname(cell.getStringCellValue());
+
+                cell = row.getCell(28);
+                newword.setUphone(cell.toString());
+
+                cell = row.getCell(29);
+                newword.setUsertype(cell.getStringCellValue());
+
+                words.add(newword);
+            }
+            return words;
+        } catch (Exception ex) {
+//			logger.info("解析Excel异常：" + ex.getMessage());
+//			System.out.println("解析Excel异常：" + ex.getMessage());
+            return null;
+        }
+
+    }
 
     /**
      * <p>

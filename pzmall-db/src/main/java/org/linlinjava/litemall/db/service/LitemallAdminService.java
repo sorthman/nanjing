@@ -42,7 +42,7 @@ public class LitemallAdminService {
         }
 
         PageHelper.startPage(page, limit);
-        return adminMapper.selectByExampleSelective(example, result);
+        return adminMapper.selectByExample(example);
     }
 
     public int updateById(LitemallAdmin admin) {

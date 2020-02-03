@@ -99,7 +99,7 @@ litemall:
       # 这个地方应该是wx模块的WxStorageController的fetch方法对应的地址
 #      address: http://localhost:8081/adminapi/storage/fetch/
 #      address: http://10.10.188.160:8081/adminapi/storage/fetch/
-      address: https://sjgj.51pinzhi.cn/adminapi/storage/fetch/
+      address: http://ning.pzunion.cn/adminapi/storage/fetch/
 #      address: https://res.sjgj.51pinzhi.cn/wx/storage/fetch/
 
     # 阿里云对象存储配置信息
