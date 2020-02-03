@@ -27,7 +27,7 @@
         label="手机号"
         prop="phone"
       />
-      <el-table-column align="center" label="性别" prop="currentaddress" />
+      <el-table-column align="center" label="详细地址" prop="currentaddress" />
       <el-table-column align="center" label="导入类型" prop="datatype" />
       <el-table-column align="center" label="数据来源" prop="addsource" />
     </el-table>
