@@ -73,6 +73,7 @@
         <el-table-column align="center" label="漫游" prop="s15" />
         <el-table-column align="center" label="南京籍" prop="s16" />
         <el-table-column align="center" label="武汉籍" prop="s17" />
+        <el-table-column align="center" label="湖北籍" prop="s19" />
         <el-table-column align="center" label="温州籍" prop="s18" />
         <el-table-column align="center" label="其他" prop="othersSum" />
       </el-table-column>
@@ -144,7 +145,7 @@ export default {
             hasCheckSum: parseInt(response.data.Data.s5) + parseInt(response.data.Data.s6) + parseInt(response.data.Data.s9) + parseInt(response.data.Data.s10),
             followSum: parseInt(response.data.Data.s5) + parseInt(response.data.Data.s6) - parseInt(response.data.Data.s7) - parseInt(response.data.Data.s8),
             notinareaSum: parseInt(response.data.Data.s9) + parseInt(response.data.Data.s10),
-            othersSum: parseInt(response.data.Data.s1) - parseInt(response.data.Data.s16) - parseInt(response.data.Data.s17) - parseInt(response.data.Data.s18)
+            othersSum: parseInt(response.data.Data.s1) - parseInt(response.data.Data.s16) - parseInt(response.data.Data.s17) - parseInt(response.data.Data.s18) - parseInt(response.data.Data.s19)
           })
           this.listLoading = false
         })
