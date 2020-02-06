@@ -75,6 +75,7 @@
     <result column="lefttime" jdbcType="INTEGER" property="lefttime" />
     <result column="lefttimemodify" jdbcType="TIMESTAMP" property="lefttimemodify" />
     <result column="modifytime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="isdocinfo" jdbcType="VARCHAR" property="isdocinfo" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -155,7 +156,7 @@
     sgphone, mjname, mjphone, ylname, ylphone, remark, ifstay, ifleavenj, iflose, loseinfo, 
     docinfo, ifsafe, datatype, iftransferarea, iftransferstreet, jiguan, livetype, usertype, 
     uphone, phoneremark, signcount, lastsigntime, ismanage, endsigntime, lefttime, lefttimemodify, 
-    modifytime
+    modifytime, isdocinfo
   </sql>
   <select id="selectByExample" parameterType="org.linlinjava.litemall.db.domain.WhuserExample" resultMap="BaseResultMap">
     <!--
@@ -279,7 +280,8 @@
       livetype, usertype, uphone, 
       phoneremark, signcount, lastsigntime, 
       ismanage, endsigntime, lefttime, 
-      lefttimemodify, modifytime)
+      lefttimemodify, modifytime, isdocinfo
+      )
     values (#{name,jdbcType=VARCHAR}, #{idcard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{nation,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
       #{currentaddress,jdbcType=VARCHAR}, #{ifwh,jdbcType=VARCHAR}, #{traffictype,jdbcType=VARCHAR}, 
@@ -302,7 +304,8 @@
       #{livetype,jdbcType=VARCHAR}, #{usertype,jdbcType=VARCHAR}, #{uphone,jdbcType=VARCHAR}, 
       #{phoneremark,jdbcType=VARCHAR}, #{signcount,jdbcType=INTEGER}, #{lastsigntime,jdbcType=TIMESTAMP}, 
       #{ismanage,jdbcType=VARCHAR}, #{endsigntime,jdbcType=TIMESTAMP}, #{lefttime,jdbcType=INTEGER}, 
-      #{lefttimemodify,jdbcType=TIMESTAMP}, #{modifytime,jdbcType=TIMESTAMP})
+      #{lefttimemodify,jdbcType=TIMESTAMP}, #{modifytime,jdbcType=TIMESTAMP}, #{isdocinfo,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.Whuser">
     <!--
@@ -518,6 +521,9 @@
       <if test="modifytime != null">
         modifytime,
       </if>
+      <if test="isdocinfo != null">
+        isdocinfo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -723,6 +729,9 @@
       </if>
       <if test="modifytime != null">
         #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdocinfo != null">
+        #{isdocinfo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -950,6 +959,9 @@
       <if test="record.modifytime != null">
         modifytime = #{record.modifytime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isdocinfo != null">
+        isdocinfo = #{record.isdocinfo,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -1029,7 +1041,8 @@
       endsigntime = #{record.endsigntime,jdbcType=TIMESTAMP},
       lefttime = #{record.lefttime,jdbcType=INTEGER},
       lefttimemodify = #{record.lefttimemodify,jdbcType=TIMESTAMP},
-      modifytime = #{record.modifytime,jdbcType=TIMESTAMP}
+      modifytime = #{record.modifytime,jdbcType=TIMESTAMP},
+      isdocinfo = #{record.isdocinfo,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1245,6 +1258,9 @@
       <if test="modifytime != null">
         modifytime = #{modifytime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isdocinfo != null">
+        isdocinfo = #{isdocinfo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1321,7 +1337,8 @@
       endsigntime = #{endsigntime,jdbcType=TIMESTAMP},
       lefttime = #{lefttime,jdbcType=INTEGER},
       lefttimemodify = #{lefttimemodify,jdbcType=TIMESTAMP},
-      modifytime = #{modifytime,jdbcType=TIMESTAMP}
+      modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      isdocinfo = #{isdocinfo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectOneByExample" parameterType="org.linlinjava.litemall.db.domain.WhuserExample" resultMap="BaseResultMap">

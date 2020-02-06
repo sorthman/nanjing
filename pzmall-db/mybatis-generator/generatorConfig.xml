@@ -107,5 +107,10 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
+        <table tableName="njuser">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+
     </context>
 </generatorConfiguration>

@@ -32,6 +32,14 @@ export function importUser(query) {
   })
 }
 
+export function importNjUser(query) {
+  return request({
+    url: '/user/uploadnj',
+    method: 'get',
+    params: query
+  })
+}
+
 export function download(query) {
   return request({
     url: '/user/download',

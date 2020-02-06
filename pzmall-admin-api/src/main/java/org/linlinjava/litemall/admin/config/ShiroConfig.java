@@ -35,6 +35,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/adminapi/auth/index", "anon");
         filterChainDefinitionMap.put("/adminapi/auth/403", "anon");
         filterChainDefinitionMap.put("/adminapi/storage/fetch/**", "anon");
+        filterChainDefinitionMap.put("/adminapi/storage/create/**", "anon");
+
         filterChainDefinitionMap.put("/adminapi/knowledge/download", "anon");
 
         filterChainDefinitionMap.put("/adminapi/**", "authc");

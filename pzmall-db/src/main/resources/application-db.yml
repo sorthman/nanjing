@@ -8,13 +8,13 @@ spring:
   datasource:
     druid:
 #      url:  jdbc:mysql://10.10.188.159:3306/litemall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
-      url:  jdbc:mysql://192.168.3.16:3306/njhealth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
-#      url:  jdbc:mysql://localhost:3306/njhealth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+#      url:  jdbc:mysql://192.168.3.16:3306/njhealth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+      url:  jdbc:mysql://localhost:3306/njhealth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
       driver-class-name:  com.mysql.jdbc.Driver
-#      username:  root
-#      password:  action
-      username:  nanjing
-      password:  nanjing2020
+      username:  root
+      password:  action
+#      username:  nanjing
+#      password:  nanjing2020
 #      username:  root001
 #      password:  Hjk5bK3J8NhiF2tR
       initial-size:  10

@@ -204,9 +204,19 @@
       >
         <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
       </el-select>
+      <el-select
+        v-model="listQuery.ifstay"
+        clearable
+        style="width: 160px"
+        class="filter-item"
+        placeholder="是否在当前区域"
+      >
+        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+      </el-select>
 
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button
+        v-permission="['GET /adminapi/user/download']"
         :loading="downloadLoading"
         class="filter-item"
         type="primary"
@@ -247,8 +257,12 @@
       <el-table-column align="center" label="社区" prop="njcommunity" />
 
       <el-table-column align="center" label="常驻地址" min-width="300px" prop="liveaddress" />
-      <el-table-column align="center" label="停留武汉时间" prop="whtime" />
-      <el-table-column align="center" label="来宁时间" prop="arrivedate" />
+      <el-table-column align="center" min-width="300px" label="停留武汉时间" prop="whtime" />
+      <el-table-column align="center" min-width="120px" label="来宁时间" prop="arrivedate">
+        <template
+          slot-scope="scope"
+        >{{scope.row.arrivedate?scope.row.arrivedate.substring(0,10):""}}</template>
+      </el-table-column>
       <el-table-column align="center" label="是否发热" prop="ifhot" />
       <el-table-column align="center" label="是否咳嗽" prop="ifkesou" />
       <el-table-column align="center" min-width="300px" label="目前症状" prop="healthinfo" />
@@ -471,6 +485,7 @@ const statusMap = {
 };
 
 const sourceMap = {
+  自主: "自主",
   自查: "自查",
   公安: "公安",
   教育: "教育",

@@ -42,6 +42,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import ch.qos.logback.core.boolex.Matcher;
+import org.linlinjava.litemall.db.domain.Njuser;
 import org.linlinjava.litemall.db.domain.Whuser;
 
 public class ExcelUtil<T> {
@@ -104,7 +105,7 @@ public class ExcelUtil<T> {
                 }
 
                 cell = row.getCell(5);
-                newword.setIdcard(cell.getStringCellValue());
+                newword.setIdcard(cell.toString());
 
                 cell = row.getCell(6);
                 newword.setIfstay(cell.getStringCellValue());
@@ -163,6 +164,129 @@ public class ExcelUtil<T> {
 
                 cell = row.getCell(29);
                 newword.setUsertype(cell.getStringCellValue());
+
+                words.add(newword);
+            }
+            return words;
+        } catch (Exception ex) {
+//			logger.info("解析Excel异常：" + ex.getMessage());
+//			System.out.println("解析Excel异常：" + ex.getMessage());
+            return null;
+        }
+
+    }
+
+    public static List<Njuser> getNJList(String filePath) {
+        try {
+            File excelFile = new File(filePath); // 创建文件对象
+            FileInputStream in = new FileInputStream(excelFile); // 文件流
+            Workbook workbook = getWorkbok(in, excelFile);
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Njuser> words = new ArrayList<Njuser>();
+            int count = 0;
+            for (Row row : sheet) {
+                // 跳过第1\2\3\4行
+                if (count < 4) {
+                    count++;
+                    continue;
+                }
+
+                Cell cell = row.getCell(0);
+                if (cell.toString().indexOf("填表说明") >= 0) {
+                    count++;
+                    continue;
+                }
+
+                Njuser newword = new Njuser();
+
+                int end = row.getLastCellNum();
+
+                cell = row.getCell(1);
+                newword.setName(cell.getStringCellValue());
+
+                cell = row.getCell(2);
+                newword.setSex(cell.getStringCellValue());
+
+                try {
+                    cell = row.getCell(3);
+                    newword.setAge((int) cell.getNumericCellValue());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(4);
+                newword.setIdcard(cell.getStringCellValue());
+
+                cell = row.getCell(5);
+                newword.setPhone(cell.toString());
+                cell = row.getCell(6);
+                newword.setArea(cell.getStringCellValue());
+                cell = row.getCell(7);
+                newword.setStreet(cell.getStringCellValue());
+                cell = row.getCell(8);
+                newword.setCommunity(cell.getStringCellValue());
+                cell = row.getCell(9);
+                newword.setHjaddress(cell.getStringCellValue());
+                cell = row.getCell(10);
+                newword.setLiveaddress(cell.getStringCellValue());
+
+                cell = row.getCell(11);
+                newword.setGlinfo(cell.getStringCellValue());
+                cell = row.getCell(12);
+                newword.setZdyqinfo(cell.getStringCellValue());
+                cell = row.getCell(13);
+                newword.setGlqtinfo(cell.getStringCellValue());
+
+                try {
+                    cell = row.getCell(14);
+                    Instant instant = cell.getDateCellValue().toInstant();
+                    ZoneId zoneId = ZoneId.systemDefault();
+                    newword.setStarttime(instant.atZone(zoneId).toLocalDateTime());
+                } catch (Exception e) {
+                }
+
+                try {
+                    cell = row.getCell(15);
+                    Instant instant = cell.getDateCellValue().toInstant();
+                    ZoneId zoneId = ZoneId.systemDefault();
+                    newword.setStoptime(instant.atZone(zoneId).toLocalDateTime());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(16);
+                newword.setStopinfo(cell.getStringCellValue());
+
+                try {
+                    cell = row.getCell(17);
+                    Instant instant = cell.getDateCellValue().toInstant();
+                    ZoneId zoneId = ZoneId.systemDefault();
+                    newword.setEndtime(instant.atZone(zoneId).toLocalDateTime());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(18);
+                newword.setSgname(cell.getStringCellValue());
+                cell = row.getCell(19);
+                newword.setSgphone(cell.toString());
+
+                cell = row.getCell(20);
+                newword.setYlname(cell.getStringCellValue());
+                cell = row.getCell(21);
+                newword.setYlphone(cell.toString());
+
+                cell = row.getCell(22);
+                newword.setMjname(cell.getStringCellValue());
+                cell = row.getCell(23);
+                newword.setMjphone(cell.toString());
+
+                cell = row.getCell(24);
+                newword.setWgname(cell.getStringCellValue());
+                cell = row.getCell(25);
+                newword.setWgphone(cell.toString());
+
+                cell = row.getCell(26);
+                newword.setGbname(cell.getStringCellValue());
+                cell = row.getCell(27);
+                newword.setGbphone(cell.toString());
 
                 words.add(newword);
             }

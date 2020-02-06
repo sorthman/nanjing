@@ -81,6 +81,30 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/njuser',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'njuser',
+    meta: {
+      title: '市申报管理',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'import',
+        component: () => import('@/views/njuser/import'),
+        name: 'import',
+        meta: {
+          perms: ['GET /adminapi/user/uploadnj'],
+          title: '每日数据导入',
+          noCache: true
+        }
+      },
+      
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     redirect: 'noredirect',
@@ -96,7 +120,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/user/import'),
         name: 'import',
         meta: {
-          perms: ['GET /adminapi/user/import'],
+          perms: ['GET /adminapi/user/upload'],
           title: '数据导入',
           noCache: true
         }
@@ -116,6 +140,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/user/nostreet'),
         name: 'nostreet',
         meta: {
+          perms: ['GET /adminapi/user/nostreet'],
           title: '无街道用户',
           noCache: true
         }
@@ -138,6 +163,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/stat/whstat'),
         name: 'whstat',
         meta: {
+          perms: ['GET /adminapi/stat/whstat'],
           title: '武汉统计报表',
           noCache: true
         }
@@ -147,6 +173,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/stat/hbstat'),
         name: 'hbstat',
         meta: {
+          perms: ['GET /adminapi/stat/hbstat'],
           title: '湖北统计报表',
           noCache: true
         }
@@ -156,6 +183,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/stat/wzstat'),
         name: 'wzstat',
         meta: {
+          perms: ['GET /adminapi/stat/wzstat'],
           title: '温州统计报表',
           noCache: true
         }

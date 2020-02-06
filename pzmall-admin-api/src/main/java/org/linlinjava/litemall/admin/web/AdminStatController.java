@@ -25,10 +25,34 @@ public class AdminStatController {
     @Autowired
     private StatService statService;
 
-    @RequiresPermissions("adminapi:stat:user")
-    @RequiresPermissionsDesc(menu = {"统计管理", "用户统计"}, button = "查询")
-    @GetMapping("/user")
-    public Object statUser() {
+    @RequiresPermissions("adminapi:stat:whstat")
+    @RequiresPermissionsDesc(menu = {"统计管理", "武汉统计报表"}, button = "查询")
+    @GetMapping("/whstat")
+    public Object whstat() {
+        List<Map> rows = statService.statUser();
+        String[] columns = new String[]{"day", "users"};
+        StatVo statVo = new StatVo();
+        statVo.setColumns(columns);
+        statVo.setRows(rows);
+        return ResponseUtil.ok(statVo);
+    }
+
+    @RequiresPermissions("adminapi:stat:hbstat")
+    @RequiresPermissionsDesc(menu = {"统计管理", "湖北统计报表"}, button = "查询")
+    @GetMapping("/hbstat")
+    public Object hbstat() {
+        List<Map> rows = statService.statUser();
+        String[] columns = new String[]{"day", "users"};
+        StatVo statVo = new StatVo();
+        statVo.setColumns(columns);
+        statVo.setRows(rows);
+        return ResponseUtil.ok(statVo);
+    }
+
+    @RequiresPermissions("adminapi:stat:wzstat")
+    @RequiresPermissionsDesc(menu = {"统计管理", "温州统计报表"}, button = "查询")
+    @GetMapping("/wzstat")
+    public Object wzstat() {
         List<Map> rows = statService.statUser();
         String[] columns = new String[]{"day", "users"};
         StatVo statVo = new StatVo();

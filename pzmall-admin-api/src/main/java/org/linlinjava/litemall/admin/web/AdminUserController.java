@@ -5,15 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
+import org.linlinjava.litemall.admin.service.LogHelper;
 import org.linlinjava.litemall.admin.vo.KnowledgeVo;
 import org.linlinjava.litemall.admin.vo.userVo;
 import org.linlinjava.litemall.core.util.ExcelUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.domain.*;
-import org.linlinjava.litemall.db.service.LitemallUserService;
-import org.linlinjava.litemall.db.service.UserCheckService;
-import org.linlinjava.litemall.db.service.UserSignService;
-import org.linlinjava.litemall.db.service.UserTransferService;
+import org.linlinjava.litemall.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +43,17 @@ public class AdminUserController {
     private UserCheckService userCheckService;
 
     @Autowired
+    private NjUserService njUserService;
+
+
+    @Autowired
     private UserTransferService userTransferService;
 
+    @Autowired
+    private LogHelper logHelper;
+
     @RequiresPermissions("adminapi:user:list")
-    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "查询")
+    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "查询")
     @GetMapping("/list")
     public Object list(String username, String phone,
                        @RequestParam(defaultValue = "") String sex,
@@ -68,7 +75,7 @@ public class AdminUserController {
                        @RequestParam(defaultValue = "") String ifadmin,
                        @RequestParam(defaultValue = "") String ifover,
                        @RequestParam(defaultValue = "") String iflose,
-
+                       @RequestParam(defaultValue = "") String ifstay,
                        @RequestParam(defaultValue = "1") Integer page,
                        @RequestParam(defaultValue = "10") Integer limit,
                        @RequestParam(defaultValue = "addtime") String sort,
@@ -78,13 +85,13 @@ public class AdminUserController {
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
         List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard, street, community, arrivedate, addsource, iftransferarea,
-                iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, page, limit, sort, order);
+                iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, ifstay, page, limit, sort, order);
         List<userVo> users = new ArrayList<>();
         for (Whuser user : userList) {
             userVo u = new userVo();
             BeanUtils.copyProperties(user, u);
             users.add(u);
-            LocalDateTime sTime = LocalDateTime.now().minusDays(14);
+            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
             if (user.getArrivedate() != null) {
                 if (user.getArrivedate().isBefore(sTime)) {
                     u.setIfover("是");
@@ -101,7 +108,7 @@ public class AdminUserController {
     }
 
     @RequiresPermissions("adminapi:user:listsign")
-    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "详情")
+    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "详情")
     @GetMapping("/listsign")
     public Object listsign(Integer uid,
                            @RequestParam(defaultValue = "1") Integer page,
@@ -113,9 +120,20 @@ public class AdminUserController {
     }
 
     @RequiresPermissions("adminapi:user:update")
-    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "编辑")
+    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "编辑")
     @PostMapping("/update")
     public Object update(@RequestBody Whuser user) {
+
+        if (user.getArrivedate() != null) {
+            user.setLefttimemodify(LocalDateTime.now());
+            user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
+            LocalDateTime endTime = user.getArrivedate().plusDays(15);
+            LocalDateTime nowTime = LocalDateTime.now();
+            Duration duration = Duration.between(nowTime, endTime);
+            user.setLefttime((int) duration.toDays());
+        }
+
+        user.setModifytime(LocalDateTime.now());
 
         if (userService.updateById(user) == 0) {
             return ResponseUtil.updatedDataFailed();
@@ -125,7 +143,7 @@ public class AdminUserController {
     }
 
     @RequiresPermissions("adminapi:user:upload")
-    @RequiresPermissionsDesc(menu = {"申报管理", "导入数据"}, button = "导入")
+    @RequiresPermissionsDesc(menu = {"申报管理", "数据导入"}, button = "导入")
     @GetMapping("/upload")
     public Object upload(@RequestParam(defaultValue = "") String filename,
                          @RequestParam(defaultValue = "") String addsource) {
@@ -135,7 +153,6 @@ public class AdminUserController {
         if (!StringUtils.isEmpty(filename)) {
             String rootPath = System.getProperty("user.dir");
             String filePath = rootPath + "/storage/" + filename;
-//			logger.debug("文件路径2：" + filePath);
             users = ExcelUtil.getList(filePath);
 
             if (users == null) {
@@ -150,14 +167,32 @@ public class AdminUserController {
         int totalCount = users.size();
         String failUser = "";
         for (Whuser user : users) {
+
             Whuser suser = userService.findByIdcard(user.getIdcard());
-            if (suser == null) {
+            if (suser == null || !addsource.equals("公安")) {
                 if (user.getHealthinfo().indexOf("发热") >= 0) {
                     user.setIfhot("是");
                 }
                 if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
                     user.setIfkesou("是");
                 }
+
+                user.setSigncount(0);
+                String strTime = "1970-01-01 00:00:00";
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime staTime = LocalDateTime.parse(strTime, df);
+                user.setLastsigntime(staTime);
+                user.setModifytime(LocalDateTime.now());
+
+                if (user.getArrivedate() != null) {
+                    user.setLefttimemodify(LocalDateTime.now());
+                    user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
+                    LocalDateTime endTime = user.getArrivedate().plusDays(15);
+                    LocalDateTime nowTime = LocalDateTime.now();
+                    Duration duration = Duration.between(nowTime, endTime);
+                    user.setLefttime((int) duration.toDays());
+                }
+
                 user.setArea(admin.getArea());
                 user.setAddsource((addsource));
                 userService.add(user);
@@ -167,11 +202,13 @@ public class AdminUserController {
             }
         }
 
+        logHelper.logAdmin(3, "导入武汉表格", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+
         return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
     }
 
     @RequiresPermissions("adminapi:user:download")
-    @RequiresPermissionsDesc(menu = {"申报管理", "登记管理"}, button = "导出")
+    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "导出")
     @GetMapping("/download")
     public void download(HttpServletResponse response, String username, String mobile,
                          @RequestParam(defaultValue = "1") Integer page,
@@ -208,5 +245,53 @@ public class AdminUserController {
             System.out.println("error");
             e.printStackTrace();
         }
+    }
+
+    @RequiresPermissions("adminapi:user:nostreet")
+    @RequiresPermissionsDesc(menu = {"申报管理", "无街道用户"}, button = "查询")
+    @GetMapping("/nostreet")
+    public void nostreet() {
+
+    }
+
+    @RequiresPermissions("adminapi:user:uploadnj")
+    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入")
+    @GetMapping("/uploadnj")
+    public Object uploadnj(@RequestParam(defaultValue = "") String filename) {
+        Subject currentUser = SecurityUtils.getSubject();
+        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+        List<Njuser> users = new ArrayList<Njuser>();
+        if (!StringUtils.isEmpty(filename)) {
+            String rootPath = System.getProperty("user.dir");
+            String filePath = rootPath + "/storage/" + filename;
+            users = ExcelUtil.getNJList(filePath);
+
+            if (users == null) {
+                return ResponseUtil.fail(-2, "请上传正确的表格");
+            }
+        } else {
+            return ResponseUtil.fail(-2, "请上传表格");
+        }
+
+        // 插入用户表
+        int count = 0;
+        int totalCount = users.size();
+        String failUser = "";
+        for (Njuser user : users) {
+
+            Njuser suser = njUserService.findByIdcard(user.getIdcard());
+            if (suser == null) {
+                user.setAddtime(LocalDateTime.now());
+                user.setAddaccount(admin.getUsername());
+                njUserService.add(user);
+                count++;
+            } else {
+                failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+            }
+        }
+
+        logHelper.logAdmin(3, "导入居家隔离表格", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+
+        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
     }
 }

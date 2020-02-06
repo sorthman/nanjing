@@ -75,6 +75,8 @@ public class LitemallUserService {
                                        String ifadmin,
                                        String ifover,
                                        String iflose,
+                                       String ifstay,
+
                                        Integer page, Integer size, String sort, String order) {
         WhuserExample example = new WhuserExample();
         WhuserExample.Criteria criteria = example.createCriteria();
@@ -142,15 +144,18 @@ public class LitemallUserService {
         if (!StringUtils.isEmpty(iflose)) {
             criteria.andIfloseEqualTo(iflose);
         }
+        if (!StringUtils.isEmpty(ifstay)) {
+            criteria.andIfstayEqualTo(ifstay);
+        }
         if (!StringUtils.isEmpty(ifadmin)) {
             criteria.andIsmanageEqualTo(ifadmin);
         }
         if (!StringUtils.isEmpty(ifover)) {
-            if (ifover == "是") {
-                LocalDateTime sTime = LocalDateTime.now().minusDays(14);
+            if (ifover.equals("是")) {
+                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
                 criteria.andArrivedateLessThan(sTime);
             } else {
-                LocalDateTime sTime = LocalDateTime.now().minusDays(14);
+                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
                 criteria.andArrivedateGreaterThan(sTime);
             }
         }
