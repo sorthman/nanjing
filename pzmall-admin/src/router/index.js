@@ -57,17 +57,30 @@ export const constantRouterMap = [
     hidden: true
   }
   ,
+  // {
+  //   path: '',
+  //   hidden: true,
+  //   component: Layout,
+  //   redirect: '/user/user',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       component: () => import('@/views/user/user'),
+  //       name: 'Dashboard',
+  //       meta: { title: '登记列表', icon: 'dashboard', noCache: true }
+  //     }
+  //   ]
+  // }
   {
     path: '',
-    hidden: true,
     component: Layout,
-    redirect: '/user/user',
+    redirect: 'dashboard',
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/user/user'),
+        component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: '登记列表', icon: 'dashboard', noCache: true }
+        meta: { title: '疫情管控', icon: 'dashboard', noCache: true }
       }
     ]
   }
@@ -88,7 +101,7 @@ export const asyncRouterMap = [
     name: 'njuser',
     meta: {
       title: '市申报管理',
-      icon: 'chart'
+      icon: 'course'
     },
     children: [
       {
@@ -101,7 +114,50 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      
+      {
+        path: 'user',
+        component: () => import('@/views/njuser/user'),
+        name: 'user',
+        meta: {
+          perms: ['GET /adminapi/njuser/list'],
+          title: '用户查询',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/outuser',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'outuser',
+    meta: {
+      title: '外来人员查询',
+      icon: 'peoples'
+    },
+    children: [
+
+      {
+        path: 'outuser',
+        component: () => import('@/views/njuser/outuser'),
+        name: 'outuser',
+        meta: {
+          perms: ['GET /adminapi/outsideuser/list'],
+          title: '外来人员查询',
+          noCache: true
+        }
+      },
+      {
+        path: 'visituser',
+        component: () => import('@/views/njuser/visituser'),
+        name: 'visituser',
+        meta: {
+          perms: ['GET /adminapi/visituser/list'],
+          title: '小区外来人员查询',
+          noCache: true
+        }
+      },
     ]
   },
   {
@@ -112,7 +168,7 @@ export const asyncRouterMap = [
     name: 'userManage',
     meta: {
       title: '申报管理',
-      icon: 'user'
+      icon: 'excel'
     },
     children: [
       {
@@ -185,6 +241,16 @@ export const asyncRouterMap = [
         meta: {
           perms: ['GET /adminapi/stat/wzstat'],
           title: '温州统计报表',
+          noCache: true
+        }
+      },
+      {
+        path: 'wlstat',
+        component: () => import('@/views/stat/wlstat'),
+        name: 'wlstat',
+        meta: {
+          perms: ['GET /adminapi/stat/wlstat'],
+          title: '外来人员统计',
           noCache: true
         }
       }

@@ -36,6 +36,7 @@
     <result column="gbphone" jdbcType="VARCHAR" property="gbphone" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
     <result column="addaccount" jdbcType="VARCHAR" property="addaccount" />
+    <result column="reportdate" jdbcType="TIMESTAMP" property="reportdate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -110,7 +111,8 @@
     -->
     id, `name`, sex, age, idcard, phone, area, street, community, hjaddress, liveaddress, 
     glinfo, zdyqinfo, glqtinfo, starttime, stoptime, stopinfo, endtime, sgname, sgphone, 
-    ylname, ylphone, mjname, mjphone, wgname, wgphone, gbname, gbphone, addtime, addaccount
+    ylname, ylphone, mjname, mjphone, wgname, wgphone, gbname, gbphone, addtime, addaccount, 
+    reportdate
   </sql>
   <select id="selectByExample" parameterType="org.linlinjava.litemall.db.domain.NjuserExample" resultMap="BaseResultMap">
     <!--
@@ -221,7 +223,8 @@
       sgphone, ylname, ylphone, 
       mjname, mjphone, wgname, 
       wgphone, gbname, gbphone, 
-      addtime, addaccount)
+      addtime, addaccount, reportdate
+      )
     values (#{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{idcard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
       #{street,jdbcType=VARCHAR}, #{community,jdbcType=VARCHAR}, #{hjaddress,jdbcType=VARCHAR}, 
@@ -231,7 +234,8 @@
       #{sgphone,jdbcType=VARCHAR}, #{ylname,jdbcType=VARCHAR}, #{ylphone,jdbcType=VARCHAR}, 
       #{mjname,jdbcType=VARCHAR}, #{mjphone,jdbcType=VARCHAR}, #{wgname,jdbcType=VARCHAR}, 
       #{wgphone,jdbcType=VARCHAR}, #{gbname,jdbcType=VARCHAR}, #{gbphone,jdbcType=VARCHAR}, 
-      #{addtime,jdbcType=TIMESTAMP}, #{addaccount,jdbcType=VARCHAR})
+      #{addtime,jdbcType=TIMESTAMP}, #{addaccount,jdbcType=VARCHAR}, #{reportdate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.Njuser">
     <!--
@@ -330,6 +334,9 @@
       <if test="addaccount != null">
         addaccount,
       </if>
+      <if test="reportdate != null">
+        reportdate,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -418,6 +425,9 @@
       </if>
       <if test="addaccount != null">
         #{addaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="reportdate != null">
+        #{reportdate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -528,6 +538,9 @@
       <if test="record.addaccount != null">
         addaccount = #{record.addaccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.reportdate != null">
+        reportdate = #{record.reportdate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -568,7 +581,8 @@
       gbname = #{record.gbname,jdbcType=VARCHAR},
       gbphone = #{record.gbphone,jdbcType=VARCHAR},
       addtime = #{record.addtime,jdbcType=TIMESTAMP},
-      addaccount = #{record.addaccount,jdbcType=VARCHAR}
+      addaccount = #{record.addaccount,jdbcType=VARCHAR},
+      reportdate = #{record.reportdate,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -667,6 +681,9 @@
       <if test="addaccount != null">
         addaccount = #{addaccount,jdbcType=VARCHAR},
       </if>
+      <if test="reportdate != null">
+        reportdate = #{reportdate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -704,7 +721,8 @@
       gbname = #{gbname,jdbcType=VARCHAR},
       gbphone = #{gbphone,jdbcType=VARCHAR},
       addtime = #{addtime,jdbcType=TIMESTAMP},
-      addaccount = #{addaccount,jdbcType=VARCHAR}
+      addaccount = #{addaccount,jdbcType=VARCHAR},
+      reportdate = #{reportdate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectOneByExample" parameterType="org.linlinjava.litemall.db.domain.NjuserExample" resultMap="BaseResultMap">
