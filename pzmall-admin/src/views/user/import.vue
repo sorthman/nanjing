@@ -5,7 +5,7 @@
       status-icon
       label-position="left"
       label-width="150px"
-      style="width: 400px; margin-left:50px;"
+      style="width: 600px; margin-left:50px;"
     >
       <el-form-item label="请选择数据类型" prop="addsource">
         <el-select
@@ -17,7 +17,8 @@
         >
           <el-option v-for="(key, value) in sourceMap" :key="key" :label="key" :value="value" />
         </el-select>
-        <a href="http://ning.pzunion.cn/manage/demo.xls">下载模板</a>
+        <a v-show="addsource!='省疾控'" href="http://ning.pzunion.cn/manage/demo.xls">下载模板</a>
+        <a v-show="addsource==='省疾控'" href="http://ning.pzunion.cn/manage/demosjk.xlsx">下载省疾控模板</a>
       </el-form-item>
       <el-form-item label="请上传文件" prop="filename">
         <el-upload
@@ -26,7 +27,7 @@
           :show-file-list="false"
           :on-success="uploadWordsUrl"
           class="avatar-uploader"
-          accept=".xls"
+          accept=".xls,.xlsx"
         >
           <i class="el-icon-plus avatar-uploader-icon" />
         </el-upload>
@@ -76,7 +77,7 @@ import {
   deleteWord,
   uploadWord
 } from "@/api/word";
-import { importUser } from "@/api/user";
+import { importUser, importSJKUser } from "@/api/user";
 import { listBook } from "@/api/wordtype";
 import Tinymce from "@/components/Tinymce";
 
@@ -104,7 +105,8 @@ const sourceMap = {
   自查: "自查",
   公安: "公安",
   教育: "教育",
-  漫游: "漫游"
+  漫游: "漫游",
+  省疾控: "省疾控"
 };
 
 export default {
@@ -271,29 +273,55 @@ export default {
         filename: this.filename
       };
       this.importLoading = true;
-      importUser(query)
-        .then(response => {
-          this.importLoading = false;
-          if (response.data.code === 0) {
-            this.importresult = response.data.data;
-            this.$notify.success({
-              title: "成功",
-              message: "导入成功"
-            });
-          } else {
+      if (this.addsource === "省疾控") {
+        importSJKUser(query)
+          .then(response => {
+            this.importLoading = false;
+            if (response.data.code === 0) {
+              this.importresult = response.data.data;
+              this.$notify.success({
+                title: "成功",
+                message: "导入成功"
+              });
+            } else {
+              this.$notify.error({
+                title: "失败",
+                message: response.data.msg
+              });
+            }
+          })
+          .catch(response => {
+            this.importLoading = false;
             this.$notify.error({
               title: "失败",
               message: response.data.msg
             });
-          }
-        })
-        .catch(response => {
-          this.importLoading = false;
-          this.$notify.error({
-            title: "失败",
-            message: response.data.msg
           });
-        });
+      } else {
+        importUser(query)
+          .then(response => {
+            this.importLoading = false;
+            if (response.data.code === 0) {
+              this.importresult = response.data.data;
+              this.$notify.success({
+                title: "成功",
+                message: "导入成功"
+              });
+            } else {
+              this.$notify.error({
+                title: "失败",
+                message: response.data.msg
+              });
+            }
+          })
+          .catch(response => {
+            this.importLoading = false;
+            this.$notify.error({
+              title: "失败",
+              message: response.data.msg
+            });
+          });
+      }
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({}, row);

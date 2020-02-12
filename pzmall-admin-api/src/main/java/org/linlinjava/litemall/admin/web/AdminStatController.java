@@ -61,4 +61,16 @@ public class AdminStatController {
         return ResponseUtil.ok(statVo);
     }
 
+    @RequiresPermissions("adminapi:stat:wzstat")
+    @RequiresPermissionsDesc(menu = {"统计管理", "外来人员统计"}, button = "查询")
+    @GetMapping("/wlstat")
+    public Object wlstat() {
+        List<Map> rows = statService.statUser();
+        String[] columns = new String[]{"day", "users"};
+        StatVo statVo = new StatVo();
+        statVo.setColumns(columns);
+        statVo.setRows(rows);
+        return ResponseUtil.ok(statVo);
+    }
+
 }

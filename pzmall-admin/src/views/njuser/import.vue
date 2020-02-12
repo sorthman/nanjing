@@ -7,18 +7,10 @@
       label-width="150px"
       style="width: 400px; margin-left:50px;"
     >
-      <!-- <el-form-item label="请选择数据类型" prop="addsource">
-        <el-select
-          v-model="addsource"
-          clearable
-          style="width: 150px"
-          class="filter-item"
-          placeholder="数据来源"
-        >
-          <el-option v-for="(key, value) in sourceMap" :key="key" :label="key" :value="value" />
-        </el-select>
-        <a href="http://ning.pzunion.cn/manage/demo.xls">下载模板</a>
-      </el-form-item> -->
+      <el-form-item label="请使用右侧模板" prop="addsource">
+        
+        <a href="http://ning.pzunion.cn/manage/njdemo.xlsx">下载模板</a>
+      </el-form-item>
       <el-form-item label="请上传文件" prop="filename">
         <el-upload
           :headers="headers"
@@ -26,7 +18,7 @@
           :show-file-list="false"
           :on-success="uploadWordsUrl"
           class="avatar-uploader"
-          accept=".xls"
+          accept=".xlsx"
         >
           <i class="el-icon-plus avatar-uploader-icon" />
         </el-upload>

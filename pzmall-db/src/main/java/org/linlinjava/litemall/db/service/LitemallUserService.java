@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,12 @@ public class LitemallUserService {
     public Whuser findByIdcard(String idcard) {
         WhuserExample example = new WhuserExample();
         example.or().andIdcardEqualTo(idcard);
+        return userMapper.selectOneByExample(example);
+    }
+
+    public Whuser findByPhone(String phone) {
+        WhuserExample example = new WhuserExample();
+        example.or().andPhoneEqualTo(phone);
         return userMapper.selectOneByExample(example);
     }
 
@@ -63,12 +70,12 @@ public class LitemallUserService {
                                        String street,
                                        String community,
                                        String arrivedate,
-                                       String addsource,
+                                       String[] addsource,
                                        String iftransferarea,
                                        String iftransferstreet,
                                        String ifsafe,
                                        String healthinfo,
-                                       String usertype,
+                                       String[] usertype,
                                        String ifwh,
                                        String ifhb,
                                        String ifleavenj,
@@ -76,6 +83,9 @@ public class LitemallUserService {
                                        String ifover,
                                        String iflose,
                                        String ifstay,
+                                       String addtime,
+                                       String managetime,
+                                       String level,
 
                                        Integer page, Integer size, String sort, String order) {
         WhuserExample example = new WhuserExample();
@@ -117,8 +127,26 @@ public class LitemallUserService {
             LocalDateTime date = LocalDateTime.parse(arrivedate);
             criteria.andArrivedateEqualTo(date);
         }
-        if (!StringUtils.isEmpty(addsource)) {
-            criteria.andAddsourceLike("%" + addsource + "%");
+        if (!StringUtils.isEmpty(addtime)) {
+            addtime = addtime.replace(" ", "T");
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime date = LocalDateTime.parse(addtime);
+            LocalDateTime dateend = date.plusDays(1);
+            criteria.andAddtimeBetween(date, dateend);
+        }
+        if (!StringUtils.isEmpty(managetime)) {
+            managetime = managetime.replace(" ", "T");
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime date = LocalDateTime.parse(managetime);
+            LocalDateTime dateend = date.plusDays(1);
+            criteria.andManagetimeBetween(date, dateend);
+        }
+        if (addsource.length > 0) {
+            List<String> list = new ArrayList<>();
+            for (String s : addsource) {
+                list.add(s);
+            }
+            criteria.andAddsourceIn(list);
         }
         if (!StringUtils.isEmpty(iftransferarea)) {
             criteria.andIftransferareaEqualTo(iftransferarea);
@@ -132,8 +160,15 @@ public class LitemallUserService {
         if (!StringUtils.isEmpty(ifhb)) {
             criteria.andIfhbEqualTo(ifhb);
         }
-        if (!StringUtils.isEmpty(usertype)) {
-            criteria.andUsertypeEqualTo(usertype);
+//        if (!StringUtils.isEmpty(usertype)) {
+//            criteria.andUsertypeEqualTo(usertype);
+//        }
+        if (usertype.length > 0) {
+            List<String> list = new ArrayList<>();
+            for (String s : usertype) {
+                list.add(s);
+            }
+            criteria.andUsertypeIn(list);
         }
         if (!StringUtils.isEmpty(ifwh)) {
             criteria.andIfwhEqualTo(ifwh);
@@ -149,6 +184,9 @@ public class LitemallUserService {
         }
         if (!StringUtils.isEmpty(ifadmin)) {
             criteria.andIsmanageEqualTo(ifadmin);
+        }
+        if (!StringUtils.isEmpty(level)) {
+            criteria.andLevelEqualTo(level);
         }
         if (!StringUtils.isEmpty(ifover)) {
             if (ifover.equals("是")) {

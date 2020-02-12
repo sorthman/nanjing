@@ -2,21 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f7b0c87-0545-4a24-ba9b-92b6d8631976" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/NjUserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminNjUserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminOutsideUserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminVisitUserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/BaseNanjingService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/OutsideUserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/VisitUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/config/ShiroConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/config/ShiroConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/vo/userVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/vo/userVo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminStatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminStatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminStorageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminStorageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminUserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/api/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/utils/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/dashboard/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/dashboard/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/layout/components/Sidebar/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/layout/components/Sidebar/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/njuser/import.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/njuser/import.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/user/import.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/user/import.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/user/user.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/user/user.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-core/src/main/java/org/linlinjava/litemall/core/util/ExcelUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-core/src/main/java/org/linlinjava/litemall/core/util/ExcelUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-core/src/main/main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-core/src/main/main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/mybatis-generator/generatorConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/mybatis-generator/generatorConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/Njuser.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/Njuser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/NjuserExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/NjuserExample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/Whuser.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/Whuser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/WhuserExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/domain/WhuserExample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/LitemallUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/LitemallUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/NjUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/NjUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/resources/application-db.yml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/resources/application-db.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/resources/org/linlinjava/litemall/db/dao/NjuserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/resources/org/linlinjava/litemall/db/dao/NjuserMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/resources/org/linlinjava/litemall/db/dao/WhuserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/resources/org/linlinjava/litemall/db/dao/WhuserMapper.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -88,10 +103,10 @@
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.linlinjava.litemall.db.service" />
+      <recent name="org.linlinjava.litemall.admin.web" />
       <recent name="org.linlinjava.litemall.admin.vo" />
       <recent name="org.linlinjava.litemall.db.util" />
       <recent name="org.linlinjava.litemall.wx.config" />
-      <recent name="org.linlinjava.litemall.admin.web" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -278,7 +293,10 @@
       <workItem from="1580547780722" duration="10320000" />
       <workItem from="1580605389005" duration="5553000" />
       <workItem from="1580618256767" duration="29986000" />
-      <workItem from="1580716779894" duration="15050000" />
+      <workItem from="1580716779894" duration="19331000" />
+      <workItem from="1580978543153" duration="27215000" />
+      <workItem from="1581389201324" duration="923000" />
+      <workItem from="1581430374844" duration="3599000" />
     </task>
     <servers />
   </component>

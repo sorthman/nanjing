@@ -176,6 +176,75 @@ public class ExcelUtil<T> {
 
     }
 
+    public static List<Whuser> getSJKList(String filePath) {
+        try {
+            File excelFile = new File(filePath); // 创建文件对象
+            FileInputStream in = new FileInputStream(excelFile); // 文件流
+            Workbook workbook = getWorkbok(in, excelFile);
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Whuser> words = new ArrayList<Whuser>();
+            int count = 0;
+            for (Row row : sheet) {
+                // 跳过第一行的目录
+                if (count < 1) {
+                    count++;
+                    continue;
+                }
+
+                Whuser newword = new Whuser();
+
+                int end = row.getLastCellNum();
+
+                Cell cell = row.getCell(0);
+                newword.setPhone(cell.toString());
+                cell = row.getCell(1);
+                newword.setLevel(cell.getStringCellValue());
+                cell = row.getCell(2);
+                String ifconfirm = cell.getStringCellValue();
+                if (ifconfirm.equals("是")) {
+                    newword.setIfsafe("确诊");
+                }
+
+                cell = row.getCell(5);
+                newword.setName(cell.getStringCellValue());
+                cell = row.getCell(6);
+                newword.setSex(cell.getStringCellValue());
+                cell = row.getCell(9);
+                newword.setArea(cell.getStringCellValue());
+
+                cell = row.getCell(10);
+                String street = cell.getStringCellValue();
+                cell = row.getCell(11);
+                newword.setLiveaddress(street + "," + cell.getStringCellValue());
+
+                cell = row.getCell(12);
+                newword.setIfwh(cell.getStringCellValue());
+                cell = row.getCell(13);
+                newword.setIfcontactSars(cell.toString());
+                cell = row.getCell(14);
+                newword.setIfcontactHot(cell.toString());
+
+                cell = row.getCell(15);
+                String ifhot = cell.getStringCellValue();
+                if (ifhot.equals("有")) {
+                    newword.setIfhot("是");
+                    newword.setIfkesou("是");
+                } else {
+                    newword.setIfhot("否");
+                    newword.setIfkesou("否");
+                }
+
+                words.add(newword);
+            }
+            return words;
+        } catch (Exception ex) {
+//			logger.info("解析Excel异常：" + ex.getMessage());
+//			System.out.println("解析Excel异常：" + ex.getMessage());
+            return null;
+        }
+
+    }
+
     public static List<Njuser> getNJList(String filePath) {
         try {
             File excelFile = new File(filePath); // 创建文件对象

@@ -17,20 +17,9 @@
         style="width: 150px;"
         placeholder="请输入结束年龄"
       />
-
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
-      <el-button
-        v-permission="['GET /adminapi/user/download']"
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>
-
       <br />
       <el-input
-        v-model="listQuery.username"
+        v-model="listQuery.name"
         clearable
         class="filter-item"
         style="width: 150px;"
@@ -60,14 +49,24 @@
         placeholder="请输入身份证"
       />
 
+      <el-date-picker
+        v-model="listQuery.addtime"
+        type="date"
+        style="width: 150px"
+        class="filter-item"
+        value-format="yyyy-MM-ddTHH:mm:ss"
+        placeholder="登记时间"
+      ></el-date-picker>
+
+      <br />
+
       <el-input
         v-model="listQuery.street"
         clearable
         class="filter-item"
-        style="width: 150px;"
+        style="width: 120px;"
         placeholder="请输入街道"
       />
-
       <el-input
         v-model="listQuery.community"
         clearable
@@ -75,6 +74,7 @@
         style="width: 120px;"
         placeholder="请输入社区"
       />
+
       <!-- <el-select
         v-model="listQuery.sex"
         clearable
@@ -94,16 +94,6 @@
         <el-option v-for="(key, value) in sexMap" :key="key" :label="key" :value="value" />
       </el-select>-->
 
-      <el-date-picker
-        v-model="listQuery.arrivedate"
-        type="date"
-        style="width: 120px"
-        class="filter-item"
-        value-format="yyyy-MM-ddTHH:mm:ss"
-        placeholder="来宁时间"
-      ></el-date-picker>
-      <br />
-
       <!-- <el-input
         v-model="listQuery.addsource"
         clearable
@@ -112,150 +102,56 @@
         placeholder="数据来源"
       />-->
 
-      <el-select
-        v-model="listQuery.addsource"
-        clearable
-        multiple
-        collapse-tags
+      <el-date-picker
+        v-model="listQuery.arrivedate"
+        type="date"
         style="width: 150px"
         class="filter-item"
-        placeholder="数据来源"
-      >
-        <el-option v-for="(key, value) in sourceMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.iftransferarea"
+        value-format="yyyy-MM-ddTHH:mm:ss"
+        placeholder="到访时间"
+      ></el-date-picker>
+
+     <el-input
+        v-model="listQuery.province"
         clearable
-        style="width: 150px"
         class="filter-item"
-        placeholder="转过街道"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.iftransferstreet"
+        style="width: 120px;"
+        placeholder="请输入省份"
+      />
+      <el-input
+        v-model="listQuery.city"
         clearable
-        style="width: 150px"
         class="filter-item"
-        placeholder="转过区域"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.ifsafe"
+        style="width: 120px;"
+        placeholder="请输入城市"
+      />
+      <el-input
+        v-model="listQuery.area"
         clearable
-        style="width: 150px"
         class="filter-item"
-        placeholder="当前状态"
-      >
-        <el-option v-for="(key, value) in zhuantaiMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.healthinfo"
-        multiple
-        clearable
-        collapse-tags
-        style="width: 150px"
-        class="filter-item"
-        placeholder="目前状况"
-      >
-        <el-option v-for="(key, value) in healthMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.usertype"
-        clearable
-        multiple
-        collapse-tags
-        style="width: 120px"
-        class="filter-item"
-        placeholder="用户类型"
-      >
-        <el-option v-for="(key, value) in userTypeMap" :key="key" :label="key" :value="value" />
-      </el-select>
+        style="width: 120px;"
+        placeholder="请输入区域"
+      />
+
       <el-select
         v-model="listQuery.ifwh"
         clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="是否去过"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <br />
-
-      <el-select
-        v-model="listQuery.ifleavenj"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="是否离宁"
-      >
-        <el-option v-for="(key, value) in statusLeaveMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.ifadmin"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="正在管理"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.ifover"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="超过14天"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.iflose"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="追访不到"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-      <el-select
-        v-model="listQuery.ifstay"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="是否当前区域"
-      >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
-      </el-select>
-
-      <el-date-picker
-        v-model="listQuery.addtime"
-        type="date"
-        style="width: 120px"
-        class="filter-item"
-        value-format="yyyy-MM-ddTHH:mm:ss"
-        placeholder="登记时间"
-      ></el-date-picker>
-
-      <el-date-picker
-        v-model="listQuery.managetime"
-        type="date"
         style="width: 150px"
         class="filter-item"
-        value-format="yyyy-MM-ddTHH:mm:ss"
-        placeholder="管理开始时间"
-      ></el-date-picker>
-
-      <el-select
-        v-model="listQuery.level"
-        clearable
-        style="width: 120px"
-        class="filter-item"
-        placeholder="登记等级"
+        placeholder="重点疫区"
       >
-        <el-option v-for="(key, value) in levelMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in zdyqMap" :key="key" :label="key" :value="value" />
       </el-select>
+
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
+      <!-- <el-button
+        v-permission="['GET /adminapi/user/download']"
+        :loading="downloadLoading"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >导出</el-button>-->
     </div>
 
     <!-- 查询结果 -->
@@ -270,13 +166,6 @@
       <el-table-column align="center" width="100px" label="编号" prop="id" sortable />
       <!-- <el-table-column align="center" label="登记方式" prop="addsource" /> -->
 
-      <el-table-column align="center" label="等级" prop="level" />
-      <el-table-column align="center" min-width="120px" label="管理时间" prop="managetime">
-        <template
-          slot-scope="scope"
-        >{{scope.row.managetime?scope.row.managetime.substring(0,10):""}}</template>
-      </el-table-column>
-
       <el-table-column align="center" label="姓名" prop="name" />
       <el-table-column min-width="120px" align="center" label="手机号" prop="phone" />
       <el-table-column align="center" label="性别" prop="sex" />
@@ -285,39 +174,26 @@
         <template slot-scope="scope">{{scope.row.idcard | idcardFilter}}</template>
       </el-table-column>
 
-      <el-table-column align="center" label="是否在行政区" prop="ifstay" />
-      <el-table-column align="center" label="用户类型" prop="usertype" />
-      <el-table-column align="center" label="是否去过疫区" prop="ifwh" />
-      <el-table-column align="center" label="是否接触疫区人员" prop="ifcontactSars" />
-      <el-table-column align="center" label="是否接触发热咳嗽" prop="ifcontactHot" />
-
-      <el-table-column align="center" label="是否离开南京" prop="ifleavenj" />
-      <el-table-column align="center" label="是否正在管理" prop="ismanage" />
-      <el-table-column align="center" label="是否超过14天" prop="ifover" />
-      <el-table-column align="center" label="是否追访不到" prop="iflose" />
-      <el-table-column align="center" label="追访不到原因" prop="loseinfo" />
-      <el-table-column align="center" label="街道" prop="street" />
-      <el-table-column align="center" label="社区" prop="njcommunity" />
-
+      <el-table-column align="center" label="生日" prop="birthday" />
+      <el-table-column align="center" label="社区" prop="community" />
       <el-table-column align="center" label="常驻地址" min-width="300px" prop="liveaddress" />
-      <el-table-column align="center" min-width="300px" label="停留武汉时间" prop="whtime" />
-      <el-table-column align="center" min-width="120px" label="来宁时间" prop="arrivedate">
+
+      <el-table-column align="center" min-width="120px" label="到达时间" prop="arrivedate">
         <template
           slot-scope="scope"
         >{{scope.row.arrivedate?scope.row.arrivedate.substring(0,10):""}}</template>
       </el-table-column>
-      <el-table-column align="center" label="是否发热" prop="ifhot" />
-      <el-table-column align="center" label="是否咳嗽" prop="ifkesou" />
-      <el-table-column align="center" min-width="300px" label="目前症状" prop="healthinfo" />
-      <el-table-column align="center" label="就诊情况" prop="docinfo" />
-      <el-table-column align="center" label="数据来源" prop="addsource" />
-      <el-table-column align="center" label="备注" min-width="600px" prop="remark" />
 
-      <el-table-column align="center" label="街道领导" prop="jdname" />
-      <el-table-column align="center" label="街道干部" prop="gbname" />
-      <el-table-column align="center" label="社工" prop="sgname" />
-      <el-table-column align="center" label="社区民警" prop="mjname" />
-      <el-table-column align="center" label="医疗卫生员" prop="ylname" />
+      <el-table-column align="center" label="省份" prop="province" />
+      <el-table-column align="center" label="城市" prop="city" />
+      <el-table-column align="center" label="区域" prop="district" />
+      <el-table-column align="center" label="是否武汉" prop="ifwh" />
+      <el-table-column align="center" label="武汉停留时间" prop="whtime" />
+
+      <el-table-column align="center" label="是否外出" prop="ifgoout" />
+      <el-table-column align="center" label="外出地址" prop="goaddress" />
+      <el-table-column align="center" label="其他信息" prop="other" />
+
       <!-- <el-table-column align="center" label="目前居住区域" prop="currentaddress" />
       <el-table-column align="center" label="武汉居住区域" prop="whaddress" />
 
@@ -337,7 +213,7 @@
       <el-table-column align="center" label="是否接触感染人员" prop="ifcontactSars" />
       <el-table-column min-width="200px" align="center" label="健康信息" prop="healthinfo" />-->
 
-      <el-table-column
+      <!-- <el-table-column
         fixed="right"
         align="center"
         label="操作"
@@ -348,7 +224,7 @@
           <el-button size="small" type="primary" @click="handleDetail(scope.row)">详情查看</el-button>
           <el-button size="small" type="primary" @click="handleUpdate(scope.row)">编辑信息</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -391,14 +267,6 @@
             type="date"
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="来宁时间"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="开始管理时间" prop="managetime">
-          <el-date-picker
-            v-model="dataForm.managetime"
-            type="date"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="开始管理时间"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="街道领导信息" prop="jdname">
@@ -521,7 +389,7 @@
 </template>
 
 <script>
-import { fetchList, download, listSign, updateUser } from "@/api/user";
+import { listUserOut } from "@/api/njuser";
 import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { formatDate } from "@/utils/time.js";
 
@@ -535,33 +403,18 @@ const statusMap = {
   否: "否"
 };
 
-const statusLeaveMap = {
-  是: "是",
-  否: "否",
-  不确定: "不确定"
-};
-
 const sourceMap = {
   自主: "自主",
   自查: "自查",
   公安: "公安",
   教育: "教育",
-  漫游: "漫游",
-  省疾控: "省疾控"
-};
-
-const levelMap = {
-  红色: "红色",
-  黄色: "黄色",
-  蓝色: "蓝色"
+  漫游: "漫游"
 };
 
 const userTypeMap = {
   武汉: "武汉",
   湖北: "湖北",
-  温州: "温州",
-  其他地区: "其他地区",
-  无接触: "无接触"
+  温州: "温州"
 };
 
 const zhuantaiMap = {
@@ -585,6 +438,24 @@ const healthMap = {
   胸闷: "胸闷"
 };
 
+const glyyMap = {
+  "14天内往来重点疫区": "14天内往来重点疫区",
+  其它: "其它"
+};
+
+const zdyqMap = {
+  武汉: "武汉",
+  "湖北": "湖北(非武汉)",
+  温州: "温州",
+  其他: "其他"
+};
+
+const stopinfoMap = {
+  转送集中隔离: "转送集中隔离",
+  转送定点医院: "转送定点医院",
+  其它: "其它"
+};
+
 export default {
   name: "User",
   components: { Pagination },
@@ -593,12 +464,13 @@ export default {
       sexMap: sexMap,
       area: "",
       statusMap: statusMap,
-      statusLeaveMap: statusLeaveMap,
       sourceMap: sourceMap,
       healthMap: healthMap,
       userTypeMap: userTypeMap,
       zhuantaiMap: zhuantaiMap,
-      levelMap: levelMap,
+      glyyMap,
+      zdyqMap,
+      stopinfoMap,
       list: null,
       alllist: null,
       signlist: null,
@@ -653,7 +525,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      fetchList(this.listQuery)
+      listUserOut(this.listQuery)
         .then(response => {
           this.list = response.data.data.list;
           this.total = response.data.data.total;
@@ -668,7 +540,7 @@ export default {
     getListAll() {
       let listQueryAll = Object.assign({}, this.listQuery);
       listQueryAll.limit = 100000;
-      fetchList(listQueryAll)
+      listUserOut(listQueryAll)
         .then(response => {
           this.alllist = response.data.data.list;
         })
@@ -727,7 +599,6 @@ export default {
                 title: "成功",
                 message: "更新成功"
               });
-              this.handleFilter();
             })
             .catch(response => {
               this.$notify.error({

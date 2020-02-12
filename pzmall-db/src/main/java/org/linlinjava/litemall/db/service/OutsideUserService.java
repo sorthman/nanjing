@@ -2,48 +2,45 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.NjuserMapper;
-import org.linlinjava.litemall.db.dao.WhuserMapper;
+import org.linlinjava.litemall.db.dao.OutsideuserMapper;
 import org.linlinjava.litemall.db.domain.Njuser;
 import org.linlinjava.litemall.db.domain.NjuserExample;
-import org.linlinjava.litemall.db.domain.Whuser;
-import org.linlinjava.litemall.db.domain.WhuserExample;
+import org.linlinjava.litemall.db.domain.Outsideuser;
+import org.linlinjava.litemall.db.domain.OutsideuserExample;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class NjUserService {
+public class OutsideUserService {
     @Resource
-    private NjuserMapper userMapper;
+    private OutsideuserMapper userMapper;
 
-    public Njuser findById(Integer userId) {
+    public Outsideuser findById(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
     }
 
-    public Njuser findByIdcard(String idcard, LocalDateTime reportdate) {
-        NjuserExample example = new NjuserExample();
-        NjuserExample.Criteria criteria = example.createCriteria();
+    public Outsideuser findByIdcard(String idcard) {
+        OutsideuserExample example = new OutsideuserExample();
+        OutsideuserExample.Criteria criteria = example.createCriteria();
 
         criteria.andIdcardEqualTo(idcard);
-        criteria.andReportdateEqualTo(reportdate);
 
         return userMapper.selectOneByExample(example);
     }
 
-    public List<Njuser> querySelective(String area,
+    public List<Outsideuser> querySelective(String area,
                                        String name, String phone,
                                        Integer page, Integer size, String sort, String order) {
-        NjuserExample example = new NjuserExample();
-        NjuserExample.Criteria criteria = example.createCriteria();
+        OutsideuserExample example = new OutsideuserExample();
+        OutsideuserExample.Criteria criteria = example.createCriteria();
 
         if (!StringUtils.isEmpty(area)) {
-            criteria.andAreaEqualTo(area);
+            criteria.andDistrictEqualTo(area);
         }
 
         if (!StringUtils.isEmpty(name)) {
@@ -61,26 +58,25 @@ public class NjUserService {
         return userMapper.selectByExample(example);
     }
 
-    public List<Njuser> querySelective(String area,
+    public List<Outsideuser> querySelective(
                                        String name,
                                        String phone,
                                        String sex,
                                        Integer sage,
                                        Integer eage,
                                        String idcard,
-                                       String street,
                                        String community,
-                                       String zdyq,
-                                       String glyy,
-                                       String starttime,
-                                       String stoptime,
-                                       String endtime,
-                                       String stopinfo,
-
+                                       String arrivedate,
+                                       String province,
+                                       String city,
+                                       String area,
+                                       String ifwh,
+                                       String street,
+                                       String addtime,
 
                                        Integer page, Integer size, String sort, String order) {
-        NjuserExample example = new NjuserExample();
-        NjuserExample.Criteria criteria = example.createCriteria();
+        OutsideuserExample example = new OutsideuserExample();
+        OutsideuserExample.Criteria criteria = example.createCriteria();
 
         if (sage != 0) {
             criteria.andAgeGreaterThanOrEqualTo(sage);
@@ -90,7 +86,7 @@ public class NjUserService {
         }
 
         if (!StringUtils.isEmpty(area)) {
-            criteria.andAreaEqualTo(area);
+            criteria.andDistrictLike("%" + area + "%");
         }
 
         if (!StringUtils.isEmpty(name)) {
@@ -106,41 +102,38 @@ public class NjUserService {
         if (!StringUtils.isEmpty(idcard)) {
             criteria.andIdcardLike("%" + idcard + "%");
         }
-        if (!StringUtils.isEmpty(street)) {
-            criteria.andStreetLike("%" + street + "%");
-        }
+
         if (!StringUtils.isEmpty(community)) {
             criteria.andCommunityLike("%" + community + "%");
         }
-        if (!StringUtils.isEmpty(zdyq)) {
-            criteria.andZdyqinfoEqualTo(zdyq);
-        }
-        if (!StringUtils.isEmpty(glyy)) {
-            criteria.andGlinfoEqualTo(sex);
-        }
-        if (!StringUtils.isEmpty(stopinfo)) {
-            criteria.andStopinfoEqualTo(stopinfo);
+
+        if (!StringUtils.isEmpty(street)) {
+            criteria.andStreetLike("%" + street + "%");
         }
 
-        if (!StringUtils.isEmpty(starttime)) {
-            starttime = starttime.replace(" ", "T");
+        if (!StringUtils.isEmpty(arrivedate)) {
+            arrivedate = arrivedate.replace(" ", "T");
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(starttime);
-            criteria.andStarttimeEqualTo(date);
+            LocalDateTime date = LocalDateTime.parse(arrivedate);
+            criteria.andArrivedateEqualTo(date);
         }
 
-        if (!StringUtils.isEmpty(stoptime)) {
-            stoptime = stoptime.replace(" ", "T");
+        if (!StringUtils.isEmpty(addtime)) {
+            addtime = addtime.replace(" ", "T");
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(stoptime);
-            criteria.andStoptimeEqualTo(date);
+            LocalDateTime date = LocalDateTime.parse(addtime);
+            LocalDateTime dateend = date.plusDays(1);
+            criteria.andAddtimeBetween(date,dateend);
         }
 
-        if (!StringUtils.isEmpty(endtime)) {
-            endtime = endtime.replace(" ", "T");
-            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime date = LocalDateTime.parse(endtime);
-            criteria.andEndtimeEqualTo(date);
+        if (!StringUtils.isEmpty(province)) {
+            criteria.andProvinceLike("%" + province + "%");
+        }
+        if (!StringUtils.isEmpty(city)) {
+            criteria.andCityLike("%" + city + "%");
+        }
+        if (!StringUtils.isEmpty(ifwh)) {
+            criteria.andIfwhLike("%" + ifwh + "%");
         }
 
         if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
@@ -152,12 +145,12 @@ public class NjUserService {
     }
 
 
-    public void add(Njuser user) {
+    public void add(Outsideuser user) {
         user.setAddtime(LocalDateTime.now());
         userMapper.insertSelective(user);
     }
 
-    public int updateById(Njuser user) {
+    public int updateById(Outsideuser user) {
         return userMapper.updateByPrimaryKeySelective(user);
     }
 }
