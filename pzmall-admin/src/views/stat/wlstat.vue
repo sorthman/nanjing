@@ -31,7 +31,7 @@
       element-loading-text="正在查询中。。。"
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template v-if="props.row.detailList" slot-scope="props">
           <el-table
             :data="props.row.detailList"
             border
@@ -108,7 +108,7 @@
       element-loading-text="正在查询中。。。"
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template v-if="props.row.detailList" slot-scope="props">
           <el-table
             :data="props.row.detailList"
             border
@@ -344,6 +344,38 @@ export default {
               detailList: items
             })
           })
+          const getSum = this.list
+          this.list.push({
+            streets: '总计',
+            num: getSum.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0),
+            nullnum: getSum.reduce(function(prev, cur) {
+              return cur.nullnum + prev
+            }, 0),
+            whnum: getSum.reduce(function(prev, cur) {
+              return cur.whnum + prev
+            }, 0),
+            hbnum: getSum.reduce(function(prev, cur) {
+              return cur.hbnum + prev
+            }, 0),
+            wznum: getSum.reduce(function(prev, cur) {
+              return cur.wznum + prev
+            }, 0),
+            nohasgoout: getSum.reduce(function(prev, cur) {
+              return cur.nohasgoout + prev
+            }, 0),
+            hasgoout: getSum.reduce(function(prev, cur) {
+              return cur.hasgoout + prev
+            }, 0),
+            nohastouch: getSum.reduce(function(prev, cur) {
+              return cur.nohastouch + prev
+            }, 0),
+            hastouch: getSum.reduce(function(prev, cur) {
+              return cur.hastouch + prev
+            }, 0)
+
+          })
 
           // 当日数据
           const allData2 = response.data.Data.data2
@@ -382,7 +414,38 @@ export default {
               detailList: items2
             })
           })
+          const getSum2 = this.list2
+          this.list2.push({
+            streets: '总计',
+            num: getSum2.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0),
+            nullnum: getSum2.reduce(function(prev, cur) {
+              return cur.nullnum + prev
+            }, 0),
+            whnum: getSum2.reduce(function(prev, cur) {
+              return cur.whnum + prev
+            }, 0),
+            hbnum: getSum2.reduce(function(prev, cur) {
+              return cur.hbnum + prev
+            }, 0),
+            wznum: getSum2.reduce(function(prev, cur) {
+              return cur.wznum + prev
+            }, 0),
+            nohasgoout: getSum2.reduce(function(prev, cur) {
+              return cur.nohasgoout + prev
+            }, 0),
+            hasgoout: getSum2.reduce(function(prev, cur) {
+              return cur.hasgoout + prev
+            }, 0),
+            nohastouch: getSum2.reduce(function(prev, cur) {
+              return cur.nohastouch + prev
+            }, 0),
+            hastouch: getSum2.reduce(function(prev, cur) {
+              return cur.hastouch + prev
+            }, 0)
 
+          })
           // 省外人员累计
           this.list3 = response.data.Data.data3
           // 省外人员当天
