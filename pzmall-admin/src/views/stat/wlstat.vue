@@ -448,17 +448,58 @@ export default {
           })
           // 省外人员累计
           this.list3 = response.data.Data.data3
+          const getSum3 = this.list3
+          this.list3.push({
+            province: '总计',
+            num: getSum3.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           // 省外人员当天
           this.list4 = response.data.Data.data4
+          const getSum4 = this.list4
+          this.list4.push({
+            province: '总计',
+            num: getSum4.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           // 省内人员累计
           this.list5 = response.data.Data.data5
+          const getSum5 = this.list5
+          this.list5.push({
+            city: '总计',
+            num: getSum5.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           // 省内人员当天
           this.list6 = response.data.Data.data6
+          const getSum6 = this.list6
+          this.list6.push({
+            city: '总计',
+            num: getSum6.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           // 其它地区累计
           this.list7 = response.data.Data.data7
+          const getSum7 = this.list7
+          this.list7.push({
+            other: '总计',
+            num: getSum7.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           // 其它地区当天
           this.list8 = response.data.Data.data8
-
+          const getSum8 = this.list8
+          this.list8.push({
+            other: '总计',
+            num: getSum8.reduce(function(prev, cur) {
+              return cur.num + prev
+            }, 0)
+          })
           this.listLoading = false
         })
         .catch((e) => {
