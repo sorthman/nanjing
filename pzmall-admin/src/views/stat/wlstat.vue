@@ -22,7 +22,14 @@
 
     <!-- 查询结果 -->
     <h2>累计数据</h2>
-    <el-table :data="list" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -92,7 +99,14 @@
       />
     </el-table>
     <h2>当天数据</h2>
-    <el-table :data="list2" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list2"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -162,34 +176,76 @@
       />
     </el-table>
     <h2>省外人员累计</h2>
-    <el-table :data="list3" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list3"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="省份" prop="province" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
     <h2>省外人员当天</h2>
-    <el-table :data="list4" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list4"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="省份" prop="province" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
     <h2>省内人员累计</h2>
-    <el-table :data="list5" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list5"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="省份" prop="province" />
       <el-table-column align="center" label="市区" prop="city" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
     <h2>省内人员当天</h2>
-    <el-table :data="list6" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list6"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="省份" prop="province" />
       <el-table-column align="center" label="市区" prop="city" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
     <h2>其它地区累计</h2>
-    <el-table :data="list7" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list7"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="地区" prop="other" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
     <h2>其它地区当天</h2>
-    <el-table :data="list8" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list8"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column align="center" label="地区" prop="other" />
       <el-table-column align="center" label="人数" prop="num" />
     </el-table>
@@ -348,6 +404,9 @@ export default {
         })
     },
     handleFilter() {
+      if (this.listLoading) {
+        return
+      }
       this.getList()
     }
   }
