@@ -28,7 +28,14 @@
     </div>
 
     <!-- 查询结果 -->
-    <el-table :data="list" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      element-loading-text="正在查询中。。。"
+    >
       <el-table-column label="武汉每日数据汇总" align="center">
         <el-table-column
           min-width="120px"
@@ -155,6 +162,9 @@ export default {
         })
     },
     handleFilter() {
+      if (this.listLoading) {
+        return
+      }
       this.getList()
     },
     handleDownload() {
