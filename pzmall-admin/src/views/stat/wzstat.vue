@@ -37,6 +37,8 @@
       element-loading-text="正在查询中。。。"
     >
       <el-table-column label="温州每日数据汇总" align="center">
+        <el-table-column align="center" label="地区" prop="area" />
+        <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
           min-width="120px"
           align="center"
