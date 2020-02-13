@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="湖北(不含武汉)每日数据汇总" align="center">
+      <el-table-column label="湖北每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -99,11 +99,11 @@
 </template>
 
 <script>
-import { statWH } from '@/api/stats'
+import { statAllHB } from '@/api/stats'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { formatDate } from '@/utils/time.js'
 export default {
-  name: 'HBStat',
+  name: 'WHStat',
   components: { Pagination },
   data() {
     return {
@@ -121,7 +121,7 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: '湖北'
+        userType: ['武汉', '湖北']
       }
     }
   },
@@ -148,7 +148,7 @@ export default {
         this.listQuery.etime = this.time + ' 23:59:59'
       }
       this.listQuery.area = localStorage.getItem('adminarea')
-      statWH(this.listQuery)
+      statAllHB(this.listQuery)
         .then(response => {
           response.data.Data.forEach(x => {
             this.list.push({ ...x,
@@ -239,6 +239,7 @@ export default {
               return cur.othersSum + prev
             }, 0)
           })
+
           this.listLoading = false
         })
         .catch(() => {
@@ -266,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '湖北' + this.time + '数据汇总.xls'
+      link.download = '武汉' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

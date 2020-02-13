@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="其它地区每日数据汇总" align="center">
+      <el-table-column label="无接触每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -54,8 +54,8 @@
         />
         <el-table-column :label="title1" align="center">
           <el-table-column prop="inareaSum" width="70" label="小计" />
-          <el-table-column prop="s5" width="70" label="未去武汉" />
-          <el-table-column prop="s6" width="70" label="去过或途径武汉" />
+          <el-table-column prop="s5" width="70" label="未去湖北" />
+          <el-table-column prop="s6" width="70" label="去过或途径湖北" />
         </el-table-column>
         <el-table-column label="已核查人数" align="center">
           <el-table-column align="center" label="合计" prop="hasCheckSum" />

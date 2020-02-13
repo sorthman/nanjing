@@ -15,6 +15,23 @@ export function statHB(query) {
     params: query
   })
 }
+
+export function statSum(query) {
+  return request({
+    url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQDayStreetMoreUserTypeTable',
+    method: 'post',
+    params: query
+  })
+}
+
+export function statAllHB(query) {
+  return request({
+    url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQDayStreetMoreUserTypeTable',
+    method: 'post',
+    params: query
+  })
+}
+
 export function statOutPerson(query) {
   return request({
     url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQOutSideTable',
