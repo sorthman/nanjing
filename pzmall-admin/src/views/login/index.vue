@@ -175,11 +175,12 @@ export default {
             .dispatch("LoginByUsername", userinfo)
             .then(() => {
               this.loading = false;
-              this.$router.push({ path: this.redirect || "/dashboard" });
+              // this.$router.push({ path: this.redirect || "/dashboard" });
+              this.$router.push({ path: "/welcome" });
             })
             .catch(response => {
               this.loading = false;
-              this.getCode()
+              this.getCode();
               this.$notify.error({
                 title: "失败",
                 message: response.data.msg

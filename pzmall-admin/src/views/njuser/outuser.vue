@@ -17,6 +17,14 @@
         style="width: 150px;"
         placeholder="请输入结束年龄"
       />
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
+      <el-button
+        :loading="downloadLoading"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >导出</el-button>
       <br />
       <el-input
         v-model="listQuery.name"
@@ -143,15 +151,7 @@
         <el-option v-for="(key, value) in zdyqMap" :key="key" :label="key" :value="value" />
       </el-select>
 
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
-      <!-- <el-button
-        v-permission="['GET /adminapi/user/download']"
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>-->
+      
     </div>
 
     <!-- 查询结果 -->
@@ -613,70 +613,50 @@ export default {
       this.downloadLoading = true;
       import("@/vendor/Export2Excel").then(excel => {
         const tHeader = [
-          "编号",
           "姓名",
+          "手机号",
           "性别",
           "年龄",
-          "身份证",
-          "人在不在区内",
-          "用户类型",
-          "是否去过",
-          "是否离宁",
-          "当日正在管理",
-          "是否超过14天",
-          "是否追访不到",
-          "追访不到原因",
-          "街道",
+          "身份证号",
+          "生日",
           "社区",
-          "户籍或常住地址",
-          "停留武汉时间",
-          "来宁时间",
-          "目前症状",
-          "就诊情况",
-          "联系方式",
-          "数据来源",
-          "备注",
-          "街道领导",
-          "街道干部",
-          "社工",
-          "社区民警",
-          "医疗卫生员"
+          "常住地址",
+          "到达时间",
+          "省份",
+          "城市",
+          "区域",
+          "是否武汉",
+          "武汉停留时间",
+          "是否外出",
+          "外出地址",
+          "其他信息",
+          
         ];
         const filterVal = [
-          "id",
           "name",
+          "phone",
           "sex",
           "age",
           "idcard",
-          "ifstay",
-          "usertype",
-          "ifwh",
-          "ifleavenj",
-          "ismanage",
-          "ifover",
-          "iflose",
-          "loseinfo",
-          "street",
-          "njcommunity",
+          "birthday",
+          "community",
           "liveaddress",
-          "whtime",
           "arrivedate",
-          "healthinfo",
-          "docinfo",
-          "phone",
-          "addsource",
-          "remark",
-          "jdname",
-          "gbname",
-          "sgname",
-          "mjname",
-          "ylname"
+          "province",
+          "city",
+          "district",
+          "ifwh",
+          "whtime",
+          "ifgoout",
+          "goaddress",
+          "other"
+         
         ];
         excel.export_json_to_excel2(
           tHeader,
           this.alllist,
           filterVal,
-          "登记列表"
+          "外来人员列表"
         );
         this.downloadLoading = false;
       });

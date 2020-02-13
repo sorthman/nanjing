@@ -9,7 +9,7 @@
     >
       <el-form-item label="请使用右侧模板" prop="addsource">
         
-        <a href="http://ning.pzunion.cn/manage/njdemo.xlsx">下载模板</a>
+        <a href="http://ning.pzunion.cn/manage/rdemo.xlsx">下载模板</a>
       </el-form-item>
       <el-form-item label="请上传文件" prop="filename">
         <el-upload
