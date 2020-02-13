@@ -156,7 +156,7 @@ export default {
               hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10),
               followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8),
               notinareaSum: parseInt(x.s9) + parseInt(x.s10),
-              othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19) - parseInt(x.s21)
+              othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19)
             })
           })
           const listsum = this.list
