@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function statWH(query) {
   return request({
-    url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQDayTable',
+    url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQDayStreetTable',
     method: 'post',
     params: query
   })

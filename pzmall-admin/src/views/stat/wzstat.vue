@@ -78,6 +78,7 @@
         <el-table-column align="center" label="公安" prop="s13" />
         <el-table-column align="center" label="教育" prop="s14" />
         <el-table-column align="center" label="漫游" prop="s15" />
+        <el-table-column align="center" label="省疾控" prop="s21" />
         <el-table-column align="center" label="南京籍" prop="s16" />
         <el-table-column align="center" label="武汉籍" prop="s17" />
         <el-table-column align="center" label="湖北籍" prop="s19" />
@@ -147,12 +148,94 @@ export default {
       this.listQuery.area = localStorage.getItem('adminarea')
       statWH(this.listQuery)
         .then(response => {
-          this.list.push({ ...response.data.Data,
-            inareaSum: parseInt(response.data.Data.s5) + parseInt(response.data.Data.s6),
-            hasCheckSum: parseInt(response.data.Data.s5) + parseInt(response.data.Data.s6) + parseInt(response.data.Data.s9) + parseInt(response.data.Data.s10),
-            followSum: parseInt(response.data.Data.s5) + parseInt(response.data.Data.s6) - parseInt(response.data.Data.s7) - parseInt(response.data.Data.s8),
-            notinareaSum: parseInt(response.data.Data.s9) + parseInt(response.data.Data.s10),
-            othersSum: parseInt(response.data.Data.s1) - parseInt(response.data.Data.s16) - parseInt(response.data.Data.s17) - parseInt(response.data.Data.s18) - parseInt(response.data.Data.s19)
+          response.data.Data.forEach(x => {
+            this.list.push({ ...x,
+              inareaSum: parseInt(x.s5) + parseInt(x.s6),
+              hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10),
+              followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8),
+              notinareaSum: parseInt(x.s9) + parseInt(x.s10),
+              othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19) - parseInt(x.s21)
+            })
+          })
+          const listsum = this.list
+
+          this.list.push({
+            street: '总计',
+            s1: listsum.reduce(function(prev, cur) {
+              return cur.s1 + prev
+            }, 0),
+            s2: listsum.reduce(function(prev, cur) {
+              return cur.s2 + prev
+            }, 0),
+            s3: listsum.reduce(function(prev, cur) {
+              return cur.s3 + prev
+            }, 0),
+            s4: listsum.reduce(function(prev, cur) {
+              return cur.s4 + prev
+            }, 0),
+            s5: listsum.reduce(function(prev, cur) {
+              return cur.s5 + prev
+            }, 0),
+            s6: listsum.reduce(function(prev, cur) {
+              return cur.s6 + prev
+            }, 0),
+            s7: listsum.reduce(function(prev, cur) {
+              return cur.s7 + prev
+            }, 0),
+            s8: listsum.reduce(function(prev, cur) {
+              return cur.s8 + prev
+            }, 0),
+            s9: listsum.reduce(function(prev, cur) {
+              return cur.s9 + prev
+            }, 0),
+            s10: listsum.reduce(function(prev, cur) {
+              return cur.s10 + prev
+            }, 0),
+            s11: listsum.reduce(function(prev, cur) {
+              return cur.s11 + prev
+            }, 0),
+            s12: listsum.reduce(function(prev, cur) {
+              return cur.s12 + prev
+            }, 0),
+            s13: listsum.reduce(function(prev, cur) {
+              return cur.s13 + prev
+            }, 0),
+            s14: listsum.reduce(function(prev, cur) {
+              return cur.s14 + prev
+            }, 0),
+            s15: listsum.reduce(function(prev, cur) {
+              return cur.s15 + prev
+            }, 0),
+            s16: listsum.reduce(function(prev, cur) {
+              return cur.s16 + prev
+            }, 0),
+            s17: listsum.reduce(function(prev, cur) {
+              return cur.s17 + prev
+            }, 0),
+            s18: listsum.reduce(function(prev, cur) {
+              return cur.s18 + prev
+            }, 0),
+            s19: listsum.reduce(function(prev, cur) {
+              return cur.s19 + prev
+            }, 0),
+            s21: listsum.reduce(function(prev, cur) {
+              return cur.s21 + prev
+            }, 0),
+            inareaSum: listsum.reduce(function(prev, cur) {
+              return cur.inareaSum + prev
+            }, 0),
+            hasCheckSum: listsum.reduce(function(prev, cur) {
+              return cur.hasCheckSum + prev
+            }, 0),
+            followSum: listsum.reduce(function(prev, cur) {
+              return cur.followSum + prev
+            }, 0),
+            notinareaSum: listsum.reduce(function(prev, cur) {
+              return cur.notinareaSum + prev
+            }, 0),
+            othersSum: listsum.reduce(function(prev, cur) {
+              return cur.othersSum + prev
+            }, 0)
           })
           this.listLoading = false
         })

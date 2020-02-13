@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="武汉每日数据汇总" align="center">
+      <el-table-column label="其它地区每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -103,7 +103,7 @@ import { statWH } from '@/api/stats'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { formatDate } from '@/utils/time.js'
 export default {
-  name: 'WHStat',
+  name: 'NoContactStat',
   components: { Pagination },
   data() {
     return {
@@ -121,7 +121,7 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: '武汉'
+        userType: '无接触'
       }
     }
   },
