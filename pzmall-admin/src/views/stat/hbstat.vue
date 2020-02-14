@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="湖北(不含武汉)每日数据汇总" align="center">
+      <el-table-column label="湖北省(不含武汉)每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -266,7 +266,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '湖北' + this.time + '数据汇总.xls'
+      link.download = '湖北省（不含武汉）' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

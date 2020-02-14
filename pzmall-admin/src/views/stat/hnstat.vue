@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="湖北省每日数据汇总" align="center">
+      <el-table-column label="河南省每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -54,8 +54,8 @@
         />
         <el-table-column :label="title1" align="center">
           <el-table-column prop="inareaSum" width="70" label="小计" />
-          <el-table-column prop="s5" width="70" label="未去湖北" />
-          <el-table-column prop="s6" width="70" label="去过或途径湖北" />
+          <el-table-column prop="s5" width="70" label="未去河南" />
+          <el-table-column prop="s6" width="70" label="去过或途径河南" />
         </el-table-column>
         <el-table-column label="已核查人数" align="center">
           <el-table-column align="center" label="合计" prop="hasCheckSum" />
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { statAllHB } from '@/api/stats'
+import { statWH } from '@/api/stats'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { formatDate } from '@/utils/time.js'
 export default {
@@ -121,7 +121,7 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: ['武汉', '湖北']
+        userType: '河南'
       }
     }
   },
@@ -148,7 +148,7 @@ export default {
         this.listQuery.etime = this.time + ' 23:59:59'
       }
       this.listQuery.area = localStorage.getItem('adminarea')
-      statAllHB(this.listQuery)
+      statWH(this.listQuery)
         .then(response => {
           response.data.Data.forEach(x => {
             this.list.push({ ...x,
@@ -267,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '湖北省' + this.time + '数据汇总.xls'
+      link.download = '河南省' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

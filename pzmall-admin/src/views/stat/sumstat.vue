@@ -121,7 +121,7 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: ['武汉', '湖北', '温州', '其它地区', '无接触']
+        userType: ['武汉', '湖北', '温州', '安徽', '河南', '江苏', '其它地区', '无接触']
       }
     }
   },
@@ -266,7 +266,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '温州' + this.time + '数据汇总.xls'
+      link.download = this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

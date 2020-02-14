@@ -267,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '武汉' + this.time + '数据汇总.xls'
+      link.download = '无接触' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }
