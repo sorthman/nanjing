@@ -12,6 +12,11 @@ server:
   port: 8082
   session:
     timeout: 86400
+    
+sync: 
+  job:
+    enable: false 
+  
 
 logging:
   level:
