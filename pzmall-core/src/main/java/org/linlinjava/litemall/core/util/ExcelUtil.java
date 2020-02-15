@@ -91,13 +91,23 @@ public class ExcelUtil<T> {
                 int end = row.getLastCellNum();
 
                 Cell cell = row.getCell(0);
-                newword.setDatatype(cell.getStringCellValue());
+                try {
+                    newword.setDatatype(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setDatatype("");
+                }
 
                 cell = row.getCell(2);
-                newword.setName(cell.getStringCellValue());
+                try {
+                    newword.setName(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(3);
-                newword.setSex(cell.getStringCellValue());
+                try {
+                    newword.setSex(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 try {
                     cell = row.getCell(4);
@@ -106,29 +116,73 @@ public class ExcelUtil<T> {
                 }
 
                 cell = row.getCell(5);
-                newword.setIdcard(cell.toString());
+                try {
+                    newword.setIdcard(cell.toString());
+                } catch (Exception e) {
+                    newword.setIdcard("");
+                }
 
                 cell = row.getCell(6);
-                newword.setIfstay(cell.getStringCellValue());
+                try {
+                    newword.setIfstay(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setIfstay("");
+                }
+
                 cell = row.getCell(7);
-                newword.setIfwh(cell.getStringCellValue());
+                try {
+                    newword.setIfwh(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setIfwh("");
+                }
+
                 cell = row.getCell(8);
-                newword.setIfleavenj(cell.getStringCellValue());
+                try {
+                    newword.setIfleavenj(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(9);
-                newword.setIsmanage(cell.getStringCellValue());
+                try {
+                    newword.setIsmanage(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(11);
-                newword.setIflose(cell.getStringCellValue());
+                try {
+                    newword.setIflose(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(12);
-                newword.setLoseinfo(cell.getStringCellValue());
+                try {
+                    newword.setLoseinfo(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(13);
-                newword.setStreet(cell.getStringCellValue());
+                try {
+                    newword.setStreet(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(14);
-                newword.setNjcommunity(cell.getStringCellValue());
+                try {
+                    newword.setNjcommunity(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(15);
-                newword.setLiveaddress(cell.getStringCellValue());
+                try {
+                    newword.setLiveaddress(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(16);
-                newword.setWhtime(cell.getStringCellValue());
+                try {
+                    newword.setWhtime(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 try {
                     cell = row.getCell(17);
@@ -139,32 +193,70 @@ public class ExcelUtil<T> {
                 }
 
                 cell = row.getCell(18);
-                newword.setHealthinfo(cell.getStringCellValue());
-                cell = row.getCell(19);
-                newword.setDocinfo(cell.getStringCellValue());
-                cell = row.getCell(20);
-                newword.setPhone(cell.toString());
+                try {
+                    newword.setHealthinfo(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
+                cell = row.getCell(19);
+                try {
+                    newword.setDocinfo(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
+                cell = row.getCell(20);
+                try {
+                    newword.setPhone(cell.toString());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(22);
-                newword.setRemark(cell.getStringCellValue());
+                try {
+                    newword.setRemark(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(23);
-                newword.setJdname(cell.getStringCellValue());
+                try {
+                    newword.setJdname(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(24);
-                newword.setGbname(cell.getStringCellValue());
+                try {
+                    newword.setGbname(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(25);
-                newword.setSgname(cell.getStringCellValue());
+                try {
+                    newword.setSgname(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(26);
-                newword.setMjname(cell.getStringCellValue());
+                try {
+                    newword.setMjname(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
+
                 cell = row.getCell(27);
-                newword.setYlname(cell.getStringCellValue());
+                try {
+                    newword.setYlname(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(28);
-                newword.setUphone(cell.toString());
+                try {
+                    newword.setUphone(cell.toString());
+                } catch (Exception e) {
+                }
 
                 cell = row.getCell(29);
-                newword.setUsertype(cell.getStringCellValue());
+                try {
+                    newword.setUsertype(cell.getStringCellValue());
+                } catch (Exception e) {
+                }
 
                 words.add(newword);
             }

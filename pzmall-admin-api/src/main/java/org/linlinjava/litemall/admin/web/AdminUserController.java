@@ -179,8 +179,8 @@ public class AdminUserController {
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
             } else if (user.getArrivedate() != null) {
-                user.setManagetime(user.getArrivedate().plusDays(1));
                 user.setLefttimemodify(LocalDateTime.now());
+                user.setManagetime(user.getArrivedate().plusDays(1));
                 user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
                 LocalDateTime endTime = user.getArrivedate().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
@@ -223,14 +223,20 @@ public class AdminUserController {
         int totalCount = users.size();
         String failUser = "";
         for (Whuser user : users) {
-
-            Whuser suser = userService.findByIdcard(user.getIdcard());
+            Whuser suser = null;
+            if (addsource.equals("公安")) {
+                suser = userService.findByIdcard(user.getIdcard());
+            } else {
+                suser = userService.findByPhone(user.getPhone());
+            }
             if (suser == null || !addsource.equals("公安")) {
-                if (user.getHealthinfo().indexOf("发热") >= 0) {
-                    user.setIfhot("是");
-                }
-                if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
-                    user.setIfkesou("是");
+                if (user.getHealthinfo() != null) {
+                    if (user.getHealthinfo().indexOf("发热") >= 0) {
+                        user.setIfhot("是");
+                    }
+                    if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
+                        user.setIfkesou("是");
+                    }
                 }
 
                 user.setSigncount(0);
@@ -252,7 +258,9 @@ public class AdminUserController {
 
                 user.setArea(admin.getArea());
                 user.setAddsource((addsource));
-                userService.add(user);
+                if (!StringUtils.isEmpty(user.getName())) {
+                    userService.add(user);
+                }
                 count++;
             } else {
                 failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
