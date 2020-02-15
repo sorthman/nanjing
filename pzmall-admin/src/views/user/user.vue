@@ -20,7 +20,13 @@
 
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button
-        v-permission="['GET /adminapi/user/download']"
+        v-permission="['POST /adminapi/user/create']"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
+      >登记用户</el-button>
+      <el-button
         :loading="downloadLoading"
         class="filter-item"
         type="primary"
@@ -128,7 +134,7 @@
         clearable
         style="width: 150px"
         class="filter-item"
-        placeholder="转过街道"
+        placeholder="转过区域"
       >
         <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
       </el-select>
@@ -137,13 +143,15 @@
         clearable
         style="width: 150px"
         class="filter-item"
-        placeholder="转过区域"
+        placeholder="转过街道"
       >
         <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
       </el-select>
       <el-select
         v-model="listQuery.ifsafe"
         clearable
+        multiple
+        collapse-tags
         style="width: 150px"
         class="filter-item"
         placeholder="当前状态"
@@ -179,7 +187,7 @@
         class="filter-item"
         placeholder="是否去过"
       >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in statusLeaveMap" :key="key" :label="key" :value="value" />
       </el-select>
       <br />
 
@@ -199,7 +207,7 @@
         class="filter-item"
         placeholder="正在管理"
       >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in statusLeaveMap" :key="key" :label="key" :value="value" />
       </el-select>
       <el-select
         v-model="listQuery.ifover"
@@ -217,7 +225,7 @@
         class="filter-item"
         placeholder="追访不到"
       >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in statusLeaveMap" :key="key" :label="key" :value="value" />
       </el-select>
       <el-select
         v-model="listQuery.ifstay"
@@ -226,7 +234,7 @@
         class="filter-item"
         placeholder="是否当前区域"
       >
-        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in statusLeaveMap" :key="key" :label="key" :value="value" />
       </el-select>
 
       <el-date-picker
@@ -383,6 +391,15 @@
           <el-input v-model="dataForm.liveaddress" />
         </el-form-item>
 
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="dataForm.sex" clearable class="filter-item" placeholder="请选择性别">
+            <el-option v-for="(key, value) in sexMap" :key="key" :label="key" :value="value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input v-model="dataForm.age" />
+        </el-form-item>
+
         <el-form-item label="用户类型" prop="usertype">
           <el-select v-model="dataForm.usertype" clearable class="filter-item" placeholder="用户类型">
             <el-option v-for="(key, value) in userTypeMap" :key="key" :label="key" :value="value" />
@@ -390,12 +407,7 @@
         </el-form-item>
 
         <el-form-item label="是否去过" prop="ifwh">
-          <el-select
-            v-model="dataForm.ifwh"
-            clearable
-            class="filter-item"
-            placeholder="是否去过"
-          >
+          <el-select v-model="dataForm.ifwh" clearable class="filter-item" placeholder="是否去过">
             <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
           </el-select>
         </el-form-item>
@@ -420,6 +432,14 @@
             placeholder="开始管理时间"
           ></el-date-picker>
         </el-form-item>
+
+        <el-form-item label="入住状态" prop="livetype">
+          <el-radio-group v-model="dataForm.livetype">
+            <el-radio label="常住">常住</el-radio>
+            <el-radio label="暂住">暂住</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="街道领导信息" prop="jdname">
           <el-input v-model="dataForm.jdname" />
         </el-form-item>
@@ -436,7 +456,7 @@
           <el-input v-model="dataForm.ylname" />
         </el-form-item>
         <el-form-item label="备注（跟踪详情）" prop="remark">
-          <el-input v-model="dataForm.remark" />
+          <el-input type="textarea" :rows="6" v-model="dataForm.remark" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -543,7 +563,13 @@
 </template>
 
 <script>
-import { fetchList, download, listSign, updateUser } from "@/api/user";
+import {
+  fetchList,
+  download,
+  listSign,
+  updateUser,
+  createUser
+} from "@/api/user";
 import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { formatDate } from "@/utils/time.js";
 
@@ -569,7 +595,8 @@ const sourceMap = {
   公安: "公安",
   教育: "教育",
   漫游: "漫游",
-  省疾控: "省疾控"
+  省疾控: "省疾控",
+  企业复工: "企业复工"
 };
 
 const levelMap = {
@@ -582,6 +609,9 @@ const userTypeMap = {
   武汉: "武汉",
   湖北: "湖北",
   温州: "温州",
+  安徽: "安徽",
+  河南: "河南",
+  江苏: "江苏",
   其它地区: "其它地区",
   无接触: "无接触"
 };
@@ -589,7 +619,8 @@ const userTypeMap = {
 const zhuantaiMap = {
   居家观察: "居家观察",
   集中观察: "集中观察",
-  确诊: "确诊"
+  确诊: "确诊",
+  无: "无"
 };
 
 const healthMap = {
@@ -732,6 +763,41 @@ export default {
       this.getSignList(row.id);
       this.dialogSignFormVisible = true;
       this.detailModel = Object.assign({}, row);
+    },
+    resetForm() {
+      this.dataForm = {
+        id: undefined,
+        name: ""
+      };
+    },
+    handleCreate() {
+      this.resetForm();
+      this.dialogStatus = "create";
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs["dataForm"].clearValidate();
+      });
+    },
+    createData() {
+      this.$refs["dataForm"].validate(valid => {
+        if (valid) {
+          createUser(this.dataForm)
+            .then(response => {
+              this.dialogFormVisible = false;
+              this.$notify.success({
+                title: "成功",
+                message: "创建成功"
+              });
+              this.handleFilter();
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: "失败",
+                message: response.data.msg
+              });
+            });
+        }
+      });
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({}, row);

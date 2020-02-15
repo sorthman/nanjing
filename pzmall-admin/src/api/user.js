@@ -24,6 +24,15 @@ export function updateUser(data) {
   })
 }
 
+export function createUser(data) {
+  return request({
+    url: '/user/create',
+    method: 'post',
+    data
+  })
+}
+
+
 export function importUser(query) {
   return request({
     url: '/user/upload',

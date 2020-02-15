@@ -119,7 +119,7 @@
         placeholder="到访时间"
       ></el-date-picker>
 
-     <el-input
+      <el-input
         v-model="listQuery.province"
         clearable
         class="filter-item"
@@ -148,10 +148,8 @@
         class="filter-item"
         placeholder="重点疫区"
       >
-        <el-option v-for="(key, value) in zdyqMap" :key="key" :label="key" :value="value" />
+        <el-option v-for="(key, value) in ifwhMap" :key="key" :label="key" :value="value" />
       </el-select>
-
-      
     </div>
 
     <!-- 查询结果 -->
@@ -187,8 +185,8 @@
       <el-table-column align="center" label="省份" prop="province" />
       <el-table-column align="center" label="城市" prop="city" />
       <el-table-column align="center" label="区域" prop="district" />
-      <el-table-column align="center" label="是否武汉" prop="ifwh" />
-      <el-table-column align="center" label="武汉停留时间" prop="whtime" />
+      <el-table-column align="center" label="14天内是否去过或经过重点疫区" prop="ifwh" />
+      <el-table-column align="center" label="停留时间" prop="whtime" />
 
       <el-table-column align="center" label="是否外出" prop="ifgoout" />
       <el-table-column align="center" label="外出地址" prop="goaddress" />
@@ -417,6 +415,15 @@ const userTypeMap = {
   温州: "温州"
 };
 
+const ifwhMap = {
+  否: "否",
+  武汉: "武汉",
+  湖北: "湖北",
+  温州: "温州",
+  安徽: "安徽",
+  河南: "河南"
+};
+
 const zhuantaiMap = {
   居家观察: "居家观察",
   集中观察: "集中观察",
@@ -445,7 +452,7 @@ const glyyMap = {
 
 const zdyqMap = {
   武汉: "武汉",
-  "湖北": "湖北(非武汉)",
+  湖北: "湖北(非武汉)",
   温州: "温州",
   其他: "其他"
 };
@@ -468,6 +475,7 @@ export default {
       healthMap: healthMap,
       userTypeMap: userTypeMap,
       zhuantaiMap: zhuantaiMap,
+      ifwhMap: ifwhMap,
       glyyMap,
       zdyqMap,
       stopinfoMap,
@@ -625,12 +633,11 @@ export default {
           "省份",
           "城市",
           "区域",
-          "是否武汉",
-          "武汉停留时间",
+          "14天内是否去过或经过重点疫区",
+          "停留时间",
           "是否外出",
           "外出地址",
-          "其他信息",
-          
+          "其他信息"
         ];
         const filterVal = [
           "name",
@@ -650,7 +657,6 @@ export default {
           "ifgoout",
           "goaddress",
           "other"
-         
         ];
         excel.export_json_to_excel2(
           tHeader,

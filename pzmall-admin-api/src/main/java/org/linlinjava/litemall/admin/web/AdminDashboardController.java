@@ -2,6 +2,8 @@ package org.linlinjava.litemall.admin.web;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.db.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +19,20 @@ import java.util.Map;
 @RestController
 @RequestMapping("/adminapi/dashboard")
 @Validated
-public class AdminDashbordController {
-    private final Log logger = LogFactory.getLog(AdminDashbordController.class);
+public class AdminDashboardController {
+    private final Log logger = LogFactory.getLog(AdminDashboardController.class);
 
     @Autowired
     private LitemallUserService userService;
 
-    @GetMapping("")
-    public Object info() {
+    @RequiresPermissions("admin:dashboard:index")
+    @RequiresPermissionsDesc(menu = { "疫情管控", "疫情管控" }, button = "查询")
+    @GetMapping("index")
+    public Object index() {
         int totalUser = userService.count();
         int todayUser = userService.countUser(true,0);
         int totalSelf = userService.countUser(false, 1);
         int totalComm = userService.countUser(false,2);
-
 
         Map<String, Object> data = new HashMap<>();
 

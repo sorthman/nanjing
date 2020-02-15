@@ -43,6 +43,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import ch.qos.logback.core.boolex.Matcher;
 import org.linlinjava.litemall.db.domain.Njuser;
+import org.linlinjava.litemall.db.domain.Ruser;
 import org.linlinjava.litemall.db.domain.Whuser;
 
 public class ExcelUtil<T> {
@@ -357,6 +358,200 @@ public class ExcelUtil<T> {
                 cell = row.getCell(27);
                 newword.setGbphone(cell.toString());
 
+                words.add(newword);
+            }
+            return words;
+        } catch (Exception ex) {
+//			logger.info("解析Excel异常：" + ex.getMessage());
+//			System.out.println("解析Excel异常：" + ex.getMessage());
+            return null;
+        }
+
+    }
+
+    public static List<Ruser> getRUserList(String filePath) {
+        try {
+            File excelFile = new File(filePath); // 创建文件对象
+            FileInputStream in = new FileInputStream(excelFile); // 文件流
+            Workbook workbook = getWorkbok(in, excelFile);
+            Sheet sheet = workbook.getSheetAt(0);
+            List<Ruser> words = new ArrayList<Ruser>();
+            int count = 0;
+            int flag = 0;
+            for (Row row : sheet) {
+                // 跳过第1行
+                if (count < 1) {
+                    Cell headerCell = row.getCell(0);
+                    String firstColumn = headerCell.getStringCellValue();
+                    if (firstColumn.equals("编号")) {
+                        flag = 1;
+                    }
+                    count++;
+                    continue;
+                }
+
+                Ruser newword = new Ruser();
+                int end = row.getLastCellNum();
+
+                if (flag == 1) {
+                    Cell firstCell = row.getCell(0);
+                    double id0 = firstCell.getNumericCellValue();
+                    Integer uid = Integer.valueOf(Double.valueOf(id0).intValue());
+                    newword.setId(uid);
+                }
+
+                Cell cell = row.getCell(flag + 0);
+                try {
+                    newword.setA1(cell.toString());
+                } catch (Exception e) {
+                    newword.setA1("");
+                }
+
+                cell = row.getCell(flag + 1);
+                try {
+                    newword.setA2(cell.toString());
+                } catch (Exception e) {
+                    newword.setA2("");
+                }
+
+                cell = row.getCell(flag + 2);
+                try {
+                    newword.setA3(cell.toString());
+                } catch (Exception e) {
+                    newword.setA3("");
+                }
+
+                cell = row.getCell(flag + 3);
+                try {
+                    newword.setA4(cell.toString());
+                } catch (Exception e) {
+                    newword.setA4("");
+                }
+
+                cell = row.getCell(flag + 4);
+                try {
+                    newword.setA5(cell.toString());
+                } catch (Exception e) {
+                    newword.setA5("");
+                }
+
+                cell = row.getCell(flag + 5);
+                try {
+                    newword.setA6(cell.toString());
+                } catch (Exception e) {
+                    newword.setA6("");
+                }
+                cell = row.getCell(flag + 6);
+                try {
+                    newword.setA7(cell.toString());
+                } catch (Exception e) {
+                    newword.setA7("");
+                }
+                cell = row.getCell(flag + 7);
+                try {
+                    newword.setA8(cell.toString());
+                } catch (Exception e) {
+                    newword.setA8("");
+                }
+                cell = row.getCell(flag + 8);
+                try {
+                    newword.setA9(cell.toString());
+                } catch (Exception e) {
+                    newword.setA9("");
+                }
+                cell = row.getCell(flag + 9);
+                try {
+                    newword.setA10(cell.toString());
+                } catch (Exception e) {
+                    newword.setA10("");
+                }
+                cell = row.getCell(flag + 10);
+                try {
+                    newword.setA11(cell.toString());
+                } catch (Exception e) {
+                    newword.setA11("");
+                }
+                cell = row.getCell(flag + 11);
+                try {
+                    newword.setA12(cell.toString());
+                } catch (Exception e) {
+                    newword.setA12("");
+                }
+                cell = row.getCell(flag + 12);
+                try {
+                    newword.setA13(cell.toString());
+                } catch (Exception e) {
+                    newword.setA13("");
+                }
+                cell = row.getCell(flag + 13);
+                try {
+                    newword.setA14(cell.toString());
+                } catch (Exception e) {
+                    newword.setA14("");
+                }
+                cell = row.getCell(flag + 14);
+                try {
+                    newword.setA15(cell.toString());
+                } catch (Exception e) {
+                    newword.setA15("");
+                }
+
+                try {
+                    cell = row.getCell(flag + 15);
+                    newword.setA16(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA16("");
+                }
+
+                try {
+                    cell = row.getCell(flag + 16);
+                    newword.setA17(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA17("");
+                }
+
+                cell = row.getCell(flag + 17);
+                try {
+                    newword.setA18(String.format("%.0f", cell.getNumericCellValue()));
+                } catch (Exception e) {
+                    newword.setA18("");
+                }
+                cell = row.getCell(flag + 18);
+                try {
+                    newword.setA19(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA19("");
+                }
+                cell = row.getCell(flag + 19);
+                try {
+                    newword.setA20(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA20("");
+                }
+                cell = row.getCell(flag + 20);
+                try {
+                    newword.setA21(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA21("");
+                }
+                cell = row.getCell(flag + 21);
+                try {
+                    newword.setA22(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA22("");
+                }
+                cell = row.getCell(flag + 22);
+                try {
+                    newword.setA23(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA23("");
+                }
+                cell = row.getCell(flag + 23);
+                try {
+                    newword.setA24(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA24("");
+                }
                 words.add(newword);
             }
             return words;

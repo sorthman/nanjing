@@ -19,9 +19,9 @@ public class LitemallUserService {
     @Resource
     private WhuserMapper userMapper;
 
-    public Whuser findById(Integer userId) {
-        return userMapper.selectByPrimaryKey(userId);
-    }
+//    public Whuser findById(Integer userId) {
+//        return userMapper.selectByPrimaryKey(userId);
+//    }
 
     public Whuser findByIdcard(String idcard) {
         WhuserExample example = new WhuserExample();
@@ -73,7 +73,7 @@ public class LitemallUserService {
                                        String[] addsource,
                                        String iftransferarea,
                                        String iftransferstreet,
-                                       String ifsafe,
+                                       String[] ifsafe,
                                        String healthinfo,
                                        String[] usertype,
                                        String ifwh,
@@ -154,8 +154,13 @@ public class LitemallUserService {
         if (!StringUtils.isEmpty(iftransferstreet)) {
             criteria.andIftransferstreetEqualTo(iftransferstreet);
         }
-        if (!StringUtils.isEmpty(ifsafe)) {
-            criteria.andIfsafeEqualTo(ifsafe);
+
+        if (ifsafe.length > 0) {
+            List<String> list = new ArrayList<>();
+            for (String s : ifsafe) {
+                list.add(s);
+            }
+            criteria.andIfsafeIn(list);
         }
         if (!StringUtils.isEmpty(ifhb)) {
             criteria.andIfhbEqualTo(ifhb);
@@ -189,12 +194,16 @@ public class LitemallUserService {
             criteria.andLevelEqualTo(level);
         }
         if (!StringUtils.isEmpty(ifover)) {
+            criteria.andManagetimeIsNotNull();
             if (ifover.equals("是")) {
-                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-                criteria.andArrivedateLessThan(sTime);
+//                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
+//                criteria.andArrivedateLessThan(sTime);
+                criteria.andLefttimeLessThanOrEqualTo(0);
+
             } else {
-                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-                criteria.andArrivedateGreaterThan(sTime);
+//                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
+//                criteria.andArrivedateGreaterThan(sTime);
+                criteria.andLefttimeGreaterThan(0);
             }
         }
         if (!StringUtils.isEmpty(healthinfo)) {

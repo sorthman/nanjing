@@ -222,6 +222,16 @@ export const asyncRouterMap = [
           title: '无街道用户',
           noCache: true
         }
+      },
+      {
+        path: 'nosign',
+        component: () => import('@/views/user/nosign'),
+        name: 'nosign',
+        meta: {
+          perms: ['GET /adminapi/user/nosign'],
+          title: '今日未申报健康用户',
+          noCache: true
+        }
       }
     ]
   },
@@ -236,6 +246,27 @@ export const asyncRouterMap = [
       icon: 'chart'
     },
     children: [
+
+      {
+        path: 'sumstat',
+        component: () => import('@/views/stat/sumstat'),
+        name: 'sumstat',
+        meta: {
+          perms: ['GET /adminapi/stat/sumstat'],
+          title: '汇总统计报表',
+          noCache: true
+        }
+      },
+      {
+        path: 'hballstat',
+        component: () => import('@/views/stat/hballstat'),
+        name: 'hballstat',
+        meta: {
+          perms: ['GET /adminapi/stat/hballstat'],
+          title: '湖北统计报表',
+          noCache: true
+        }
+      },
       {
         path: 'whstat',
         component: () => import('@/views/stat/whstat'),
@@ -256,16 +287,7 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      {
-        path: 'hballstat',
-        component: () => import('@/views/stat/hballstat'),
-        name: 'hballstat',
-        meta: {
-          perms: ['GET /adminapi/stat/hballstat'],
-          title: '湖北统计报表',
-          noCache: true
-        }
-      },
+
       {
         path: 'wzstat',
         component: () => import('@/views/stat/wzstat'),
@@ -276,7 +298,40 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      
+
+      {
+        path: 'ahstat',
+        component: () => import('@/views/stat/ahstat'),
+        name: 'ahstat',
+        meta: {
+          perms: ['GET /adminapi/stat/ahstat'],
+          title: '安徽统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'hnstat',
+        component: () => import('@/views/stat/hnstat'),
+        name: 'hnstat',
+        meta: {
+          perms: ['GET /adminapi/stat/hnstat'],
+          title: '河南统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'jsstat',
+        component: () => import('@/views/stat/jsstat'),
+        name: 'jsstat',
+        meta: {
+          perms: ['GET /adminapi/stat/jsstat'],
+          title: '江苏统计报表',
+          noCache: true
+        }
+      },
+
       {
         path: 'otherstat',
         component: () => import('@/views/stat/otherstat'),
@@ -287,7 +342,7 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      
+
       {
         path: 'nocontactstat',
         component: () => import('@/views/stat/nocontactstat'),
@@ -298,16 +353,7 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      {
-        path: 'sumstat',
-        component: () => import('@/views/stat/sumstat'),
-        name: 'sumstat',
-        meta: {
-          perms: ['GET /adminapi/stat/sumstat'],
-          title: '汇总统计报表',
-          noCache: true
-        }
-      },
+
       {
         path: 'wlstat',
         component: () => import('@/views/stat/wlstat'),
