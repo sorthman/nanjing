@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.linlinjava.litemall.db.dao.DataSyncMapper">
+
+    <select id="getLastSyncTime" parameterType="java.lang.String" resultType="java.util.Date">
+        SELECT
+			sd.lastSyncTime 
+		FROM
+			sync_data_process sd 
+		WHERE
+			sd.jobName = #{jobName}
+			LIMIT 1
+    </select>
+    
+    <update id="updateSyncTime" parameterType="java.util.HashMap">
+    	UPDATE sync_data_process 
+		SET lastSyncTime = #{lastSyncTime} 
+		WHERE
+			jobName = #{jobName}
+    </update>
+    
+    <select id="getReturnNanjingData" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.vo.SyncReturnNanjingVo">
+   		SELECT
+			u.`name`,
+			u.idcard AS idCard,
+			u.phone,
+			u.njcommunity as community,
+			u.currentaddress as address,
+			u.arrivedate as arrivalDate,
+			u.remark as trackingRemark,
+			u.ifwh as arrivalEpidemicArea,
+			u.whtime as arrivalEpidemicAreaDate,
+			u.livetype as resideResult,
+			u.jdname as streetLeader,
+			u.jdphone as streetLeaderPhone,
+			u.gbname as streetCadre,
+			u.gbphone as streetCadrePhone,
+			u.sgname as communityWorker,
+			u.sgphone as communityWorkerPhone,
+			u.mjname as communityPolice,
+			u.mjphone as communityPolicePhone,
+			u.ylname as medicalPersonnel,
+			u.ylphone as medicalPersonnelPhone
+		FROM
+			whuser u 
+		WHERE
+			u.ifleavenj = "否" 
+			<if test="startTime!=null">
+			AND u.modifytime <![CDATA[ >= ]]> #{startTime}
+			</if>
+			AND u.modifytime <![CDATA[ < ]]> #{endTime}
+    </select>
+    
+    <insert id="saveErrorRecord" parameterType="org.linlinjava.litemall.db.vo.SyncErrorRecordVo">
+    	INSERT sync_data_error_record ( httpUrl, paramsJson, respStr, errorReason )
+		VALUES
+			( #{httpUrl}, #{paramsJson}, #{respStr}, #{errorReason} )
+    </insert>
+    
+    <insert id="saveJobRecord" parameterType="java.util.HashMap">
+    	INSERT sync_job_record ( jobName, syncDataNum, errorNum, syncTime )
+		VALUES
+			( #{jobName}, #{syncDataNum}, #{errorNum}, #{syncTime} )
+    </insert>
+    
+    <select id="getAllUserData" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.vo.SyncReturnNanjingVo">
+   		SELECT
+			u.`name`,
+			u.idcard AS idCard,
+			u.phone,
+			u.njcommunity as community,
+			u.currentaddress as address,
+			u.arrivedate as arrivalDate,
+			u.remark as trackingRemark,
+			u.ifwh as arrivalEpidemicArea,
+			u.whtime as arrivalEpidemicAreaDate,
+			u.livetype as resideResult,
+			u.jdname as streetLeader,
+			u.jdphone as streetLeaderPhone,
+			u.gbname as streetCadre,
+			u.gbphone as streetCadrePhone,
+			u.sgname as communityWorker,
+			u.sgphone as communityWorkerPhone,
+			u.mjname as communityPolice,
+			u.mjphone as communityPolicePhone,
+			u.ylname as medicalPersonnel,
+			u.ylphone as medicalPersonnelPhone
+		FROM
+			whuser u 
+		WHERE
+			u.modifytime <![CDATA[ < ]]> #{endTime}
+			<if test="startTime!=null">
+			AND u.modifytime <![CDATA[ >= ]]> #{startTime}
+			</if>
+    </select>
+    
+    <select id="getOutSiteData" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.vo.SyncOutsideVo">
+    	SELECT
+			u.`name`,
+			u.idcard AS idCard,
+			u.phone,
+			u.community AS community,
+			u.liveaddress AS address,
+			u.arrivedate AS arrivalDate,
+			u.remark AS trackingRemark,
+			CONCAT_WS( "/", u.province, u.city, u.district ) AS fromRegion 
+		FROM
+			outsideuser u
+		WHERE
+			u.modifytime <![CDATA[ < ]]> #{endTime}
+			<if test="startTime!=null">
+			AND u.modifytime <![CDATA[ >= ]]> #{startTime}
+			</if>
+    </select>
+    
+    <select id="getTemperatureData" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.vo.SyncTemperatureVo">
+    	SELECT
+			uc.temperature AS temp,
+			uc.signtime AS measureDatetime,
+			u.`name`,
+			u.phone,
+			u.idcard AS idCard,
+			u.arrivedate AS arrivalDate 
+		FROM
+			usercheck uc
+			LEFT JOIN whuser u ON uc.uid = u.id 
+		WHERE
+			uc.signtime <![CDATA[ < ]]> #{endTime}
+			<if test="startTime!=null">
+			AND uc.signtime <![CDATA[ >= ]]> #{startTime}
+			</if>
+    </select>
+    
+    <select id="getHealthData" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.vo.SyncHealthVo">
+    	SELECT
+			u.`name`,
+			u.idcard AS idCard,
+			u.phone,
+			u.njcommunity AS community,
+			u.currentaddress AS address,
+			u.arrivedate AS arrivalDate,
+			uc.ifleavenj AS leaveResult,
+			u.gpsaddrrss AS locationRegion,
+			uc.iflose AS trackingResult,
+			uc.loseinfo AS trackingReason,
+			uc.ismanage AS manageResult,
+			uc.ifsafe AS currentState,
+			uc.ifhot AS feverResult,
+			uc.temperature AS feverTemperature,
+			uc.ifkesou AS coughResult,
+			uc.healthinfo AS symptom,
+			u.isdocinfo AS visitResult,
+			uc.docinfo AS visitRemark 
+		FROM
+			usercheck uc
+			LEFT JOIN whuser u ON uc.uid = u.id 
+		WHERE
+			uc.signtime <![CDATA[ < ]]> #{endTime}
+			<if test="startTime!=null">
+			AND uc.signtime <![CDATA[ >= ]]> #{startTime}
+			</if>
+    </select>
+    
+</mapper>
