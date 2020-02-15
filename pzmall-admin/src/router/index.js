@@ -74,13 +74,14 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: 'welcome',
+    hidden: true,
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: '疫情管控', icon: 'dashboard', noCache: true }
+        path: 'welcome',
+        component: () => import('@/views/dashboard/main'),
+        name: 'welcome',
+        meta: { title: '欢迎进入', icon: 'dashboard', noCache: true }
       }
     ]
   }
@@ -93,6 +94,27 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  {
+    path: '/dashboard/',
+    component: Layout,
+    // alwaysShow: true,
+    name: 'dashboard',
+    meta: {
+      title: '疫情管控',
+      icon: 'dashboard'
+    },
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        name: 'dashboard',
+        meta: {
+          perms: ['GET /adminapi/dashboardindex'],
+          title: '疫情管控', icon: 'dashboard', noCache: true
+        }
+      }
+    ]
+  },
   {
     path: '/njuser',
     component: Layout,
@@ -116,7 +138,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'user',
-        component: () => import('@/views/njuser/user'),
+        component: () => import('@/views/njuser/ruser'),
         name: 'user',
         meta: {
           perms: ['GET /adminapi/njuser/list'],
@@ -200,6 +222,16 @@ export const asyncRouterMap = [
           title: '无街道用户',
           noCache: true
         }
+      },
+      {
+        path: 'nosign',
+        component: () => import('@/views/user/nosign'),
+        name: 'nosign',
+        meta: {
+          perms: ['GET /adminapi/user/nosign'],
+          title: '今日未申报健康用户',
+          noCache: true
+        }
       }
     ]
   },
@@ -214,6 +246,27 @@ export const asyncRouterMap = [
       icon: 'chart'
     },
     children: [
+
+      {
+        path: 'sumstat',
+        component: () => import('@/views/stat/sumstat'),
+        name: 'sumstat',
+        meta: {
+          perms: ['GET /adminapi/stat/sumstat'],
+          title: '汇总统计报表',
+          noCache: true
+        }
+      },
+      {
+        path: 'hballstat',
+        component: () => import('@/views/stat/hballstat'),
+        name: 'hballstat',
+        meta: {
+          perms: ['GET /adminapi/stat/hballstat'],
+          title: '湖北统计报表',
+          noCache: true
+        }
+      },
       {
         path: 'whstat',
         component: () => import('@/views/stat/whstat'),
@@ -230,10 +283,11 @@ export const asyncRouterMap = [
         name: 'hbstat',
         meta: {
           perms: ['GET /adminapi/stat/hbstat'],
-          title: '湖北统计报表',
+          title: '湖北(不含武汉)统计',
           noCache: true
         }
       },
+
       {
         path: 'wzstat',
         component: () => import('@/views/stat/wzstat'),
@@ -244,6 +298,62 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
+
+      {
+        path: 'ahstat',
+        component: () => import('@/views/stat/ahstat'),
+        name: 'ahstat',
+        meta: {
+          perms: ['GET /adminapi/stat/ahstat'],
+          title: '安徽统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'hnstat',
+        component: () => import('@/views/stat/hnstat'),
+        name: 'hnstat',
+        meta: {
+          perms: ['GET /adminapi/stat/hnstat'],
+          title: '河南统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'jsstat',
+        component: () => import('@/views/stat/jsstat'),
+        name: 'jsstat',
+        meta: {
+          perms: ['GET /adminapi/stat/jsstat'],
+          title: '江苏统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'otherstat',
+        component: () => import('@/views/stat/otherstat'),
+        name: 'otherstat',
+        meta: {
+          perms: ['GET /adminapi/stat/otherstat'],
+          title: '其他地区统计报表',
+          noCache: true
+        }
+      },
+
+      {
+        path: 'nocontactstat',
+        component: () => import('@/views/stat/nocontactstat'),
+        name: 'nocontactstat',
+        meta: {
+          perms: ['GET /adminapi/stat/nocontactstat'],
+          title: '无接触统计报表',
+          noCache: true
+        }
+      },
+
       {
         path: 'wlstat',
         component: () => import('@/views/stat/wlstat'),
@@ -253,7 +363,7 @@ export const asyncRouterMap = [
           title: '外来人员统计',
           noCache: true
         }
-      }
+      },
     ]
   },
 

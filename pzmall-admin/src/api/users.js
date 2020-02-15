@@ -7,3 +7,11 @@ export function fetchList(query) {
     params: query
   })
 }
+
+export function fetchNoSignList(query) {
+  return request({
+    url: 'https://super.51pinzhi.cn/poc_extend/ac/acYQNoPlayCard',
+    method: 'post',
+    params: query
+  })
+}

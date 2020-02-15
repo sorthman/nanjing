@@ -47,6 +47,8 @@ public class AdminUserController {
     @Autowired
     private NjUserService njUserService;
 
+    @Autowired
+    private RUserService rUserService;
 
     @Autowired
     private UserTransferService userTransferService;
@@ -68,7 +70,7 @@ public class AdminUserController {
                        @RequestParam(defaultValue = "") String[] addsource,
                        @RequestParam(defaultValue = "") String iftransferarea,
                        @RequestParam(defaultValue = "") String iftransferstreet,
-                       @RequestParam(defaultValue = "") String ifsafe,
+                       @RequestParam(defaultValue = "") String[] ifsafe,
                        @RequestParam(defaultValue = "") String healthinfo,
                        @RequestParam(defaultValue = "") String[] usertype,
                        @RequestParam(defaultValue = "") String ifwh,
@@ -97,9 +99,9 @@ public class AdminUserController {
             userVo u = new userVo();
             BeanUtils.copyProperties(user, u);
             users.add(u);
-            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-            if (user.getArrivedate() != null) {
-                if (user.getArrivedate().isBefore(sTime)) {
+//            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
+            if (user.getLefttime() != null) {
+                if (user.getLefttime() <= 0) {
                     u.setIfover("是");
                 } else {
                     u.setIfover("否");
@@ -125,6 +127,35 @@ public class AdminUserController {
         return ResponseUtil.ok(signList);
     }
 
+    @RequiresPermissions("adminapi:user:create")
+    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "新增用户")
+    @PostMapping("/create")
+    public Object create(@RequestBody Whuser newuser) {
+        Subject currentUser = SecurityUtils.getSubject();
+        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+
+        if (userService.findByIdcard(newuser.getIdcard()) != null) {
+            return ResponseUtil.fail(-2, "该身份证号用户已经存在");
+        }
+
+        if (newuser.getManagetime() != null) {
+            newuser.setLefttimemodify(LocalDateTime.now());
+            newuser.setEndsigntime(newuser.getManagetime().plusDays(14).minusMinutes(1));
+            LocalDateTime endTime = newuser.getManagetime().plusDays(14);
+            LocalDateTime nowTime = LocalDateTime.now();
+            Duration duration = Duration.between(nowTime, endTime);
+            newuser.setLefttime((int) duration.toDays());
+        }
+        newuser.setAddtime(LocalDateTime.now());
+        newuser.setModifytime(LocalDateTime.now());
+        newuser.setAddsource("自主");
+        newuser.setArea(admin.getArea());
+        newuser.setAddaccount(admin.getId());
+
+        userService.add(newuser);
+        return ResponseUtil.ok(newuser);
+    }
+
     @RequiresPermissions("adminapi:user:update")
     @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "编辑")
     @PostMapping("/update")
@@ -133,8 +164,8 @@ public class AdminUserController {
         if (user.getAddsource().equals("省疾控")) {
             if (user.getManagetime() != null) {
                 user.setLefttimemodify(LocalDateTime.now());
-                user.setEndsigntime(user.getArrivedate().plusDays(14).minusMinutes(1));
-                LocalDateTime endTime = user.getArrivedate().plusDays(14);
+                user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
+                LocalDateTime endTime = user.getManagetime().plusDays(14);
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
@@ -142,15 +173,14 @@ public class AdminUserController {
         } else {
             if (user.getManagetime() != null) {
                 user.setLefttimemodify(LocalDateTime.now());
-                user.setEndsigntime(user.getArrivedate().plusDays(14).minusMinutes(1));
-                LocalDateTime endTime = user.getArrivedate().plusDays(14);
+                user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
+                LocalDateTime endTime = user.getManagetime().plusDays(14);
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
-            }
-            else if (user.getArrivedate() != null) {
-                user.setManagetime(user.getArrivedate().plusDays(1));
+            } else if (user.getArrivedate() != null) {
                 user.setLefttimemodify(LocalDateTime.now());
+                user.setManagetime(user.getArrivedate().plusDays(1));
                 user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
                 LocalDateTime endTime = user.getArrivedate().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
@@ -193,14 +223,20 @@ public class AdminUserController {
         int totalCount = users.size();
         String failUser = "";
         for (Whuser user : users) {
-
-            Whuser suser = userService.findByIdcard(user.getIdcard());
+            Whuser suser = null;
+            if (addsource.equals("公安")) {
+                suser = userService.findByIdcard(user.getIdcard());
+            } else {
+                suser = userService.findByPhone(user.getPhone());
+            }
             if (suser == null || !addsource.equals("公安")) {
-                if (user.getHealthinfo().indexOf("发热") >= 0) {
-                    user.setIfhot("是");
-                }
-                if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
-                    user.setIfkesou("是");
+                if (user.getHealthinfo() != null) {
+                    if (user.getHealthinfo().indexOf("发热") >= 0) {
+                        user.setIfhot("是");
+                    }
+                    if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
+                        user.setIfkesou("是");
+                    }
                 }
 
                 user.setSigncount(0);
@@ -222,7 +258,9 @@ public class AdminUserController {
 
                 user.setArea(admin.getArea());
                 user.setAddsource((addsource));
-                userService.add(user);
+                if (!StringUtils.isEmpty(user.getName())) {
+                    userService.add(user);
+                }
                 count++;
             } else {
                 failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
@@ -272,7 +310,7 @@ public class AdminUserController {
                 user.setLastsigntime(staTime);
                 user.setModifytime(LocalDateTime.now());
 
-                if(user.getLevel().equals("红色")){ //只有红色设置管理时间
+                if (user.getLevel().equals("红色")) { //只有红色设置管理时间
                     user.setManagetime(LocalDateTime.now());
                 }
 
@@ -346,17 +384,68 @@ public class AdminUserController {
 
     }
 
+    @RequiresPermissions("adminapi:user:nosign")
+    @RequiresPermissionsDesc(menu = {"申报管理", "今日未申报健康用户"}, button = "查询")
+    @GetMapping("/nosign")
+    public void nosign() {
+
+    }
+
+//    @RequiresPermissions("adminapi:user:uploadnj")
+//    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入")
+//    @GetMapping("/uploadnj")
+//    public Object uploadnj(@RequestParam(defaultValue = "") String filename) {
+//        Subject currentUser = SecurityUtils.getSubject();
+//        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+//        List<Njuser> users = new ArrayList<Njuser>();
+//        if (!StringUtils.isEmpty(filename)) {
+//            String rootPath = System.getProperty("user.dir");
+//            String filePath = rootPath + "/storage/" + filename;
+//            users = ExcelUtil.getNJList(filePath);
+//
+//            if (users == null) {
+//                return ResponseUtil.fail(-2, "请上传正确的表格");
+//            }
+//        } else {
+//            return ResponseUtil.fail(-2, "请上传表格");
+//        }
+//
+//        // 插入用户表
+//        int count = 0;
+//        int totalCount = users.size();
+//        String failUser = "";
+//        for (Njuser user : users) {
+//            LocalDateTime reportDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+//            Njuser suser = njUserService.findByIdcard(user.getIdcard(), reportDate);
+//            if (suser == null) {
+////                user.setArea(admin.getArea());
+//                //设置填报日期
+//                user.setReportdate(reportDate);
+//                user.setAddtime(LocalDateTime.now());
+//                user.setAddaccount(admin.getUsername());
+//                njUserService.add(user);
+//                count++;
+//            } else {
+//                failUser += "当天重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+//            }
+//        }
+//
+//        logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+//
+//        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
+//    }
+
     @RequiresPermissions("adminapi:user:uploadnj")
-    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入")
+    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入市申报")
     @GetMapping("/uploadnj")
     public Object uploadnj(@RequestParam(defaultValue = "") String filename) {
         Subject currentUser = SecurityUtils.getSubject();
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Njuser> users = new ArrayList<Njuser>();
+        List<Ruser> users = new ArrayList<Ruser>();
         if (!StringUtils.isEmpty(filename)) {
             String rootPath = System.getProperty("user.dir");
             String filePath = rootPath + "/storage/" + filename;
-            users = ExcelUtil.getNJList(filePath);
+            users = ExcelUtil.getRUserList(filePath);
 
             if (users == null) {
                 return ResponseUtil.fail(-2, "请上传正确的表格");
@@ -369,24 +458,21 @@ public class AdminUserController {
         int count = 0;
         int totalCount = users.size();
         String failUser = "";
-        for (Njuser user : users) {
-            LocalDateTime reportDate = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-            Njuser suser = njUserService.findByIdcard(user.getIdcard(), reportDate);
-            if (suser == null) {
-//                user.setArea(admin.getArea());
-                //设置填报日期
-                user.setReportdate(reportDate);
-                user.setAddtime(LocalDateTime.now());
-                user.setAddaccount(admin.getUsername());
-                njUserService.add(user);
-                count++;
+        String op = "导入";
+        for (Ruser user : users) {
+//            LocalDateTime reportDate = LocalDateTime.of(LocalDate.now(), LocalTim.MIN);
+            if (user.getId() != null) {
+                op = "更新";
+                rUserService.updateById(user);
             } else {
-                failUser += "当天重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+                op = "导入";
+                rUserService.add(user);
             }
+            count++;
         }
 
-        logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+        logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条," + op + "成功" + count + "条", filename);
 
-        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
+        return ResponseUtil.ok("总计：" + totalCount + "条," + op + "成功" + count + "条" + "<br/>" + failUser);
     }
 }

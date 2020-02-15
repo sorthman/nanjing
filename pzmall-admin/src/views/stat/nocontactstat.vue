@@ -67,7 +67,7 @@
               width="70"
               label="超过14天观察期解除管理累计人数"
             />
-            <el-table-column prop="followSum" width="70" label="待确认" />
+            <el-table-column prop="followSum" width="70" label="查否数" />
           </el-table-column>
           <el-table-column :label="title3">
             <el-table-column prop="notinareaSum" width="70" label="小计" />
@@ -153,7 +153,7 @@ export default {
           response.data.Data.forEach(x => {
             this.list.push({ ...x,
               inareaSum: parseInt(x.s5) + parseInt(x.s6),
-              hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10),
+              hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10) + parseInt(x.s11),
               followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8),
               notinareaSum: parseInt(x.s9) + parseInt(x.s10),
               othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19)
@@ -267,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '武汉' + this.time + '数据汇总.xls'
+      link.download = '无接触' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

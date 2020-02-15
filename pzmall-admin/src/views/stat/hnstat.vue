@@ -36,7 +36,7 @@
       highlight-current-row
       element-loading-text="正在查询中。。。"
     >
-      <el-table-column label="温州每日数据汇总" align="center">
+      <el-table-column label="河南省每日数据汇总" align="center">
         <el-table-column align="center" label="地区" prop="area" />
         <el-table-column align="center" label="街道" prop="street" />
         <el-table-column
@@ -54,8 +54,8 @@
         />
         <el-table-column :label="title1" align="center">
           <el-table-column prop="inareaSum" width="70" label="小计" />
-          <el-table-column prop="s5" width="70" label="未去温州" />
-          <el-table-column prop="s6" width="70" label="去过或途径温州" />
+          <el-table-column prop="s5" width="70" label="未去河南" />
+          <el-table-column prop="s6" width="70" label="去过或途径河南" />
         </el-table-column>
         <el-table-column label="已核查人数" align="center">
           <el-table-column align="center" label="合计" prop="hasCheckSum" />
@@ -103,7 +103,7 @@ import { statWH } from '@/api/stats'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { formatDate } from '@/utils/time.js'
 export default {
-  name: 'WZStat',
+  name: 'WHStat',
   components: { Pagination },
   data() {
     return {
@@ -121,7 +121,7 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: '温州'
+        userType: '河南'
       }
     }
   },
@@ -239,6 +239,7 @@ export default {
               return cur.othersSum + prev
             }, 0)
           })
+
           this.listLoading = false
         })
         .catch(() => {
@@ -266,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '温州' + this.time + '数据汇总.xls'
+      link.download = '河南省' + this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }

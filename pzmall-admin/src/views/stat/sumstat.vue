@@ -54,8 +54,8 @@
         />
         <el-table-column :label="title1" align="center">
           <el-table-column prop="inareaSum" width="70" label="小计" />
-          <el-table-column prop="s5" width="70" label="未去湖北" />
-          <el-table-column prop="s6" width="70" label="去过或途径湖北" />
+          <el-table-column prop="s5" width="70" label="未去疫区" />
+          <el-table-column prop="s6" width="70" label="去过或途径疫区" />
         </el-table-column>
         <el-table-column label="已核查人数" align="center">
           <el-table-column align="center" label="合计" prop="hasCheckSum" />
@@ -67,7 +67,7 @@
               width="70"
               label="超过14天观察期解除管理累计人数"
             />
-            <el-table-column prop="followSum" width="70" label="待确认" />
+            <el-table-column prop="followSum" width="70" label="查否数" />
           </el-table-column>
           <el-table-column :label="title3">
             <el-table-column prop="notinareaSum" width="70" label="小计" />
@@ -121,7 +121,8 @@ export default {
         stime: '',
         etime: '',
         area: '',
-        userType: ['武汉', '湖北', '温州', '其它地区', '无接触']
+        userType: ['武汉', '湖北', '温州']
+        // userType: ['武汉', '湖北', '温州', '安徽', '河南', '江苏', '其它地区', '无接触']
       }
     }
   },
@@ -153,7 +154,7 @@ export default {
           response.data.Data.forEach(x => {
             this.list.push({ ...x,
               inareaSum: parseInt(x.s5) + parseInt(x.s6),
-              hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10),
+              hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10) + parseInt(x.s11),
               followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8),
               notinareaSum: parseInt(x.s9) + parseInt(x.s10),
               othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19)
@@ -266,7 +267,7 @@ export default {
       // 利用URL.createObjectURL()方法为a元素生成blob URL
       link.href = URL.createObjectURL(blob)
       // 设置文件名
-      link.download = '温州' + this.time + '数据汇总.xls'
+      link.download = this.time + '数据汇总.xls'
       link.click()
       URL.revokeObjectURL(blob)
     }
