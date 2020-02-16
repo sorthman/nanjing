@@ -191,6 +191,7 @@
       <el-table-column align="center" label="是否外出" prop="ifgoout" />
       <el-table-column align="center" label="外出地址" prop="goaddress" />
       <el-table-column align="center" label="其他信息" prop="other" />
+      <el-table-column align="center" label="添加时间" prop="addtime" />
 
       <!-- <el-table-column align="center" label="目前居住区域" prop="currentaddress" />
       <el-table-column align="center" label="武汉居住区域" prop="whaddress" />
@@ -637,7 +638,8 @@ export default {
           "停留时间",
           "是否外出",
           "外出地址",
-          "其他信息"
+          "其他信息",
+          "添加时间"
         ];
         const filterVal = [
           "name",
@@ -656,7 +658,8 @@ export default {
           "whtime",
           "ifgoout",
           "goaddress",
-          "other"
+          "other",
+          "addtime"
         ];
         excel.export_json_to_excel2(
           tHeader,

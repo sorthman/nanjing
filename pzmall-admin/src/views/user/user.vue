@@ -326,6 +326,8 @@
       <el-table-column align="center" label="社工" prop="sgname" />
       <el-table-column align="center" label="社区民警" prop="mjname" />
       <el-table-column align="center" label="医疗卫生员" prop="ylname" />
+      <el-table-column align="center" label="添加时间" prop="addtime" />
+
       <!-- <el-table-column align="center" label="目前居住区域" prop="currentaddress" />
       <el-table-column align="center" label="武汉居住区域" prop="whaddress" />
 
@@ -378,6 +380,11 @@
         label-width="120px"
         style="width: 600px; margin-left:50px;"
       >
+        <el-form-item v-if="dialogStatus=='create'" label="数据来源" prop="addsource">
+          <el-select v-model="dataForm.addsource" clearable class="filter-item" placeholder="数据来源">
+            <el-option v-for="(key, value) in addsourceMap" :key="key" :label="key" :value="value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="dataForm.name" />
         </el-form-item>
@@ -599,6 +606,15 @@ const sourceMap = {
   企业复工: "企业复工"
 };
 
+const addsourceMap = {
+  自查: "自查",
+  公安: "公安",
+  教育: "教育",
+  漫游: "漫游",
+  省疾控: "省疾控",
+  企业复工: "企业复工"
+};
+
 const levelMap = {
   红色: "红色",
   黄色: "黄色",
@@ -648,6 +664,7 @@ export default {
       statusMap: statusMap,
       statusLeaveMap: statusLeaveMap,
       sourceMap: sourceMap,
+      addsourceMap,
       healthMap: healthMap,
       userTypeMap: userTypeMap,
       zhuantaiMap: zhuantaiMap,
@@ -779,6 +796,13 @@ export default {
       });
     },
     createData() {
+      if (this.dataForm.addsource == "") {
+        this.$notify.error({
+          title: "失败",
+          message: "请先选择数据来源"
+        });
+        return;
+      }
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           createUser(this.dataForm)
@@ -866,7 +890,8 @@ export default {
           "街道干部",
           "社工",
           "社区民警",
-          "医疗卫生员"
+          "医疗卫生员",
+          "添加时间"
         ];
         const filterVal = [
           "id",
@@ -896,7 +921,8 @@ export default {
           "gbname",
           "sgname",
           "mjname",
-          "ylname"
+          "ylname",
+          "addtime"
         ];
         excel.export_json_to_excel2(
           tHeader,
