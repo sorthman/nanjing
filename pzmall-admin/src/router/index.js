@@ -55,8 +55,7 @@ export const constantRouterMap = [
     path: '/401',
     component: () => import('@/views/errorPage/401'),
     hidden: true
-  }
-  ,
+  },
   // {
   //   path: '',
   //   hidden: true,
@@ -106,7 +105,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
+        component: () => import('@/views/dashboard/index.vue'),
         name: 'dashboard',
         meta: {
           perms: ['GET /adminapi/dashboardindex'],
@@ -179,7 +178,7 @@ export const asyncRouterMap = [
           title: '小区外来人员查询',
           noCache: true
         }
-      },
+      }
     ]
   },
   {
@@ -363,7 +362,7 @@ export const asyncRouterMap = [
           title: '外来人员统计',
           noCache: true
         }
-      },
+      }
     ]
   },
 
