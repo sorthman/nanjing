@@ -113,15 +113,15 @@
 
     .ms-tips {
       margin-top: px2vh(30px);
-      font-size: 8px;
+      font-size: px2vw(18px);
       color: #999999;
       display: flex;
       align-items: center;
-      margin-right: 5px;
 
       .mini-btns {
-        font-size: 8px;
-        padding: 8px;
+        margin-left: 5px;
+        font-size: px2vw(16px);
+        padding: 3px 5px;
       }
     }
   }

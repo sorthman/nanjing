@@ -32,7 +32,8 @@ export default {
       s1: null,
       s2: null,
       s3: null,
-      s4: null
+      s4: null,
+      now: date.format(null, 'yyyy年MM月dd日 hh:mm')
     }
   },
   computed: {
@@ -71,28 +72,32 @@ export default {
         info({
           'area': '鼓楼区'
         }).then(response => {
+          this.now = date.format(null, 'yyyy年MM月dd日 hh:mm')
           this.model = response.data.Data
           // 鼓楼区疫情防控实时数据
+          const options = {
+            separator: ''
+          }
           if (!this.s1) {
-            this.s1 = new window.CountUp('s1', 0, this.model.s1)
+            this.s1 = new window.CountUp('s1', 0, this.model.s1, 0, 2, options)
             this.s1.start()
           } else {
             this.s1.update(this.model.s1)
           }
           if (!this.s2) {
-            this.s2 = new window.CountUp('s2', 0, this.model.s2)
+            this.s2 = new window.CountUp('s2', 0, this.model.s2, 0, 2, options)
             this.s2.start()
           } else {
             this.s2.update(this.model.s2)
           }
           if (!this.s3) {
-            this.s3 = new window.CountUp('s3', 0, this.model.s3)
+            this.s3 = new window.CountUp('s3', 0, this.model.s3, 0, 2, options)
             this.s3.start()
           } else {
             this.s3.update(this.model.s3)
           }
           if (!this.s4) {
-            this.s4 = new window.CountUp('s4', 0, this.model.s4)
+            this.s4 = new window.CountUp('s4', 0, this.model.s4, 0, 2, options)
             this.s4.start()
           } else {
             this.s4.update(this.model.s4)
@@ -252,6 +257,9 @@ export default {
           }
         ]
       })
+    },
+    go() {
+      this.$router.push({ path: '/user/user' })
     }
   }
 }

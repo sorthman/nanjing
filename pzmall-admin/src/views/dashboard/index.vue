@@ -26,8 +26,8 @@
             </div>
           </div>
           <div class="ms-tips">
-            <p>截止2020年2月12日 10:10 丨 来源: 鼓楼区疫情防控平台</p>
-            <el-button type="primary" round plain size="mini" class="mini-btns">查看更多</el-button>
+            <p>截止{{ now }}</p>
+            <el-button type="primary" round plain size="mini" class="mini-btns" @click="go">查看更多</el-button>
           </div>
         </div>
       </el-card>
@@ -50,7 +50,7 @@
       <el-card class="b1">
         <div slot="header" class="card-head">
           <img src="../../assets/img/4.png" alt="">
-          <span>居家观察人员地理位置分析统计</span>
+          <span>居家观察人员位置分析统计</span>
         </div>
         <div class="sa-head">
           <p class="m">位置</p>
