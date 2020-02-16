@@ -27,6 +27,7 @@ export default {
       myChart2: null,
       model: {},
       streets: [],
+      streetsNums: [],
       timeinterval: null,
       num: 0,
       s1: null,
@@ -112,6 +113,29 @@ export default {
             } else {
               x.a = 0
             }
+            const find1 = this.streetsNums.find(y => y.street === x.street)
+            if (!find1) {
+              this.streetsNums.push(x)
+            } else {
+              find1.a = x.a
+              find1.num = x.num
+            }
+          })
+          this.$nextTick(() => {
+            this.streetsNums.forEach(x => {
+              if (!x.nums) {
+                x.nums = new window.CountUp(x.street + '1', 0, x.a, 0, 2, options)
+                x.nums.start()
+              } else {
+                x.nums.update(x.a)
+              }
+              if (!x.nums1) {
+                x.nums1 = new window.CountUp(x.street + '2', 0, x.num, 0, 2, options)
+                x.nums1.start()
+              } else {
+                x.nums1.update(x.num)
+              }
+            })
           })
           this.draw()
           resolve(true)

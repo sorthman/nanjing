@@ -72,8 +72,8 @@
         <div v-for="(item,i) in streets" :key="i" :class="'t'+(i+1)" class="t">
           <div class="title">{{ item.street }}街道</div>
           <div class="txt">
-            <div>居家观察<span>{{ item.a }}</span></div>
-            <div>外来人员<span>{{ item.num }}</span></div>
+            <div>居家观察<span :id="item.street+1">0</span></div>
+            <div>外来人员<span :id="item.street+2">0</span></div>
           </div>
         </div>
       </div>
