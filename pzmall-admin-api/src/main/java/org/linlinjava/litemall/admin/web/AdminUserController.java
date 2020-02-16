@@ -201,6 +201,11 @@ public class AdminUserController {
             }
         }
 
+        //如果managetime 不为空则 ismanage 设置是
+        if (user.getManagetime() != null) {
+            user.setIsmanage("是");
+        }
+
         user.setModifytime(LocalDateTime.now());
 
         if (userService.updateById(user) == 0) {
@@ -236,12 +241,12 @@ public class AdminUserController {
         String failUser = "";
         for (Whuser user : users) {
             Whuser suser = null;
-            if (addsource.equals("公安")) {
+            if (addsource.equals("公安") || addsource.equals("企业复工")) {
                 suser = userService.findByIdcard(user.getIdcard());
             } else {
                 suser = userService.findByPhone(user.getPhone());
             }
-            if (suser == null || !addsource.equals("公安")) {
+            if (suser == null) {
                 if (user.getHealthinfo() != null) {
                     if (user.getHealthinfo().indexOf("发热") >= 0) {
                         user.setIfhot("是");
@@ -313,7 +318,7 @@ public class AdminUserController {
 
             Whuser suser = userService.findByPhone(user.getPhone());
 //            if (suser == null || !addsource.equals("公安")) {
-            if (true) {
+            if (suser == null) {
                 user.setIdcard("");
                 user.setSigncount(0);
                 String strTime = "1970-01-01 00:00:00";
@@ -339,7 +344,7 @@ public class AdminUserController {
                 userService.add(user);
                 count++;
             } else {
-                failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+                failUser += "重复用户：" + suser.getName() + "/" + suser.getPhone() + "<br/>";
             }
         }
 
