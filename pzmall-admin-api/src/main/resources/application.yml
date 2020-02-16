@@ -15,8 +15,7 @@ server:
     
 sync: 
   job:
-    enable: false 
-  
+    enable: true
 
 logging:
   level:

@@ -227,7 +227,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/user/nosign'),
         name: 'nosign',
         meta: {
-          perms: ['GET /adminapi/user/nosign'],
+          perms: ['GET /adminapi/user/nosign'],
           title: '今日未申报健康用户',
           noCache: true
         }

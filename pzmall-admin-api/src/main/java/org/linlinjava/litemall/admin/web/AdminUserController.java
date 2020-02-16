@@ -100,7 +100,7 @@ public class AdminUserController {
             BeanUtils.copyProperties(user, u);
             users.add(u);
 //            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-            if (user.getLefttime() != null) {
+            if (user.getLefttime() != null && user.getManagetime() != null) {
                 if (user.getLefttime() <= 0) {
                     u.setIfover("是");
                 } else {
@@ -138,6 +138,7 @@ public class AdminUserController {
             return ResponseUtil.fail(-2, "该身份证号用户已经存在");
         }
 
+        //自主用户设置了管理时间
         if (newuser.getManagetime() != null) {
             newuser.setLefttimemodify(LocalDateTime.now());
             newuser.setEndsigntime(newuser.getManagetime().plusDays(14).minusMinutes(1));
@@ -146,9 +147,10 @@ public class AdminUserController {
             Duration duration = Duration.between(nowTime, endTime);
             newuser.setLefttime((int) duration.toDays());
         }
+
         newuser.setAddtime(LocalDateTime.now());
         newuser.setModifytime(LocalDateTime.now());
-        newuser.setAddsource("自主");
+//        newuser.setAddsource("自主");
         newuser.setArea(admin.getArea());
         newuser.setAddaccount(admin.getId());
 
@@ -161,6 +163,9 @@ public class AdminUserController {
     @PostMapping("/update")
     public Object update(@RequestBody Whuser user) {
 
+        Whuser suser = userService.findById(user.getId());
+
+        //如果设置到宁时间或者管理时间
         if (user.getAddsource().equals("省疾控")) {
             if (user.getManagetime() != null) {
                 user.setLefttimemodify(LocalDateTime.now());
@@ -186,6 +191,13 @@ public class AdminUserController {
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
+            }
+        }
+
+        //如果到宁时间设置为null
+        if (user.getArrivedate() == null) {
+            if (suser.getAddsource().equals("省疾控") && suser.getLevel().equals("红色")) {
+
             }
         }
 

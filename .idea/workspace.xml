@@ -4,7 +4,9 @@
     <list default="true" id="3f7b0c87-0545-4a24-ba9b-92b6d8631976" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/java/org/linlinjava/litemall/admin/web/AdminUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pzmall-core/src/main/java/org/linlinjava/litemall/core/util/ExcelUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-core/src/main/java/org/linlinjava/litemall/core/util/ExcelUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin-api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin-api/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-admin/src/views/user/import.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-admin/src/views/user/import.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/LitemallUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/java/org/linlinjava/litemall/db/service/LitemallUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pzmall-db/src/main/resources/application-db.yml" beforeDir="false" afterPath="$PROJECT_DIR$/pzmall-db/src/main/resources/application-db.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -287,7 +289,7 @@
       <workItem from="1581581143304" duration="117000" />
       <workItem from="1581581279541" duration="5952000" />
       <workItem from="1581657100797" duration="4785000" />
-      <workItem from="1581746530677" duration="3338000" />
+      <workItem from="1581746530677" duration="8155000" />
     </task>
     <servers />
   </component>

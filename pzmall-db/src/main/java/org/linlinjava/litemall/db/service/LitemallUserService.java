@@ -19,9 +19,9 @@ public class LitemallUserService {
     @Resource
     private WhuserMapper userMapper;
 
-//    public Whuser findById(Integer userId) {
-//        return userMapper.selectByPrimaryKey(userId);
-//    }
+    public Whuser findById(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
 
     public Whuser findByIdcard(String idcard) {
         WhuserExample example = new WhuserExample();
