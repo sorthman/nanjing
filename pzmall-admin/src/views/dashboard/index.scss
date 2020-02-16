@@ -75,7 +75,7 @@
 
     .nums {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       text-align: center;
 
       .box + .box {
@@ -108,6 +108,7 @@
         padding-top: 10px;
         font-size: px2vw(16px);
         color: #333333;
+        //transform: scale(.8);
       }
     }
 
