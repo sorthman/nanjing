@@ -247,6 +247,7 @@ public class AdminUserController {
                 suser = userService.findByPhone(user.getPhone());
             }
             if (suser == null) {
+
                 if (user.getHealthinfo() != null) {
                     if (user.getHealthinfo().indexOf("发热") >= 0) {
                         user.setIfhot("是");
@@ -256,14 +257,16 @@ public class AdminUserController {
                     }
                 }
 
-                user.setSigncount(0);
+                user.setSigncount(0); //默认打卡次数设置0
                 String strTime = "1970-01-01 00:00:00";
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime staTime = LocalDateTime.parse(strTime, df);
                 user.setLastsigntime(staTime);
                 user.setModifytime(LocalDateTime.now());
 
+                //如果来宁时间不为空
                 if (user.getArrivedate() != null) {
+                    //管理时间默认+1天
                     user.setManagetime(user.getArrivedate().plusDays(1));
                     user.setLefttimemodify(LocalDateTime.now());
                     user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
@@ -333,8 +336,8 @@ public class AdminUserController {
 
                 if (user.getManagetime() != null) {
                     user.setLefttimemodify(LocalDateTime.now());
-                    user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
-                    LocalDateTime endTime = user.getManagetime().plusDays(15);
+                    user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
+                    LocalDateTime endTime = user.getManagetime().plusDays(14);
                     LocalDateTime nowTime = LocalDateTime.now();
                     Duration duration = Duration.between(nowTime, endTime);
                     user.setLefttime((int) duration.toDays());
