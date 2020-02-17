@@ -5,7 +5,7 @@
       status-icon
       label-position="left"
       label-width="150px"
-      style="width: 600px; margin-left:50px;"
+      style="width: 100%; margin-left:50px;"
     >
       <el-form-item label="请选择数据类型" prop="addsource">
         <el-select

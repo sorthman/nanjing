@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -59,41 +61,29 @@ public class AdminUserController {
     @RequiresPermissions("adminapi:user:list")
     @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "查询")
     @GetMapping("/list")
-    public Object list(String username, String phone,
-                       @RequestParam(defaultValue = "") String sex,
-                       @RequestParam(defaultValue = "0") Integer sage,
-                       @RequestParam(defaultValue = "0") Integer eage,
-                       @RequestParam(defaultValue = "") String idcard,
-                       @RequestParam(defaultValue = "") String street,
-                       @RequestParam(defaultValue = "") String community,
-                       @RequestParam(defaultValue = "") String arrivedate,
-                       @RequestParam(defaultValue = "") String[] addsource,
-                       @RequestParam(defaultValue = "") String iftransferarea,
-                       @RequestParam(defaultValue = "") String iftransferstreet,
-                       @RequestParam(defaultValue = "") String[] ifsafe,
-                       @RequestParam(defaultValue = "") String healthinfo,
-                       @RequestParam(defaultValue = "") String[] usertype,
-                       @RequestParam(defaultValue = "") String ifwh,
-                       @RequestParam(defaultValue = "") String ifhb,
-                       @RequestParam(defaultValue = "") String ifleavenj,
-                       @RequestParam(defaultValue = "") String ifadmin,
-                       @RequestParam(defaultValue = "") String ifover,
-                       @RequestParam(defaultValue = "") String iflose,
-                       @RequestParam(defaultValue = "") String ifstay,
-                       @RequestParam(defaultValue = "") String addtime,
-                       @RequestParam(defaultValue = "") String managetime,
-                       @RequestParam(defaultValue = "") String level,
+    public Object list(String username, String phone, @RequestParam(defaultValue = "") String sex,
+                       @RequestParam(defaultValue = "0") Integer sage, @RequestParam(defaultValue = "0") Integer eage,
+                       @RequestParam(defaultValue = "") String idcard, @RequestParam(defaultValue = "") String street,
+                       @RequestParam(defaultValue = "") String community, @RequestParam(defaultValue = "") String arrivedate,
+                       @RequestParam(defaultValue = "") String[] addsource, @RequestParam(defaultValue = "") String iftransferarea,
+                       @RequestParam(defaultValue = "") String iftransferstreet, @RequestParam(defaultValue = "") String[] ifsafe,
+                       @RequestParam(defaultValue = "") String healthinfo, @RequestParam(defaultValue = "") String[] usertype,
+                       @RequestParam(defaultValue = "") String ifwh, @RequestParam(defaultValue = "") String ifhb,
+                       @RequestParam(defaultValue = "") String ifleavenj, @RequestParam(defaultValue = "") String ifadmin,
+                       @RequestParam(defaultValue = "") String ifover, @RequestParam(defaultValue = "") String iflose,
+                       @RequestParam(defaultValue = "") String ifstay, @RequestParam(defaultValue = "") String addtime,
+                       @RequestParam(defaultValue = "") String managetime, @RequestParam(defaultValue = "") String level,
 
-                       @RequestParam(defaultValue = "1") Integer page,
-                       @RequestParam(defaultValue = "10") Integer limit,
-                       @RequestParam(defaultValue = "addtime") String sort,
-                       @RequestParam(defaultValue = "desc") String order) {
+                       @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
+                       @RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order) {
 
         Subject currentUser = SecurityUtils.getSubject();
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
-        List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard, street, community, arrivedate, addsource, iftransferarea,
-                iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, page, limit, sort, order);
+        List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard,
+                street, community, arrivedate, addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo,
+                usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, page,
+                limit, sort, order);
         List<userVo> users = new ArrayList<>();
         for (Whuser user : userList) {
             userVo u = new userVo();
@@ -118,10 +108,8 @@ public class AdminUserController {
     @RequiresPermissions("adminapi:user:listsign")
     @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "详情")
     @GetMapping("/listsign")
-    public Object listsign(Integer uid,
-                           @RequestParam(defaultValue = "1") Integer page,
-                           @RequestParam(defaultValue = "10") Integer limit,
-                           @RequestParam(defaultValue = "addtime") String sort,
+    public Object listsign(Integer uid, @RequestParam(defaultValue = "1") Integer page,
+                           @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "addtime") String sort,
                            @RequestParam(defaultValue = "desc") String order) {
         List<Usercheck> signList = userCheckService.querySelective(uid, page, limit, sort, order);
         return ResponseUtil.ok(signList);
@@ -138,7 +126,7 @@ public class AdminUserController {
             return ResponseUtil.fail(-2, "该身份证号用户已经存在");
         }
 
-        //自主用户设置了管理时间
+        // 自主用户设置了管理时间
         if (newuser.getManagetime() != null) {
             newuser.setLefttimemodify(LocalDateTime.now());
             newuser.setEndsigntime(newuser.getManagetime().plusDays(14).minusMinutes(1));
@@ -165,7 +153,7 @@ public class AdminUserController {
 
         Whuser suser = userService.findById(user.getId());
 
-        //如果设置到宁时间或者管理时间
+        // 如果设置到宁时间或者管理时间
         if (user.getAddsource().equals("省疾控")) {
             if (user.getManagetime() != null) {
                 user.setLefttimemodify(LocalDateTime.now());
@@ -194,14 +182,14 @@ public class AdminUserController {
             }
         }
 
-        //如果到宁时间设置为null
+        // 如果到宁时间设置为null
         if (user.getArrivedate() == null) {
             if (suser.getAddsource().equals("省疾控") && suser.getLevel().equals("红色")) {
 
             }
         }
 
-        //如果managetime 不为空则 ismanage 设置是
+        // 如果managetime 不为空则 ismanage 设置是
         if (user.getManagetime() != null) {
             user.setIsmanage("是");
         }
@@ -247,7 +235,6 @@ public class AdminUserController {
                 suser = userService.findByPhone(user.getPhone());
             }
             if (suser == null) {
-
                 if (user.getHealthinfo() != null) {
                     if (user.getHealthinfo().indexOf("发热") >= 0) {
                         user.setIfhot("是");
@@ -257,16 +244,14 @@ public class AdminUserController {
                     }
                 }
 
-                user.setSigncount(0); //默认打卡次数设置0
+                user.setSigncount(0);
                 String strTime = "1970-01-01 00:00:00";
                 DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime staTime = LocalDateTime.parse(strTime, df);
                 user.setLastsigntime(staTime);
                 user.setModifytime(LocalDateTime.now());
 
-                //如果来宁时间不为空
                 if (user.getArrivedate() != null) {
-                    //管理时间默认+1天
                     user.setManagetime(user.getArrivedate().plusDays(1));
                     user.setLefttimemodify(LocalDateTime.now());
                     user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
@@ -291,7 +276,6 @@ public class AdminUserController {
 
         return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
     }
-
 
     @RequiresPermissions("adminapi:user:uploadsjk")
     @RequiresPermissionsDesc(menu = {"申报管理", "数据导入"}, button = "导入省疾控")
@@ -330,14 +314,14 @@ public class AdminUserController {
                 user.setLastsigntime(staTime);
                 user.setModifytime(LocalDateTime.now());
 
-                if (user.getLevel().equals("红色")) { //只有红色设置管理时间
+                if (user.getLevel().equals("红色")) { // 只有红色设置管理时间
                     user.setManagetime(LocalDateTime.now());
                 }
 
                 if (user.getManagetime() != null) {
                     user.setLefttimemodify(LocalDateTime.now());
-                    user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
-                    LocalDateTime endTime = user.getManagetime().plusDays(14);
+                    user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+                    LocalDateTime endTime = user.getManagetime().plusDays(15);
                     LocalDateTime nowTime = LocalDateTime.now();
                     Duration duration = Duration.between(nowTime, endTime);
                     user.setLefttime((int) duration.toDays());
@@ -356,18 +340,16 @@ public class AdminUserController {
         return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
     }
 
-
     @RequiresPermissions("adminapi:user:download")
     @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "导出")
     @GetMapping("/download")
     public void download(HttpServletResponse response, String username, String mobile,
-                         @RequestParam(defaultValue = "1") Integer page,
-                         @RequestParam(defaultValue = "10") Integer limit,
-                         @RequestParam(defaultValue = "addtime") String sort,
-                         @RequestParam(defaultValue = "desc") String order) {
+                         @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
+                         @RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order) {
         Subject currentUser = SecurityUtils.getSubject();
         LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Whuser> userList = userService.querySelective(admin.getArea(), username, mobile, page, 1000000, sort, order);
+        List<Whuser> userList = userService.querySelective(admin.getArea(), username, mobile, page, 1000000, sort,
+                order);
         List<KnowledgeVo> xlslist = new ArrayList<KnowledgeVo>();
 //		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 //		Date now = new Date();
@@ -479,16 +461,113 @@ public class AdminUserController {
         int totalCount = users.size();
         String failUser = "";
         String op = "导入";
+        boolean doOp = true;
+
         for (Ruser user : users) {
-//            LocalDateTime reportDate = LocalDateTime.of(LocalDate.now(), LocalTim.MIN);
+
             if (user.getId() != null) {
-                op = "更新";
-                rUserService.updateById(user);
-            } else {
+                // 进行规则校验
+                if (!"常住".equals(user.getA13()) && !"暂住".equals(user.getA13())) {
+                    failUser += "【人员类别】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                if (!"往来地区".equals(user.getA15()) && !"病例同乘".equals(user.getA15()) && !"其他1".equals(user.getA15())
+                        && !"其他2".equals(user.getA15())) {
+                    failUser += "【情况分类】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                List<String> removeStrList = new ArrayList<>();
+                removeStrList.add("新增隔离");
+                removeStrList.add("实际居住地不在本辖区、但在本市其他辖区");
+                removeStrList.add("查无此人");
+                removeStrList.add("已离开南京");
+                removeStrList.add("尚在核查");
+                removeStrList.add("已经实施居家隔离，非当日新增");
+                removeStrList.add("已经解除隔离");
+                removeStrList.add("居住在本市且不需要居家隔离");
+                removeStrList.add("其他");
+
+                if (!removeStrList.contains(user.getA19())) {
+                    failUser += "【排除类型】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && "移交中".equals(user.getA18())) {
+                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+                if (!"尚在核查".equals(user.getA19()) && "核查中".equals(user.getA18())) {
+                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+                if (("实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) || "尚在核查".equals(user.getA19())
+                ) && "完成".equals(user.getA18())) {
+                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && !StringUtils.isEmpty(user.getA21())) {
+                    failUser += "【实际居住地址】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                // 实际居住地
+                if (user.getA22().equals(user.getA1())) {
+                    failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                List<String> areaList = new ArrayList<>();
+                areaList.add("江宁区");
+                areaList.add("浦口区");
+                areaList.add("高淳区");
+                areaList.add("建邺区");
+                areaList.add("玄武区");
+                areaList.add("六合区");
+                areaList.add("溧水区");
+                areaList.add("鼓楼区");
+                areaList.add("栖霞区");
+                areaList.add("秦淮区");
+                areaList.add("雨花台区");
+                areaList.add("江北新区");
+
+                if (!areaList.contains(user.getA22())) {
+                    failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                    doOp = false;
+                }
+
+                if ("已经实施居家隔离，非当日新增".equals(user.getA19()) || "已经解除隔离".equals(user.getA19())) {
+                    if (StringUtils.isEmpty(user.getA26())) {
+                        failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                        doOp = false;
+                    }
+                }
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("");
+                if ("新增隔离".equals(user.getA19())) {
+                    if (!dateFormat.format(new Date()).equals(user.getA26())) {
+                        failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+                        doOp = false;
+                    }
+                }
+            }
+
+            if (user.getId() == null) {
                 op = "导入";
                 rUserService.add(user);
+                count++;
+            } else {
+                op = "更新";
+//                if (doOp) {
+                if (true) {
+                    rUserService.updateById(user);
+                    count++;
+                } else {
+                    continue;
+                }
             }
-            count++;
         }
 
         logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条," + op + "成功" + count + "条", filename);

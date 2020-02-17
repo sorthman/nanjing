@@ -79,35 +79,41 @@
       highlight-current-row
     >
       <el-table-column align="center" width="100px" label="编号" prop="id" sortable />
-      <!-- <el-table-column align="center" label="登记方式" prop="addsource" /> -->
 
       <el-table-column align="center" label="区划名称" prop="a1" />
       <el-table-column align="center" label="姓名" prop="a2" />
       <el-table-column min-width="200px" align="center" label="身份证号" prop="a3" />
-      <el-table-column align="center" label="常驻地址" min-width="300px" prop="a4" />
-      <el-table-column min-width="120px" align="center" label="手机号" prop="a5" />
+      <el-table-column align="center" label="户籍地址" min-width="300px" prop="a4" />
+      <el-table-column min-width="120px" align="center" label="居住地详细地址" prop="a5" />
+      <el-table-column align="center" label="手机号码" prop="a6" />
+      <el-table-column align="center" label="手机号码2" prop="a7" />
+      <el-table-column align="center" label="手机号码3" prop="a8" />
+      <el-table-column align="center" label="流出地区省" prop="a9" />
+      <el-table-column align="center" label="流出地区市" prop="a10" />
+      <el-table-column align="center" label="流出地区区" prop="a11" />
+      <el-table-column align="center" min-width="150px" label="抵宁日期" prop="a12" />
+      <el-table-column align="center" label="人员类别" prop="a13" />
+      <el-table-column align="center" label="乘车信息" prop="a14" />
+      <el-table-column align="center" label="情况分类" prop="a15" />
+      <el-table-column align="center" min-width="300px" label="其他备查信息" prop="a16" />
+      <el-table-column align="center" min-width="350px" label="下发核查时间" prop="a17" />
+      <el-table-column align="center" label="检查结果" prop="a18" />
+      <el-table-column align="center" label="排除类型" prop="a19" />
+      <el-table-column align="center" label="排除简述" prop="a20" />
 
-      <el-table-column align="center" label="流出地区省" prop="a6" />
-      <el-table-column align="center" label="流出地区市" prop="a7" />
-      <el-table-column align="center" label="流出地区区" prop="a8" />
-
-      <el-table-column align="center" min-width="150px" label="抵宁日期" prop="a9" />
-      <el-table-column align="center" min-width="150px" label="数据来源" prop="a10" />
-      <el-table-column align="center" label="人员类别" prop="a11" />
-
-      <el-table-column align="center" min-width="300px" label="派出所" prop="a12" />
-      <el-table-column align="center" min-width="350px" label="关联车次" prop="a13" />
-      <el-table-column align="center" label="登记时间" prop="a14" />
-      <el-table-column align="center" label="数据分类" prop="a15" />
-      <el-table-column align="center" label="部门" prop="a16" />
-
-      <el-table-column align="center" label="下发核查备注" prop="a17" />
-      <el-table-column align="center" label="下发核查时间" prop="a18" />
-      <el-table-column align="center" label="排除和类型" prop="a19" />
-      <el-table-column align="center" label="现居住（省）" prop="a20" />
-      <el-table-column align="center" label="现居住（市）" prop="a21" />
-      <el-table-column align="center" label="现居住（区）" prop="a22" />
-      <el-table-column align="center" label="是否新增" prop="a23" />
+      <el-table-column align="center" label="实际居住地址" prop="a21" />
+      <el-table-column align="center" label="实际居住地（区）" prop="a22" />
+      <el-table-column align="center" label="实际居住地（街道）" prop="a23" />
+      <el-table-column align="center" label="外地去向" prop="a24" />
+      <el-table-column align="center" label="近期是否回宁" prop="a25" />
+      <el-table-column align="center" label="开始隔离时间" prop="a26" />
+      <el-table-column align="center" label="备注一" prop="a27" />
+      <el-table-column align="center" label="备注二" prop="a28" />
+      <el-table-column align="center" label="备注三" prop="a29" />
+      <el-table-column align="center" label="备注四" prop="a30
+      
+      
+      " />
 
       <!-- <el-table-column align="center" label="目前居住区域" prop="currentaddress" />
       <el-table-column align="center" label="武汉居住区域" prop="whaddress" />
@@ -532,27 +538,33 @@ export default {
           "区划名称",
           "姓名",
           "身份证号码",
+          "户籍地址",
           "居住地详细地址",
           "手机号码",
-          "流出地区（省",
+          "手机号码2",
+          "联系号码3",
+          "流出地区（省）",
           "流出地区（市）",
           "流出地区（区）",
           "抵宁日期",
-          "数据来源",
           "人员类别",
-          "派出所",
-          "关联车次",
-          "登记时间",
-          "数据分类",
-          "部门",
-          "下发核查备注",
+          "乘车信息",
+          "情况分类",
+          "其他备查信息",
           "下发核查时间",
           "核查结果",
           "排除类型",
-          "实际居住地（市）",
+          "排除简述",
+          "实际居住地址",
           "实际居住地（区）",
           "实际居住地（街道）",
-          "是否新增"
+          "外地去向",
+          "近期是否回宁",
+          "开始隔离时间",
+          "备注一",
+          "备注二",
+          "备注三",
+          "备注四"
         ];
         const filterVal = [
           "id",
@@ -579,8 +591,13 @@ export default {
           "a21",
           "a22",
           "a23",
-          "a24"
-          
+          "a24",
+          "a25",
+          "a26",
+          "a27",
+          "a28",
+          "a29",
+          "a30"
         ];
         excel.export_json_to_excel2(
           tHeader,

@@ -604,7 +604,7 @@ public class ExcelUtil<T> {
 
                 cell = row.getCell(flag + 17);
                 try {
-                    newword.setA18(String.format("%.0f", cell.getNumericCellValue()));
+                    newword.setA18(cell.getStringCellValue());
                 } catch (Exception e) {
                     newword.setA18("");
                 }
@@ -644,6 +644,43 @@ public class ExcelUtil<T> {
                 } catch (Exception e) {
                     newword.setA24("");
                 }
+                cell = row.getCell(flag + 24);
+                try {
+                    newword.setA25(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA25("");
+                }
+                cell = row.getCell(flag + 25);
+                try {
+                    newword.setA26(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA26("");
+                }
+                cell = row.getCell(flag + 26);
+                try {
+                    newword.setA27(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA27("");
+                }
+                cell = row.getCell(flag + 27);
+                try {
+                    newword.setA28(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA28("");
+                }
+                cell = row.getCell(flag + 28);
+                try {
+                    newword.setA29(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA29("");
+                }
+                cell = row.getCell(flag + 29);
+                try {
+                    newword.setA30(cell.getStringCellValue());
+                } catch (Exception e) {
+                    newword.setA30("");
+                }
+
                 words.add(newword);
             }
             return words;
