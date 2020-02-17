@@ -604,7 +604,8 @@ const sourceMap = {
   漫游: "漫游",
   省疾控: "省疾控",
   企业复工: "企业复工",
-  外来人员登记: "外来人员登记"
+  外来人员登记: "外来人员登记",
+  宁归来: "宁归来"
 };
 
 const addsourceMap = {
@@ -614,7 +615,8 @@ const addsourceMap = {
   漫游: "漫游",
   省疾控: "省疾控",
   企业复工: "企业复工",
-  外来人员登记: "外来人员登记"
+  外来人员登记: "外来人员登记",
+  宁归来: "宁归来"
 };
 
 const levelMap = {
@@ -798,13 +800,49 @@ export default {
       });
     },
     createData() {
-      if (this.dataForm.addsource == "") {
+      //验证到宁时间与管理时间逻辑
+      if (
+        this.dataForm.arrivedate == null &&
+        this.dataForm.managetime != null
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "请设置到宁时间"
+        });
+        return;
+      }
+
+      if (
+        this.dataForm.arrivedate != null &&
+        this.dataForm.managetime == null
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "请设置管理时间"
+        });
+        return;
+      }
+
+      if (
+        this.dataForm.arrivedate != null &&
+        this.dataForm.managetime != null &&
+        this.dataForm.managetime < this.dataForm.arrivedate
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "管理时间不能在来宁时间前面"
+        });
+        return;
+      }
+
+      if (this.dataForm.addsource == null) {
         this.$notify.error({
           title: "失败",
           message: "请先选择数据来源"
         });
         return;
       }
+
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           createUser(this.dataForm)
