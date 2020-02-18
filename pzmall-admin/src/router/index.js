@@ -169,6 +169,16 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
+      {
+        path: 'schooluser',
+        component: () => import('@/views/njuser/schooluser'),
+        name: 'schooluser',
+        meta: {
+          perms: ['GET /adminapi/schooluser/list'],
+          title: '高校人员查询',
+          noCache: true
+        }
+      },
       // {
       //   path: 'visituser',
       //   component: () => import('@/views/njuser/visituser'),

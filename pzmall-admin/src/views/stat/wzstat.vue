@@ -45,8 +45,8 @@
           label="总人数"
           prop="s1"
         />
-        <el-table-column align="center" label="已核查人数" prop="s2" />
-        <el-table-column align="center" label="当日正在管理人数" prop="s3" />
+        <!-- <el-table-column align="center" label="已核查人数" prop="s2" />
+        <el-table-column align="center" label="当日正在管理人数" prop="s3" /> -->
         <!-- <el-table-column
           align="center"
           label="超过14天观察期解除管理累计人数"

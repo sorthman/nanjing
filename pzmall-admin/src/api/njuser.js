@@ -24,4 +24,12 @@ export function listUserVisit(query) {
   })
 }
 
+export function listUserSchool(query) {
+  return request({
+    url: '/schooluser/list',
+    method: 'get',
+    params: query
+  })
+}
+
 

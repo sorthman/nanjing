@@ -29,7 +29,7 @@ public class AdminSchoolUserController {
 	@Autowired
 	private BaseNanjingService baseNanjingService;
 
-	@RequiresPermissions("admin:schooluser:list")
+	@RequiresPermissions("adminapi:schooluser:list")
 	@RequiresPermissionsDesc(menu = { "外来人员查询", "高校外来人员查询" }, button = "查询")
 	@GetMapping("/list")
 	public Object list(@RequestParam(defaultValue = "") String name,
