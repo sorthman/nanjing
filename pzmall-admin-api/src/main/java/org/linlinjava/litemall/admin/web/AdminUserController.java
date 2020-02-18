@@ -150,9 +150,13 @@ public class AdminUserController {
         // 如果设置管理时间不为空
         if (suser.getAddsource().equals("省疾控") && !StringUtils.isEmpty(suser.getLevel()) && suser.getLevel().equals("红色")) {
             if (user.getManagetime() != null) {
-                if (user.getManagetime() != suser.getManagetime()) {
+                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                    //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
-                }//不一致才修改Lefttimemodify
+                } else {
+                    user.setLefttimemodify(suser.getLefttimemodify());
+                }
+
                 user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
                 LocalDateTime endTime = user.getManagetime().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
@@ -164,9 +168,12 @@ public class AdminUserController {
             }
         } else {
             if (user.getManagetime() != null) {
-                if (user.getManagetime() != suser.getManagetime()) {
+                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                    //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
-                }//不一致才修改Lefttimemodify
+                } else {
+                    user.setLefttimemodify(suser.getLefttimemodify());
+                }
                 user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
                 LocalDateTime endTime = user.getManagetime().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
@@ -175,9 +182,12 @@ public class AdminUserController {
             } else if (user.getArrivedate() != null) {
 
                 user.setManagetime(user.getArrivedate().plusDays(1));
-                if (user.getManagetime() != suser.getManagetime()) {
+                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                    //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
-                }//不一致才修改Lefttimemodify
+                } else {
+                    user.setLefttimemodify(suser.getLefttimemodify());
+                }
 
                 user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
                 LocalDateTime endTime = user.getManagetime().plusDays(15);
@@ -323,7 +333,8 @@ public class AdminUserController {
                 user.setModifytime(LocalDateTime.now());
 
                 if (user.getLevel().equals("红色")) { // 只有红色设置管理时间
-                    user.setManagetime(LocalDateTime.now());
+                    LocalDateTime today_start = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+                    user.setManagetime(today_start);
                 }
 
                 if (user.getManagetime() != null) {
