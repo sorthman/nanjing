@@ -58,8 +58,8 @@ public class AdminUserController {
 	@Autowired
 	private LogHelper logHelper;
 
-	@RequiresPermissions("adminapi:user:list")
-	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "查询")
+//	@RequiresPermissions("adminapi:user:list")
+//	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "查询")
 	@GetMapping("/list")
 	public Object list(String username, String phone, @RequestParam(defaultValue = "") String sex,
 			@RequestParam(defaultValue = "0") Integer sage, @RequestParam(defaultValue = "0") Integer eage,
@@ -136,6 +136,7 @@ public class AdminUserController {
 		newuser.setModifytime(LocalDateTime.now());
 		newuser.setArea(admin.getArea());
 		newuser.setAddaccount(admin.getId());
+		newuser.setLastsigntime(LocalDateTime.of(1970, 01, 01, 0, 0));
 
 		userService.add(newuser);
 		return ResponseUtil.ok(newuser);

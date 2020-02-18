@@ -17,6 +17,7 @@
         	</foreach>
         	</if>
 			AND street IS NOT NULL 
+			AND njcommunity IS NOT NULL 
 			AND id NOT IN (
 			SELECT
 				id 
