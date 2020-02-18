@@ -1,8 +1,11 @@
 package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
+
+import org.linlinjava.litemall.db.dao.ExWhUserMapper;
 import org.linlinjava.litemall.db.dao.WhuserMapper;
 import org.linlinjava.litemall.db.domain.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +21,9 @@ import java.util.List;
 public class LitemallUserService {
     @Resource
     private WhuserMapper userMapper;
+    
+    @Autowired
+    private ExWhUserMapper exWhUserMapper;
 
     public Whuser findById(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
@@ -65,7 +71,21 @@ public class LitemallUserService {
                                        String ifwh, String ifhb, String ifleavenj, String ifadmin, String ifover, String iflose, String ifstay,
                                        String addtime, String managetime, String level,
 
-                                       Integer page, Integer size, String sort, String order) {
+                                       Integer page, Integer size, String sort, String order, String checkIsNot) {
+    	
+    	if (!StringUtils.isEmpty(checkIsNot)) {
+			if ("是".equals(checkIsNot)) {
+
+				List<String> list = new ArrayList<>();
+				for (String s : usertype) {
+					list.add(s);
+				}
+
+				PageHelper.startPage(page, size);
+				List<Whuser> userList = exWhUserMapper.getUserListBySearch(list);
+				return userList;
+			}
+    	}
 
         WhuserExample example = new WhuserExample();
 
