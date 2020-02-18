@@ -150,7 +150,7 @@ public class AdminUserController {
         // 如果设置管理时间不为空
         if (suser.getAddsource().equals("省疾控") && !StringUtils.isEmpty(suser.getLevel()) && suser.getLevel().equals("红色")) {
             if (user.getManagetime() != null) {
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                if (suser.getManagetime() != null && user.getManagetime().compareTo(suser.getManagetime()) != 0) {
                     //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
                 } else {
@@ -168,7 +168,7 @@ public class AdminUserController {
             }
         } else {
             if (user.getManagetime() != null) {
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                if (suser.getManagetime() != null && user.getManagetime().compareTo(suser.getManagetime()) != 0) {
                     //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
                 } else {
@@ -182,7 +182,7 @@ public class AdminUserController {
             } else if (user.getArrivedate() != null) {
 
                 user.setManagetime(user.getArrivedate().plusDays(1));
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+                if (suser.getManagetime() != null && user.getManagetime().compareTo(suser.getManagetime()) != 0) {
                     //不一致才修改Lefttimemodify
                     user.setLefttimemodify(LocalDateTime.now());
                 } else {

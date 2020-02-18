@@ -169,16 +169,16 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      {
-        path: 'visituser',
-        component: () => import('@/views/njuser/visituser'),
-        name: 'visituser',
-        meta: {
-          perms: ['GET /adminapi/visituser/list'],
-          title: '小区外来人员查询',
-          noCache: true
-        }
-      }
+      // {
+      //   path: 'visituser',
+      //   component: () => import('@/views/njuser/visituser'),
+      //   name: 'visituser',
+      //   meta: {
+      //     perms: ['GET /adminapi/visituser/list'],
+      //     title: '小区外来人员查询',
+      //     noCache: true
+      //   }
+      // }
     ]
   },
   {
