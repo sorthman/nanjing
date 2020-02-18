@@ -47,11 +47,11 @@
         />
         <el-table-column align="center" label="已核查人数" prop="s2" />
         <el-table-column align="center" label="当日正在管理人数" prop="s3" />
-        <el-table-column
+        <!-- <el-table-column
           align="center"
           label="超过14天观察期解除管理累计人数"
           prop="s4"
-        />
+        /> -->
         <el-table-column :label="title1" align="center">
           <el-table-column prop="inareaSum" width="70" label="小计" />
           <el-table-column prop="s5" width="70" label="未去湖北" />

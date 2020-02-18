@@ -872,6 +872,42 @@ export default {
       });
     },
     updateData() {
+
+      //验证到宁时间与管理时间逻辑
+      if (
+        this.dataForm.arrivedate == null &&
+        this.dataForm.managetime != null
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "请设置到宁时间"
+        });
+        return;
+      }
+
+      if (
+        this.dataForm.arrivedate != null &&
+        this.dataForm.managetime == null
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "请设置管理时间"
+        });
+        return;
+      }
+
+      if (
+        this.dataForm.arrivedate != null &&
+        this.dataForm.managetime != null &&
+        this.dataForm.managetime < this.dataForm.arrivedate
+      ) {
+        this.$notify.error({
+          title: "失败",
+          message: "管理时间不能在来宁时间前面"
+        });
+        return;
+      }
+
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           updateUser(this.dataForm)
