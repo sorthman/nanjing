@@ -259,10 +259,23 @@ public class LitemallUserService {
                 criteria.andIdcardLike("%" + idcard + "%");
             }
             if (!StringUtils.isEmpty(street)) {
-                criteria.andStreetLike("%" + street + "%");
+                if ("有".equals(street)) {
+                    criteria.andStreetIsNotNull();
+                } else if ("无".equals(street)) {
+                    criteria.andStreetIsNull();
+                } else {
+                    criteria.andStreetLike("%" + street + "%");
+                }
             }
+
             if (!StringUtils.isEmpty(community)) {
-                criteria.andNjcommunityLike("%" + community + "%");
+                if ("有".equals(community)) {
+                    criteria.andNjcommunityIsNotNull();
+                } else if ("无".equals(community)) {
+                    criteria.andNjcommunityIsNull();
+                } else {
+                    criteria.andNjcommunityLike("%" + community + "%");
+                }
             }
             if (!StringUtils.isEmpty(arrivedate)) {
                 arrivedate = arrivedate.replace(" ", "T");
