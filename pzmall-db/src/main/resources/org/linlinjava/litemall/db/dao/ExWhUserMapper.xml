@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.linlinjava.litemall.db.dao.ExWhUserMapper">
 
-    <select id="getUserListBySearch" parameterType="java.lang.String" resultType="org.linlinjava.litemall.db.domain.Whuser">
+    <select id="getUserListBySearch" parameterType="java.util.HashMap" resultType="org.linlinjava.litemall.db.domain.Whuser">
         SELECT
 			* 
 		FROM
@@ -10,10 +10,12 @@
 		WHERE
 			ifleavenj = '否' 
 			AND ifstay = '是' 
+			<if test="typeSize!='0'">
 			AND usertype IN
-			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			<foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
                 #{item,jdbcType=VARCHAR}
         	</foreach>
+        	</if>
 			AND street IS NOT NULL 
 			AND id NOT IN (
 			SELECT
@@ -23,10 +25,12 @@
 			WHERE
 				ifleavenj = '否' 
 				AND ifstay = '是' 
+				<if test="typeSize!='0'">
 				AND usertype IN
-				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				<foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
                 #{item,jdbcType=VARCHAR}
         		</foreach>
+        		</if>
 				AND ismanage = '是' 
 				AND lefttime <![CDATA[ > ]]> 0 UNION ALL
 			SELECT
@@ -36,10 +40,12 @@
 			WHERE
 				ifleavenj = '否' 
 				AND ifstay = '是'
+				<if test="typeSize!='0'">
 				AND usertype IN 
-				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				<foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
                 #{item,jdbcType=VARCHAR}
         		</foreach>
+        		</if>
 				AND lefttime <![CDATA[ <= ]]> 0 
 				AND managetime IS NOT NULL 
 			AND ( ifsafe IS NULL OR ifsafe = '居家观察' ) 
