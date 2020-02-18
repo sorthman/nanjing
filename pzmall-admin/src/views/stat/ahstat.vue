@@ -83,6 +83,8 @@
         <el-table-column align="center" label="省疾控" prop="s21" />
         <el-table-column align="center" label="外来人员登记" prop="s22" />
         <el-table-column align="center" label="企业复工" prop="s23" />
+        <el-table-column align="center" label="宁归来" prop="s24" />
+
         <el-table-column align="center" label="南京籍" prop="s16" />
         <el-table-column align="center" label="武汉籍" prop="s17" />
         <el-table-column align="center" label="湖北籍" prop="s19" />
@@ -230,6 +232,9 @@ export default {
             }, 0),
             s23: listsum.reduce(function(prev, cur) {
               return cur.s23 + prev
+            }, 0),
+            s24: listsum.reduce(function(prev, cur) {
+              return cur.s24 + prev
             }, 0),
             inareaSum: listsum.reduce(function(prev, cur) {
               return cur.inareaSum + prev

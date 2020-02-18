@@ -89,7 +89,6 @@ public class AdminUserController {
             userVo u = new userVo();
             BeanUtils.copyProperties(user, u);
             users.add(u);
-//            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
             if (user.getLefttime() != null && user.getManagetime() != null) {
                 if (user.getLefttime() <= 0) {
                     u.setIfover("是");
@@ -97,10 +96,6 @@ public class AdminUserController {
                     u.setIfover("否");
                 }
             }
-
-//            String strMobile = user.getPhone().toString();
-//            strMobile = strMobile.replace(strMobile.substring(3, 9), "******");
-//            user.setPhone(Long.parseLong(strMobile));
         }
         return ResponseUtil.okList(users, userList);
     }
@@ -129,8 +124,8 @@ public class AdminUserController {
         // 自主用户设置了管理时间
         if (newuser.getManagetime() != null) {
             newuser.setLefttimemodify(LocalDateTime.now());
-            newuser.setEndsigntime(newuser.getManagetime().plusDays(14).minusMinutes(1));
-            LocalDateTime endTime = newuser.getManagetime().plusDays(14);
+            newuser.setEndsigntime(newuser.getManagetime().plusDays(15).minusMinutes(1));
+            LocalDateTime endTime = newuser.getManagetime().plusDays(15);
             LocalDateTime nowTime = LocalDateTime.now();
             Duration duration = Duration.between(nowTime, endTime);
             newuser.setLefttime((int) duration.toDays());
@@ -138,7 +133,6 @@ public class AdminUserController {
 
         newuser.setAddtime(LocalDateTime.now());
         newuser.setModifytime(LocalDateTime.now());
-//        newuser.setAddsource("自主");
         newuser.setArea(admin.getArea());
         newuser.setAddaccount(admin.getId());
 
@@ -153,39 +147,48 @@ public class AdminUserController {
 
         Whuser suser = userService.findById(user.getId());
 
-        // 如果设置到宁时间或者管理时间
-        if (user.getAddsource().equals("省疾控")) {
+        // 如果设置管理时间不为空
+        if (suser.getAddsource().equals("省疾控") && !StringUtils.isEmpty(suser.getLevel()) && suser.getLevel().equals("红色")) {
             if (user.getManagetime() != null) {
-                user.setLefttimemodify(LocalDateTime.now());
-                user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
-                LocalDateTime endTime = user.getManagetime().plusDays(14);
+                if (user.getManagetime() != suser.getManagetime()) {
+                    user.setLefttimemodify(LocalDateTime.now());
+                }//不一致才修改Lefttimemodify
+                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+                LocalDateTime endTime = user.getManagetime().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
+            } else {
+                //如果管理时间为空，省疾控不用处理
+                user.setManagetime(suser.getManagetime());
             }
         } else {
             if (user.getManagetime() != null) {
-                user.setLefttimemodify(LocalDateTime.now());
-                user.setEndsigntime(user.getManagetime().plusDays(14).minusMinutes(1));
-                LocalDateTime endTime = user.getManagetime().plusDays(14);
+                if (user.getManagetime() != suser.getManagetime()) {
+                    user.setLefttimemodify(LocalDateTime.now());
+                }//不一致才修改Lefttimemodify
+                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+                LocalDateTime endTime = user.getManagetime().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
             } else if (user.getArrivedate() != null) {
-                user.setLefttimemodify(LocalDateTime.now());
+
                 user.setManagetime(user.getArrivedate().plusDays(1));
-                user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
-                LocalDateTime endTime = user.getArrivedate().plusDays(15);
+                if (user.getManagetime() != suser.getManagetime()) {
+                    user.setLefttimemodify(LocalDateTime.now());
+                }//不一致才修改Lefttimemodify
+
+                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+                LocalDateTime endTime = user.getManagetime().plusDays(15);
                 LocalDateTime nowTime = LocalDateTime.now();
                 Duration duration = Duration.between(nowTime, endTime);
                 user.setLefttime((int) duration.toDays());
-            }
-        }
-
-        // 如果到宁时间设置为null
-        if (user.getArrivedate() == null) {
-            if (suser.getAddsource().equals("省疾控") && suser.getLevel().equals("红色")) {
-
+            } else {
+                //如果管理时间为空
+                user.setLefttimemodify(LocalDateTime.now());
+                user.setEndsigntime(null);
+                user.setLefttime(0);
             }
         }
 
@@ -196,7 +199,7 @@ public class AdminUserController {
 
         user.setModifytime(LocalDateTime.now());
 
-        if (userService.updateById(user) == 0) {
+        if (userService.updateByIdWithNull(user) == 0) {
             return ResponseUtil.updatedDataFailed();
         }
 
@@ -268,6 +271,11 @@ public class AdminUserController {
                 }
                 count++;
             } else {
+                //追加addsouce
+                if (!suser.getAddsource().equals(addsource)) {
+                    suser.setAddsource(suser.getAddsource() + "," + addsource);
+                    userService.updateById(suser);
+                }
                 failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
             }
         }
@@ -560,8 +568,8 @@ public class AdminUserController {
                 count++;
             } else {
                 op = "更新";
-//                if (doOp) {
-                if (true) {
+                if (doOp) {
+//                if (true) {
                     rUserService.updateById(user);
                     count++;
                 } else {
