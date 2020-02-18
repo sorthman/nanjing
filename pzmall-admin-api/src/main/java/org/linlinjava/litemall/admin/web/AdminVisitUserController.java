@@ -32,34 +32,34 @@ public class AdminVisitUserController {
     @Autowired
     private VisitUserService userService;
 
-    @RequiresPermissions("admin:visituser:list")
-    @RequiresPermissionsDesc(menu = {"外来人员查询", "小区外来人员查询"}, button = "查询")
-    @GetMapping("/list")
-    public Object list(@RequestParam(defaultValue = "") String name,
-                       @RequestParam(defaultValue = "") String phone,
-                       @RequestParam(defaultValue = "") String sex,
-                       @RequestParam(defaultValue = "0") Integer sage,
-                       @RequestParam(defaultValue = "0") Integer eage,
-                       @RequestParam(defaultValue = "") String idcard,
-                       @RequestParam(defaultValue = "") String traffictype,
-                       @RequestParam(defaultValue = "") String trafficinfo,
-                       @RequestParam(defaultValue = "") String ifwh,
-                       @RequestParam(defaultValue = "") String ifxq,
-                       @RequestParam(defaultValue = "") String visitaddress,
-                       @RequestParam(defaultValue = "0") Integer visitcode,
-
-                       @RequestParam(defaultValue = "1") Integer page,
-                       @RequestParam(defaultValue = "10") Integer limit,
-                       @RequestParam(defaultValue = "id") String sort,
-                       @RequestParam(defaultValue = "desc") String order) {
-
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-
-        List<Visituser> items = userService.querySelective(name, phone, sex, sage, eage, idcard, traffictype, trafficinfo, ifwh, ifxq, visitaddress, visitcode, page, limit, sort, order);
-
-        return ResponseUtil.okList(items);
-    }
+//    @RequiresPermissions("admin:visituser:list")
+//    @RequiresPermissionsDesc(menu = {"外来人员查询", "小区外来人员查询"}, button = "查询")
+//    @GetMapping("/list")
+//    public Object list(@RequestParam(defaultValue = "") String name,
+//                       @RequestParam(defaultValue = "") String phone,
+//                       @RequestParam(defaultValue = "") String sex,
+//                       @RequestParam(defaultValue = "0") Integer sage,
+//                       @RequestParam(defaultValue = "0") Integer eage,
+//                       @RequestParam(defaultValue = "") String idcard,
+//                       @RequestParam(defaultValue = "") String traffictype,
+//                       @RequestParam(defaultValue = "") String trafficinfo,
+//                       @RequestParam(defaultValue = "") String ifwh,
+//                       @RequestParam(defaultValue = "") String ifxq,
+//                       @RequestParam(defaultValue = "") String visitaddress,
+//                       @RequestParam(defaultValue = "0") Integer visitcode,
+//
+//                       @RequestParam(defaultValue = "1") Integer page,
+//                       @RequestParam(defaultValue = "10") Integer limit,
+//                       @RequestParam(defaultValue = "id") String sort,
+//                       @RequestParam(defaultValue = "desc") String order) {
+//
+//        Subject currentUser = SecurityUtils.getSubject();
+//        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+//
+//        List<Visituser> items = userService.querySelective(name, phone, sex, sage, eage, idcard, traffictype, trafficinfo, ifwh, ifxq, visitaddress, visitcode, page, limit, sort, order);
+//
+//        return ResponseUtil.okList(items);
+//    }
 
 //	@RequiresPermissions("admin:njuser:update")
 //	@RequiresPermissionsDesc(menu = { "市申报管理", "外来人员查询" }, button = "编辑")

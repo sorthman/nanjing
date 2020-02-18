@@ -264,6 +264,17 @@
       >
         <el-option v-for="(key, value) in levelMap" :key="key" :label="key" :value="value" />
       </el-select>
+
+      <br />
+      <el-select
+        v-model="listQuery.checkIsNot"
+        clearable
+        style="width: 120px"
+        class="filter-item"
+        placeholder="查否数"
+      >
+        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value" />
+      </el-select>
     </div>
 
     <!-- 查询结果 -->
