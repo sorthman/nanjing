@@ -201,7 +201,7 @@ public class IdCardUtil {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String year = CardCode.substring(6).substring(0, 4);// 得到年份
 		String yue = CardCode.substring(10).substring(0, 2);// 得到月份
-		// String day=CardCode.substring(12).substring(0,2);//得到日
+		String day = CardCode.substring(12).substring(0, 2);// 得到日
 		String sex;
 		if (Integer.parseInt(CardCode.substring(16).substring(0, 1)) % 2 == 0) {// 判断性别
 			sex = "女";
@@ -212,9 +212,10 @@ public class IdCardUtil {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String fyear = format.format(date).substring(0, 4);// 当前年份
 		String fyue = format.format(date).substring(5, 7);// 月份
-		// String fday=format.format(date).substring(8,10);
+		String fday = format.format(date).substring(8, 10);
 		int age = 0;
-		if (Integer.parseInt(yue) <= Integer.parseInt(fyue)) { // 当前月份大于用户出身的月份表示已过生
+		if (Integer.parseInt(yue) < Integer.parseInt(fyue) || (Integer.parseInt(yue) == Integer.parseInt(fyue)
+				&& Integer.parseInt(day) < Integer.parseInt(fday))) { // 当前月份大于用户出身的月份表示已过生
 			age = Integer.parseInt(fyear) - Integer.parseInt(year) + 1;
 		} else {// 当前用户还没过生
 			age = Integer.parseInt(fyear) - Integer.parseInt(year);
@@ -234,7 +235,7 @@ public class IdCardUtil {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String uyear = "19" + card.substring(6, 8);// 年份
 		String uyue = card.substring(8, 10);// 月份
-		// String uday=card.substring(10, 12);//日
+		String uday = card.substring(10, 12);// 日
 		String usex = card.substring(14, 15);// 用户的性别
 		String sex;
 		if (Integer.parseInt(usex) % 2 == 0) {
@@ -246,9 +247,10 @@ public class IdCardUtil {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String fyear = format.format(date).substring(0, 4);// 当前年份
 		String fyue = format.format(date).substring(5, 7);// 月份
-		// String fday=format.format(date).substring(8,10);
+		String fday = format.format(date).substring(8, 10);
 		int age = 0;
-		if (Integer.parseInt(uyue) <= Integer.parseInt(fyue)) { // 当前月份大于用户出身的月份表示已过生
+		if (Integer.parseInt(uyue) < Integer.parseInt(fyue) || (Integer.parseInt(uyue) == Integer.parseInt(fyue)
+				&& Integer.parseInt(uday) < Integer.parseInt(fday))) { // 当前月份大于用户出身的月份表示已过生
 			age = Integer.parseInt(fyear) - Integer.parseInt(uyear) + 1;
 		} else {// 当前用户还没过生
 			age = Integer.parseInt(fyear) - Integer.parseInt(uyear);
@@ -265,7 +267,7 @@ public class IdCardUtil {
 	public static void main(String[] args) throws Exception {
 		// String IDCardNum="210102820826411";
 		// String IDCardNum="210102198208264114";
-		String IDCardNum = "321281199403017938";
+		String IDCardNum = "321281199402217938";
 		String IDCardNum15 = "321031991027010";
 		System.out.println(IdCardUtil.IDCardValidate(IDCardNum));
 
