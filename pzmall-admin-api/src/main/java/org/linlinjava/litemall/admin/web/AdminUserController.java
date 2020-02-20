@@ -6,6 +6,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.admin.service.LogHelper;
+import org.linlinjava.litemall.admin.util.IdCardUtil;
 import org.linlinjava.litemall.admin.vo.KnowledgeVo;
 import org.linlinjava.litemall.admin.vo.userVo;
 import org.linlinjava.litemall.core.util.ExcelUtil;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -223,7 +225,7 @@ public class AdminUserController {
 	@RequiresPermissionsDesc(menu = { "申报管理", "数据导入" }, button = "导入")
 	@GetMapping("/upload")
 	public Object upload(@RequestParam(defaultValue = "") String filename,
-			@RequestParam(defaultValue = "") String addsource) {
+			@RequestParam(defaultValue = "") String addsource) throws NumberFormatException, ParseException {
 		Subject currentUser = SecurityUtils.getSubject();
 		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 		List<Whuser> users = new ArrayList<Whuser>();
@@ -280,7 +282,8 @@ public class AdminUserController {
 				user.setArea(admin.getArea());
 				user.setAddsource((addsource));
 
-				if (!StringUtils.isEmpty(user.getIdcard())) {
+				if (!StringUtils.isEmpty(user.getIdcard())
+						&& StringUtils.isEmpty(IdCardUtil.IDCardValidate(user.getIdcard()))) {
 					String strYear = user.getIdcard().substring(6, 10);// 年份
 					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
 					user.setAge(Integer.valueOf(dateFormat.format(new Date())) - Integer.valueOf(strYear));
