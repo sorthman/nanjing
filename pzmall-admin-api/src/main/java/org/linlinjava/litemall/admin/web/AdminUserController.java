@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 //import sun.rmi.runtime.Log;
@@ -225,7 +226,7 @@ public class AdminUserController {
 	@RequiresPermissionsDesc(menu = { "申报管理", "数据导入" }, button = "导入")
 	@GetMapping("/upload")
 	public Object upload(@RequestParam(defaultValue = "") String filename,
-			@RequestParam(defaultValue = "") String addsource) throws NumberFormatException, ParseException {
+			@RequestParam(defaultValue = "") String addsource) throws Exception {
 		Subject currentUser = SecurityUtils.getSubject();
 		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 		List<Whuser> users = new ArrayList<Whuser>();
@@ -284,15 +285,15 @@ public class AdminUserController {
 
 				if (!StringUtils.isEmpty(user.getIdcard())
 						&& StringUtils.isEmpty(IdCardUtil.IDCardValidate(user.getIdcard()))) {
-					String strYear = user.getIdcard().substring(6, 10);// 年份
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-					user.setAge(Integer.valueOf(dateFormat.format(new Date())) - Integer.valueOf(strYear));
 
-					if (Integer.parseInt(user.getIdcard().substring(16, 17)) % 2 == 0) {
-						user.setSex("女");
+					Map<String, Object> idCardInfo = null;
+					if (user.getIdcard().length() == 15) {
+						idCardInfo = IdCardUtil.getCarInfo15W(user.getIdcard());
 					} else {
-						user.setSex("男");
+						idCardInfo = IdCardUtil.getCarInfo(user.getIdcard());
 					}
+					user.setAge((int) idCardInfo.get("age"));
+					user.setSex(idCardInfo.get("sex").toString());
 				}
 
 				if (!StringUtils.isEmpty(user.getName())) {
