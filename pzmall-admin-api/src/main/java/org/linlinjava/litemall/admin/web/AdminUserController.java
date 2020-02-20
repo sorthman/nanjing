@@ -279,6 +279,19 @@ public class AdminUserController {
 
 				user.setArea(admin.getArea());
 				user.setAddsource((addsource));
+
+				if (!StringUtils.isEmpty(user.getIdcard())) {
+					String strYear = user.getIdcard().substring(6, 10);// 年份
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+					user.setAge(Integer.valueOf(dateFormat.format(new Date())) - Integer.valueOf(strYear));
+
+					if (Integer.parseInt(user.getIdcard().substring(16, 17)) % 2 == 0) {
+						user.setSex("女");
+					} else {
+						user.setSex("男");
+					}
+				}
+
 				if (!StringUtils.isEmpty(user.getName())) {
 					userService.add(user);
 				}
