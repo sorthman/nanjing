@@ -95,171 +95,86 @@ public class LitemallUserService {
 
 		WhuserExample example = new WhuserExample();
 
-		if (addsource.length > 0) {
-			for (String singlesource : addsource) {
-				WhuserExample.Criteria criteria = example.createCriteria();
+		WhuserExample.Criteria criteria_ifsafe = example.createCriteria();
 
-				if (!StringUtils.isEmpty(singlesource)) {
-					criteria.andAddsourceLike("%" + singlesource + "%");
+		if (ifsafe.length > 0) {
+			boolean nullInIfsafe = false;
+			List<String> list = new ArrayList<>();
+			for (String s : ifsafe) {
+				if (s.equals("无")) {
+					nullInIfsafe = true;
+					continue;
 				}
-				if (sage != 0) {
-					criteria.andAgeGreaterThanOrEqualTo(sage);
-				}
-				if (eage != 0) {
-					criteria.andAgeLessThanOrEqualTo(eage);
-				}
+				list.add(s);
+			}
+			if (nullInIfsafe) {
 
-				if (!StringUtils.isEmpty(area)) {
-					criteria.andAreaEqualTo(area);
-				}
+				WhuserExample.Criteria criteria2 = example.createCriteria();
+				criteria2.andIfsafeIsNull();
+				otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria2, 1,
+						list);
 
-				if (!StringUtils.isEmpty(username)) {
-					criteria.andNameLike("%" + username + "%");
-				}
-				if (!StringUtils.isEmpty(mobile)) {
-					criteria.andPhoneLike("%" + mobile + "%");
-				}
-
-				if (!StringUtils.isEmpty(sex)) {
-					criteria.andSexEqualTo(sex);
-				}
-				if (!StringUtils.isEmpty(idcard)) {
-					criteria.andIdcardLike("%" + idcard + "%");
-				}
-				if (!StringUtils.isEmpty(street)) {
-					if ("有".equals(street)) {
-						criteria.andStreetIsNotNull();
-					} else if ("无".equals(street)) {
-						criteria.andStreetIsNull();
-					} else {
-						criteria.andStreetLike("%" + street + "%");
-					}
+				if (addsource.length <= 0) {
+					example.or(criteria2);
 				}
 
-				if (!StringUtils.isEmpty(community)) {
-					if ("有".equals(community)) {
-						criteria.andNjcommunityIsNotNull();
-					} else if ("无".equals(community)) {
-						criteria.andNjcommunityIsNull();
-					} else {
-						criteria.andNjcommunityLike("%" + community + "%");
-					}
+				WhuserExample.Criteria criteria3 = example.createCriteria();
+				criteria3.andIfsafeIn(list);
+				otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria3, 2,
+						list);
+
+				if (addsource.length <= 0) {
+					example.or(criteria3);
 				}
 
-				if (!StringUtils.isEmpty(arrivedate)) {
-					arrivedate = arrivedate.replace(" ", "T");
-					DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-					LocalDateTime date = LocalDateTime.parse(arrivedate);
-					criteria.andArrivedateEqualTo(date);
-				}
-				if (!StringUtils.isEmpty(addtime)) {
-					addtime = addtime.replace(" ", "T");
-					DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-					LocalDateTime date = LocalDateTime.parse(addtime);
-					LocalDateTime dateend = date.plusDays(1);
-					criteria.andAddtimeBetween(date, dateend);
-				}
-				if (!StringUtils.isEmpty(managetime)) {
-					managetime = managetime.replace(" ", "T");
-					DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-					LocalDateTime date = LocalDateTime.parse(managetime);
-					LocalDateTime dateend = date.plusDays(1);
-					criteria.andManagetimeBetween(date, dateend);
-				}
-//        if (addsource.length > 0) {
-//            List<String> list = new ArrayList<>();
-//            WhuserExample.Criteria criteria2 = example.newAndCreateCriteria();
-//            for (String s : addsource) {
-//                list.add(s);
-//                example.and(example.createCriteria()
-//                        .andEqualTo("name", projectCatalogEntity.getName())
-//                        .orEqualTo("code", projectCatalogEntity.getCode()));
-//                criteria2..andAddsourceLike("%" + s + "%");
-//            }
-//            example.
-////            criteria.andAddsourceIn(list);
-//        }
-				if (!StringUtils.isEmpty(iftransferarea)) {
-					criteria.andIftransferareaEqualTo(iftransferarea);
-				}
-				if (!StringUtils.isEmpty(iftransferstreet)) {
-					criteria.andIftransferstreetEqualTo(iftransferstreet);
-				}
-
-				if (ifsafe.length > 0) {
-					List<String> list = new ArrayList<>();
-					for (String s : ifsafe) {
-						list.add(s);
-					}
-					criteria.andIfsafeIn(list);
-				}
-				if (!StringUtils.isEmpty(ifhb)) {
-					criteria.andIfhbEqualTo(ifhb);
-				}
-//        if (!StringUtils.isEmpty(usertype)) {
-//            criteria.andUsertypeEqualTo(usertype);
-//        }
-				if (usertype.length > 0) {
-					List<String> list = new ArrayList<>();
-					for (String s : usertype) {
-						list.add(s);
-					}
-					criteria.andUsertypeIn(list);
-				}
-				if (!StringUtils.isEmpty(ifwh)) {
-					criteria.andIfwhEqualTo(ifwh);
-				}
-				if (!StringUtils.isEmpty(ifleavenj)) {
-					criteria.andIfleavenjEqualTo(ifleavenj);
-				}
-				if (!StringUtils.isEmpty(iflose)) {
-					criteria.andIfloseEqualTo(iflose);
-				}
-				if (!StringUtils.isEmpty(ifstay)) {
-					criteria.andIfstayEqualTo(ifstay);
-				}
-				if (!StringUtils.isEmpty(ifadmin)) {
-					criteria.andIsmanageEqualTo(ifadmin);
-				}
-				if (!StringUtils.isEmpty(level)) {
-					criteria.andLevelEqualTo(level);
-				}
-				if (!StringUtils.isEmpty(ifover)) {
-					criteria.andManagetimeIsNotNull();
-					if (ifover.equals("是")) {
-//                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-//                criteria.andArrivedateLessThan(sTime);
-						criteria.andLefttimeLessThanOrEqualTo(0);
-
-					} else {
-//                LocalDateTime sTime = LocalDateTime.now().minusDays(15);
-//                criteria.andArrivedateGreaterThan(sTime);
-						criteria.andLefttimeGreaterThan(0);
-					}
-				}
-				if (!StringUtils.isEmpty(healthinfo)) {
-					if (healthinfo.indexOf("咳嗽") >= 0) {
-						criteria.andIfkesouEqualTo("是");
-					}
-					if (healthinfo.indexOf("发热") >= 0) {
-						criteria.andIfhotEqualTo("是");
-					}
-					healthinfo = healthinfo.replaceAll("咳嗽", "");
-					healthinfo = healthinfo.replaceAll("发热", "");
-
-					String[] infos = healthinfo.split(",");
-					for (String s : infos) {
-						if (s.length() > 1) {
-							criteria.andHealthinfoLike("%" + s + "%");
-						}
-					}
-				}
-
-				example.or(criteria);
+			} else {
+				criteria_ifsafe.andIfsafeIn(list);
+				otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example,
+						criteria_ifsafe, 2, list);
 			}
 		} else {
-			WhuserExample.Criteria criteria = example.createCriteria();
+			otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate, addsource,
+					iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb, ifleavenj, ifadmin,
+					ifover, iflose, ifstay, addtime, managetime, level, example, criteria_ifsafe, 3, null);
+		}
 
+		if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
+			example.setOrderByClause(sort + " " + order);
+		}
+
+		PageHelper.startPage(page, size);
+		return userMapper.selectByExample(example);
+	}
+
+	private void otherSelections(String area, String username, String mobile, String sex, Integer sage, Integer eage,
+			String idcard, String street, String community, String arrivedate, String[] addsource,
+			String iftransferarea, String iftransferstreet, String[] ifsafe, String healthinfo, String[] usertype,
+			String ifwh, String ifhb, String ifleavenj, String ifadmin, String ifover, String iflose, String ifstay,
+			String addtime, String managetime, String level, WhuserExample example, WhuserExample.Criteria criteria,
+			int tag, List<String> ifsafelist) {
+		if (addsource.length > 0) {
+			for (String singlesource : addsource) {
+				WhuserExample.Criteria criteria3 = example.createCriteria();
+				if (1 == tag) {
+					criteria3.andIfsafeIsNull();
+				} else if(2 == tag) {
+					criteria3.andIfsafeIn(ifsafelist);
+				}
+
+				otherSelectSon(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria3,
+						singlesource);
+				example.or(criteria3);
+			}
+
+		} else {
 			if (sage != 0) {
 				criteria.andAgeGreaterThanOrEqualTo(sage);
 			}
@@ -331,13 +246,13 @@ public class LitemallUserService {
 				criteria.andIftransferstreetEqualTo(iftransferstreet);
 			}
 
-			if (ifsafe.length > 0) {
-				List<String> list = new ArrayList<>();
-				for (String s : ifsafe) {
-					list.add(s);
-				}
-				criteria.andIfsafeIn(list);
-			}
+//			if (ifsafe.length > 0) {
+//				List<String> list = new ArrayList<>();
+//				for (String s : ifsafe) {
+//					list.add(s);
+//				}
+//				criteria.andIfsafeIn(list);
+//			}
 			if (!StringUtils.isEmpty(ifhb)) {
 				criteria.andIfhbEqualTo(ifhb);
 			}
@@ -400,13 +315,178 @@ public class LitemallUserService {
 				}
 			}
 		}
+	}
 
-		if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
-			example.setOrderByClause(sort + " " + order);
+	private void otherSelectSon(String area, String username, String mobile, String sex, Integer sage, Integer eage,
+			String idcard, String street, String community, String arrivedate, String[] addsource,
+			String iftransferarea, String iftransferstreet, String[] ifsafe, String healthinfo, String[] usertype,
+			String ifwh, String ifhb, String ifleavenj, String ifadmin, String ifover, String iflose, String ifstay,
+			String addtime, String managetime, String level, WhuserExample example, WhuserExample.Criteria criteria,
+			String singlesource) {
+
+		if (!StringUtils.isEmpty(singlesource)) {
+			criteria.andAddsourceLike("%" + singlesource + "%");
+		}
+		if (sage != 0) {
+			criteria.andAgeGreaterThanOrEqualTo(sage);
+		}
+		if (eage != 0) {
+			criteria.andAgeLessThanOrEqualTo(eage);
 		}
 
-		PageHelper.startPage(page, size);
-		return userMapper.selectByExample(example);
+		if (!StringUtils.isEmpty(area)) {
+			criteria.andAreaEqualTo(area);
+		}
+
+		if (!StringUtils.isEmpty(username)) {
+			criteria.andNameLike("%" + username + "%");
+		}
+		if (!StringUtils.isEmpty(mobile)) {
+			criteria.andPhoneLike("%" + mobile + "%");
+		}
+
+		if (!StringUtils.isEmpty(sex)) {
+			criteria.andSexEqualTo(sex);
+		}
+		if (!StringUtils.isEmpty(idcard)) {
+			criteria.andIdcardLike("%" + idcard + "%");
+		}
+		if (!StringUtils.isEmpty(street)) {
+			if ("有".equals(street)) {
+				criteria.andStreetIsNotNull();
+			} else if ("无".equals(street)) {
+				criteria.andStreetIsNull();
+			} else {
+				criteria.andStreetLike("%" + street + "%");
+			}
+		}
+
+		if (!StringUtils.isEmpty(community)) {
+			if ("有".equals(community)) {
+				criteria.andNjcommunityIsNotNull();
+			} else if ("无".equals(community)) {
+				criteria.andNjcommunityIsNull();
+			} else {
+				criteria.andNjcommunityLike("%" + community + "%");
+			}
+		}
+
+		if (!StringUtils.isEmpty(arrivedate)) {
+			arrivedate = arrivedate.replace(" ", "T");
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime date = LocalDateTime.parse(arrivedate);
+			criteria.andArrivedateEqualTo(date);
+		}
+		if (!StringUtils.isEmpty(addtime)) {
+			addtime = addtime.replace(" ", "T");
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime date = LocalDateTime.parse(addtime);
+			LocalDateTime dateend = date.plusDays(1);
+			criteria.andAddtimeBetween(date, dateend);
+		}
+		if (!StringUtils.isEmpty(managetime)) {
+			managetime = managetime.replace(" ", "T");
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime date = LocalDateTime.parse(managetime);
+			LocalDateTime dateend = date.plusDays(1);
+			criteria.andManagetimeBetween(date, dateend);
+		}
+//    if (addsource.length > 0) {
+//        List<String> list = new ArrayList<>();
+//        WhuserExample.Criteria criteria2 = example.newAndCreateCriteria();
+//        for (String s : addsource) {
+//            list.add(s);
+//            example.and(example.createCriteria()
+//                    .andEqualTo("name", projectCatalogEntity.getName())
+//                    .orEqualTo("code", projectCatalogEntity.getCode()));
+//            criteria2..andAddsourceLike("%" + s + "%");
+//        }
+//        example.
+////        criteria.andAddsourceIn(list);
+//    }
+		if (!StringUtils.isEmpty(iftransferarea)) {
+			criteria.andIftransferareaEqualTo(iftransferarea);
+		}
+		if (!StringUtils.isEmpty(iftransferstreet)) {
+			criteria.andIftransferstreetEqualTo(iftransferstreet);
+		}
+
+//			if (ifsafe.length > 0) {
+//				List<String> list = new ArrayList<>();
+//				for (String s : ifsafe) {
+//					WhuserExample.Criteria criteria2 = example.createCriteria();
+//					if (s.equals("无")) {
+//						criteria2.andIfsafeIsNull();
+//						continue;
+//					}
+//					list.add(s);
+//					example.or(criteria2);
+//				}
+//				criteria.andIfsafeIn(list);
+//			}
+
+		if (!StringUtils.isEmpty(ifhb)) {
+			criteria.andIfhbEqualTo(ifhb);
+		}
+//    if (!StringUtils.isEmpty(usertype)) {
+//        criteria.andUsertypeEqualTo(usertype);
+//    }
+		if (usertype.length > 0) {
+			List<String> list = new ArrayList<>();
+			for (String s : usertype) {
+				list.add(s);
+			}
+			criteria.andUsertypeIn(list);
+		}
+		if (!StringUtils.isEmpty(ifwh)) {
+			criteria.andIfwhEqualTo(ifwh);
+		}
+		if (!StringUtils.isEmpty(ifleavenj)) {
+			criteria.andIfleavenjEqualTo(ifleavenj);
+		}
+		if (!StringUtils.isEmpty(iflose)) {
+			criteria.andIfloseEqualTo(iflose);
+		}
+		if (!StringUtils.isEmpty(ifstay)) {
+			criteria.andIfstayEqualTo(ifstay);
+		}
+		if (!StringUtils.isEmpty(ifadmin)) {
+			criteria.andIsmanageEqualTo(ifadmin);
+		}
+		if (!StringUtils.isEmpty(level)) {
+			criteria.andLevelEqualTo(level);
+		}
+		if (!StringUtils.isEmpty(ifover)) {
+			criteria.andManagetimeIsNotNull();
+			if (ifover.equals("是")) {
+//            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
+//            criteria.andArrivedateLessThan(sTime);
+				criteria.andLefttimeLessThanOrEqualTo(0);
+
+			} else {
+//            LocalDateTime sTime = LocalDateTime.now().minusDays(15);
+//            criteria.andArrivedateGreaterThan(sTime);
+				criteria.andLefttimeGreaterThan(0);
+			}
+		}
+		if (!StringUtils.isEmpty(healthinfo)) {
+			if (healthinfo.indexOf("咳嗽") >= 0) {
+				criteria.andIfkesouEqualTo("是");
+			}
+			if (healthinfo.indexOf("发热") >= 0) {
+				criteria.andIfhotEqualTo("是");
+			}
+			healthinfo = healthinfo.replaceAll("咳嗽", "");
+			healthinfo = healthinfo.replaceAll("发热", "");
+
+			String[] infos = healthinfo.split(",");
+			for (String s : infos) {
+				if (s.length() > 1) {
+					criteria.andHealthinfoLike("%" + s + "%");
+				}
+			}
+
+		}
 	}
 
 	public int count() {
