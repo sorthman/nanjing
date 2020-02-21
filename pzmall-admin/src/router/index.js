@@ -93,6 +93,7 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  
   {
     path: '/dashboard/',
     component: Layout,
@@ -444,6 +445,28 @@ export const asyncRouterMap = [
       }
     ],
     hidden: true
+  },
+
+  {
+    path: 'https://221.131.141.246:4443/epidemic/ax-open/link',
+    component: Layout,
+    // alwaysShow: true,
+    name: 'NCP',
+    meta: {
+      title: 'NCP分析管控平台',
+      icon: 'link'
+    },
+    children: [
+      {
+        path: 'https://221.131.141.246:4443/epidemic/ax-open/link',
+        component: () => import('@/views/dashboard/index.vue'),
+        name: 'NCP',
+        meta: {
+          perms: ['GET /adminapi/ncp/index'],
+          title: 'NCP分析管控平台', icon: 'link', noCache: true
+        }
+      }
+    ]
   },
 
   { path: '*', redirect: '/404', hidden: true }

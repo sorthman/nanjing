@@ -21,6 +21,9 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="管理员手机号" prop="phone"/>
+
+
       <el-table-column align="center" label="管理员角色" prop="roleIds">
         <template slot-scope="scope">
           <el-tag v-for="roleId in scope.row.roleIds" :key="roleId" type="primary" style="margin-right: 20px;"> {{ formatRole(roleId) }} </el-tag>

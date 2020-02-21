@@ -67,6 +67,7 @@
               width="70"
               label="超过14天观察期解除管理累计人数"
             />
+            <el-table-column prop="s25" width="70" label="待确认" />
             <el-table-column prop="followSum" width="70" label="查否数" />
           </el-table-column>
           <el-table-column :label="title3">
@@ -157,7 +158,7 @@ export default {
             this.list.push({ ...x,
               inareaSum: parseInt(x.s5) + parseInt(x.s6),
               hasCheckSum: parseInt(x.s5) + parseInt(x.s6) + parseInt(x.s9) + parseInt(x.s10) + parseInt(x.s11),
-              followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8),
+              followSum: parseInt(x.s5) + parseInt(x.s6) - parseInt(x.s7) - parseInt(x.s8) - parseInt(x.s25),
               notinareaSum: parseInt(x.s9) + parseInt(x.s10),
               othersSum: parseInt(x.s1) - parseInt(x.s16) - parseInt(x.s17) - parseInt(x.s18) - parseInt(x.s19)
             })
@@ -234,6 +235,9 @@ export default {
             }, 0),
             s24: listsum.reduce(function(prev, cur) {
               return cur.s24 + prev
+            }, 0),
+            s25: listsum.reduce(function(prev, cur) {
+              return cur.s25 + prev
             }, 0),
             inareaSum: listsum.reduce(function(prev, cur) {
               return cur.inareaSum + prev

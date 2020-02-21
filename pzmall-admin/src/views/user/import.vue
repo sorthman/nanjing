@@ -27,7 +27,7 @@
           :show-file-list="false"
           :on-success="uploadWordsUrl"
           class="avatar-uploader"
-          accept=".xls,.xlsx"
+          accept=".xls, .xlsx"
         >
           <i class="el-icon-plus avatar-uploader-icon" />
         </el-upload>
@@ -107,7 +107,8 @@ const sourceMap = {
   教育: "教育",
   漫游: "漫游",
   省疾控: "省疾控",
-  企业复工: "企业复工"
+  企业复工: "企业复工",
+  宁归来: "宁归来"
 };
 
 export default {
