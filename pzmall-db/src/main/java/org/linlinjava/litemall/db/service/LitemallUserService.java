@@ -108,27 +108,39 @@ public class LitemallUserService {
 				list.add(s);
 			}
 			if (nullInIfsafe) {
+				if (list.size() > 0) {
+					WhuserExample.Criteria criteria2 = example.createCriteria();
+					criteria2.andIfsafeIsNull();
+					otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+							addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+							ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria2,
+							1, list);
 
-				WhuserExample.Criteria criteria2 = example.createCriteria();
-				criteria2.andIfsafeIsNull();
-				otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
-						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
-						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria2, 1,
-						list);
+					if (addsource.length <= 0) {
+						example.or(criteria2);
+					}
 
-				if (addsource.length <= 0) {
-					example.or(criteria2);
-				}
+					WhuserExample.Criteria criteria3 = example.createCriteria();
+					criteria3.andIfsafeIn(list);
+					otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+							addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+							ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria3,
+							2, list);
 
-				WhuserExample.Criteria criteria3 = example.createCriteria();
-				criteria3.andIfsafeIn(list);
-				otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
-						addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
-						ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example, criteria3, 2,
-						list);
+					if (addsource.length <= 0) {
+						example.or(criteria3);
+					}
+				} else {
+					WhuserExample.Criteria criteria2 = example.createCriteria();
+					criteria2.andIfsafeIsNull();
+					otherSelections(area, username, mobile, sex, sage, eage, idcard, street, community, arrivedate,
+							addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo, usertype, ifwh, ifhb,
+							ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, example,
+							criteria_ifsafe, 2, list);
 
-				if (addsource.length <= 0) {
-					example.or(criteria3);
+					if (addsource.length <= 0) {
+						example.or(criteria2);
+					}
 				}
 
 			} else {
@@ -163,7 +175,7 @@ public class LitemallUserService {
 				WhuserExample.Criteria criteria3 = example.createCriteria();
 				if (1 == tag) {
 					criteria3.andIfsafeIsNull();
-				} else if(2 == tag) {
+				} else if (2 == tag) {
 					criteria3.andIfsafeIn(ifsafelist);
 				}
 
