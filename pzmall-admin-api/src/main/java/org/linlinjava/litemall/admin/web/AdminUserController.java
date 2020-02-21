@@ -41,398 +41,419 @@ import org.springframework.beans.BeanUtils;
 @RequestMapping("/adminapi/user")
 @Validated
 public class AdminUserController {
-    private final Log logger = LogFactory.getLog(AdminUserController.class);
+	private final Log logger = LogFactory.getLog(AdminUserController.class);
 
-    @Autowired
-    private LitemallUserService userService;
+	@Autowired
+	private LitemallUserService userService;
 
-    @Autowired
-    private UserCheckService userCheckService;
+	@Autowired
+	private UserCheckService userCheckService;
 
-    @Autowired
-    private NjUserService njUserService;
+	@Autowired
+	private NjUserService njUserService;
 
-    @Autowired
-    private RUserService rUserService;
+	@Autowired
+	private RUserService rUserService;
 
-    @Autowired
-    private UserTransferService userTransferService;
+	@Autowired
+	private UserTransferService userTransferService;
 
-    @Autowired
-    private LogHelper logHelper;
+	@Autowired
+	private LogHelper logHelper;
 
-    @RequiresPermissions("adminapi:user:list")
-    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "查询")
-    @GetMapping("/list")
-    public Object list(String username, String phone, @RequestParam(defaultValue = "") String sex,
-                       @RequestParam(defaultValue = "0") Integer sage, @RequestParam(defaultValue = "0") Integer eage,
-                       @RequestParam(defaultValue = "") String idcard, @RequestParam(defaultValue = "") String street,
-                       @RequestParam(defaultValue = "") String community, @RequestParam(defaultValue = "") String arrivedate,
-                       @RequestParam(defaultValue = "") String[] addsource, @RequestParam(defaultValue = "") String iftransferarea,
-                       @RequestParam(defaultValue = "") String iftransferstreet, @RequestParam(defaultValue = "") String[] ifsafe,
-                       @RequestParam(defaultValue = "") String healthinfo, @RequestParam(defaultValue = "") String[] usertype,
-                       @RequestParam(defaultValue = "") String ifwh, @RequestParam(defaultValue = "") String ifhb,
-                       @RequestParam(defaultValue = "") String ifleavenj, @RequestParam(defaultValue = "") String ifadmin,
-                       @RequestParam(defaultValue = "") String ifover, @RequestParam(defaultValue = "") String iflose,
-                       @RequestParam(defaultValue = "") String ifstay, @RequestParam(defaultValue = "") String addtime,
-                       @RequestParam(defaultValue = "") String managetime, @RequestParam(defaultValue = "") String level,
+	@RequiresPermissions("adminapi:user:list")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "查询")
+	@GetMapping("/list")
+	public Object list(String username, String phone, @RequestParam(defaultValue = "") String sex,
+			@RequestParam(defaultValue = "0") Integer sage, @RequestParam(defaultValue = "0") Integer eage,
+			@RequestParam(defaultValue = "") String idcard, @RequestParam(defaultValue = "") String street,
+			@RequestParam(defaultValue = "") String community, @RequestParam(defaultValue = "") String arrivedate,
+			@RequestParam(defaultValue = "") String[] addsource, @RequestParam(defaultValue = "") String iftransferarea,
+			@RequestParam(defaultValue = "") String iftransferstreet, @RequestParam(defaultValue = "") String[] ifsafe,
+			@RequestParam(defaultValue = "") String healthinfo, @RequestParam(defaultValue = "") String[] usertype,
+			@RequestParam(defaultValue = "") String ifwh, @RequestParam(defaultValue = "") String ifhb,
+			@RequestParam(defaultValue = "") String ifleavenj, @RequestParam(defaultValue = "") String ifadmin,
+			@RequestParam(defaultValue = "") String ifover, @RequestParam(defaultValue = "") String iflose,
+			@RequestParam(defaultValue = "") String ifstay, @RequestParam(defaultValue = "") String addtime,
+			@RequestParam(defaultValue = "") String managetime, @RequestParam(defaultValue = "") String level,
 
-                       @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
-                       @RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order,
-                       @RequestParam(defaultValue = "") String checkIsNot) {
+			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
+			@RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order,
+			@RequestParam(defaultValue = "") String checkIsNot) {
 
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
-        List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard,
-                street, community, arrivedate, addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo,
-                usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, page,
-                limit, sort, order, checkIsNot);
-        List<userVo> users = new ArrayList<>();
-        for (Whuser user : userList) {
-            userVo u = new userVo();
-            BeanUtils.copyProperties(user, u);
-            users.add(u);
-            if (user.getLefttime() != null && user.getManagetime() != null) {
-                if (user.getLefttime() <= 0) {
-                    u.setIfover("是");
-                } else {
-                    u.setIfover("否");
-                }
-            }
-        }
-        return ResponseUtil.okList(users, userList);
-    }
+		List<Whuser> userList = userService.querySelective(admin.getArea(), username, phone, sex, sage, eage, idcard,
+				street, community, arrivedate, addsource, iftransferarea, iftransferstreet, ifsafe, healthinfo,
+				usertype, ifwh, ifhb, ifleavenj, ifadmin, ifover, iflose, ifstay, addtime, managetime, level, page,
+				limit, sort, order, checkIsNot);
+		List<userVo> users = new ArrayList<>();
+		for (Whuser user : userList) {
+			userVo u = new userVo();
+			BeanUtils.copyProperties(user, u);
+			users.add(u);
+			if (user.getLefttime() != null && user.getManagetime() != null) {
+				if (user.getLefttime() <= 0) {
+					u.setIfover("是");
+				} else {
+					u.setIfover("否");
+				}
+			}
+		}
+		return ResponseUtil.okList(users, userList);
+	}
 
-    @RequiresPermissions("adminapi:user:listsign")
-    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "详情")
-    @GetMapping("/listsign")
-    public Object listsign(Integer uid, @RequestParam(defaultValue = "1") Integer page,
-                           @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "addtime") String sort,
-                           @RequestParam(defaultValue = "desc") String order) {
-        List<Usercheck> signList = userCheckService.querySelective(uid, page, limit, sort, order);
-        return ResponseUtil.ok(signList);
-    }
+	@RequiresPermissions("adminapi:user:listsign")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "详情")
+	@GetMapping("/listsign")
+	public Object listsign(Integer uid, @RequestParam(defaultValue = "1") Integer page,
+			@RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "addtime") String sort,
+			@RequestParam(defaultValue = "desc") String order) {
+		List<Usercheck> signList = userCheckService.querySelective(uid, page, limit, sort, order);
+		return ResponseUtil.ok(signList);
+	}
 
-    @RequiresPermissions("adminapi:user:create")
-    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "新增用户")
-    @PostMapping("/create")
-    public Object create(@RequestBody Whuser newuser) {
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+	@RequiresPermissions("adminapi:user:create")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "新增用户")
+	@PostMapping("/create")
+	public Object create(@RequestBody Whuser newuser) {
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
 
-        if (userService.findByIdcard(newuser.getIdcard()) != null) {
-            return ResponseUtil.fail(-2, "该身份证号用户已经存在");
-        }
+		if (userService.findByIdcard(newuser.getIdcard()) != null) {
+			return ResponseUtil.fail(-2, "该身份证号用户已经存在");
+		}
 
-        // 自主用户设置了管理时间
-        if (newuser.getManagetime() != null) {
-            newuser.setLefttimemodify(LocalDateTime.now());
-            newuser.setEndsigntime(newuser.getManagetime().plusDays(15).minusMinutes(1));
-            LocalDateTime endTime = newuser.getManagetime().plusDays(15);
-            LocalDateTime nowTime = LocalDateTime.now();
-            Duration duration = Duration.between(nowTime, endTime);
-            newuser.setLefttime((int) duration.toDays());
-        }
+		// 自主用户设置了管理时间
+		if (newuser.getManagetime() != null) {
+			newuser.setLefttimemodify(LocalDateTime.now());
+			newuser.setEndsigntime(newuser.getManagetime().plusDays(15).minusMinutes(1));
+			LocalDateTime endTime = newuser.getManagetime().plusDays(15);
+			LocalDateTime nowTime = LocalDateTime.now();
+			Duration duration = Duration.between(nowTime, endTime);
+			newuser.setLefttime((int) duration.toDays());
+		}
 
-        newuser.setAddtime(LocalDateTime.now());
-        newuser.setModifytime(LocalDateTime.now());
-        newuser.setArea(admin.getArea());
-        newuser.setAddaccount(admin.getId());
-        newuser.setLastsigntime(LocalDateTime.of(1970, 01, 01, 0, 0));
+		newuser.setAddtime(LocalDateTime.now());
+		newuser.setModifytime(LocalDateTime.now());
+		newuser.setArea(admin.getArea());
+		newuser.setAddaccount(admin.getId());
+		newuser.setLastsigntime(LocalDateTime.of(1970, 01, 01, 0, 0));
 
-        userService.add(newuser);
-        return ResponseUtil.ok(newuser);
-    }
+		userService.add(newuser);
+		return ResponseUtil.ok(newuser);
+	}
 
-    @RequiresPermissions("adminapi:user:update")
-    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "编辑")
-    @PostMapping("/update")
-    public Object update(@RequestBody Whuser user) {
+	@RequiresPermissions("adminapi:user:update")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "编辑")
+	@PostMapping("/update")
+	public Object update(@RequestBody Whuser user) {
 
-        Whuser suser = userService.findById(user.getId());
+		Whuser suser = userService.findById(user.getId());
 
-        // 如果设置管理时间不为空
-        if (suser.getAddsource().equals("省疾控") && !StringUtils.isEmpty(suser.getLevel())
-                && suser.getLevel().equals("红色")) {
-            if (user.getManagetime() != null) {
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
-                    // 不一致才修改Lefttimemodify
-                    user.setLefttimemodify(LocalDateTime.now());
-                } else {
-                    user.setLefttimemodify(suser.getLefttimemodify());
-                }
+		Whuser suserByIdCard = userService.findByIdcard(user.getIdcard());
 
-                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
-                LocalDateTime endTime = user.getManagetime().plusDays(15);
-                LocalDateTime nowTime = LocalDateTime.now();
-                Duration duration = Duration.between(nowTime, endTime);
-                user.setLefttime((int) duration.toDays());
-            } else {
-                // 如果管理时间为空，省疾控不用处理
-                user.setManagetime(suser.getManagetime());
-            }
-        } else {
-            if (user.getManagetime() != null) {
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
-                    // 不一致才修改Lefttimemodify
-                    user.setLefttimemodify(LocalDateTime.now());
-                } else {
-                    user.setLefttimemodify(suser.getLefttimemodify());
-                }
-                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
-                LocalDateTime endTime = user.getManagetime().plusDays(15);
-                LocalDateTime nowTime = LocalDateTime.now();
-                Duration duration = Duration.between(nowTime, endTime);
-                user.setLefttime((int) duration.toDays());
-            } else if (user.getArrivedate() != null) {
+		if (null != suser && null != suserByIdCard) {
+			if (suser.getId() != suserByIdCard.getId()) {
+				return ResponseUtil.fail(-2, "该身份证号用户已经存在");
+			}
+		}
 
-                user.setManagetime(user.getArrivedate().plusDays(1));
-                if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
-                    // 不一致才修改Lefttimemodify
-                    user.setLefttimemodify(LocalDateTime.now());
-                } else {
-                    user.setLefttimemodify(suser.getLefttimemodify());
-                }
+		// 如果设置管理时间不为空
+		if (suser.getAddsource().equals("省疾控") && !StringUtils.isEmpty(suser.getLevel())
+				&& suser.getLevel().equals("红色")) {
+			if (user.getManagetime() != null) {
+				if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+					// 不一致才修改Lefttimemodify
+					user.setLefttimemodify(LocalDateTime.now());
+				} else {
+					user.setLefttimemodify(suser.getLefttimemodify());
+				}
 
-                user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
-                LocalDateTime endTime = user.getManagetime().plusDays(15);
-                LocalDateTime nowTime = LocalDateTime.now();
-                Duration duration = Duration.between(nowTime, endTime);
-                user.setLefttime((int) duration.toDays());
-            } else {
-                // 如果管理时间为空
-                user.setLefttimemodify(LocalDateTime.now());
-                user.setEndsigntime(null);
-                user.setLefttime(0);
-            }
-        }
+				user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+				LocalDateTime endTime = user.getManagetime().plusDays(15);
+				LocalDateTime nowTime = LocalDateTime.now();
+				Duration duration = Duration.between(nowTime, endTime);
+				user.setLefttime((int) duration.toDays());
+			} else {
+				// 如果管理时间为空，省疾控不用处理
+				user.setManagetime(suser.getManagetime());
+			}
+		} else {
+			if (user.getManagetime() != null) {
+				if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+					// 不一致才修改Lefttimemodify
+					user.setLefttimemodify(LocalDateTime.now());
+				} else {
+					user.setLefttimemodify(suser.getLefttimemodify());
+				}
+				user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+				LocalDateTime endTime = user.getManagetime().plusDays(15);
+				LocalDateTime nowTime = LocalDateTime.now();
+				Duration duration = Duration.between(nowTime, endTime);
+				user.setLefttime((int) duration.toDays());
+			} else if (user.getArrivedate() != null) {
 
-        // 如果managetime 不为空则 ismanage 设置是
-        if (user.getManagetime() != null) {
-            user.setIsmanage("是");
-        }
+				user.setManagetime(user.getArrivedate().plusDays(1));
+				if (user.getManagetime().compareTo(suser.getManagetime()) != 0) {
+					// 不一致才修改Lefttimemodify
+					user.setLefttimemodify(LocalDateTime.now());
+				} else {
+					user.setLefttimemodify(suser.getLefttimemodify());
+				}
 
-        user.setModifytime(LocalDateTime.now());
+				user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+				LocalDateTime endTime = user.getManagetime().plusDays(15);
+				LocalDateTime nowTime = LocalDateTime.now();
+				Duration duration = Duration.between(nowTime, endTime);
+				user.setLefttime((int) duration.toDays());
+			} else {
+				// 如果管理时间为空
+				user.setLefttimemodify(LocalDateTime.now());
+				user.setEndsigntime(null);
+				user.setLefttime(0);
+			}
+		}
 
-        if (userService.updateByIdWithNull(user) == 0) {
-            return ResponseUtil.updatedDataFailed();
-        }
+		// 如果managetime 不为空则 ismanage 设置是
+		if (user.getManagetime() != null) {
+			user.setIsmanage("是");
+		}
 
-        return ResponseUtil.ok(user);
-    }
+		user.setModifytime(LocalDateTime.now());
 
-    @RequiresPermissions("adminapi:user:upload")
-    @RequiresPermissionsDesc(menu = {"申报管理", "数据导入"}, button = "导入")
-    @GetMapping("/upload")
-    public Object upload(@RequestParam(defaultValue = "") String filename,
-                         @RequestParam(defaultValue = "") String addsource) throws Exception {
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Whuser> users = new ArrayList<Whuser>();
-        if (!StringUtils.isEmpty(filename)) {
-            String rootPath = System.getProperty("user.dir");
-            String filePath = rootPath + "/storage/" + filename;
-            users = ExcelUtil.getList(filePath);
+		if (userService.updateByIdWithNull(user) == 0) {
+			return ResponseUtil.updatedDataFailed();
+		}
 
-            if (users == null) {
-                return ResponseUtil.fail(-2, "请上传正确的表格");
-            }
-        } else {
-            return ResponseUtil.fail(-2, "请上传表格");
-        }
+		return ResponseUtil.ok(user);
+	}
 
-        // 插入用户表
-        int count = 0;
-        int totalCount = users.size();
+	@RequiresPermissions("adminapi:user:upload")
+	@RequiresPermissionsDesc(menu = { "申报管理", "数据导入" }, button = "导入")
+	@GetMapping("/upload")
+	public Object upload(@RequestParam(defaultValue = "") String filename,
+			@RequestParam(defaultValue = "") String addsource) throws Exception {
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+		List<Whuser> users = new ArrayList<Whuser>();
+		if (!StringUtils.isEmpty(filename)) {
+			String rootPath = System.getProperty("user.dir");
+			String filePath = rootPath + "/storage/" + filename;
+			users = ExcelUtil.getList(filePath);
 
-        String failUser = "";
-        for (Whuser user : users) {
-            Whuser suser = null;
-            if (addsource.equals("公安") || addsource.equals("企业复工") || addsource.equals("宁归来")) {
-                suser = userService.findByIdcard(user.getIdcard());
-            } else {
-                suser = userService.findByPhone(user.getPhone());
-            }
-            if (suser == null) {
-                if (user.getHealthinfo() != null) {
-                    if (user.getHealthinfo().indexOf("发热") >= 0) {
-                        user.setIfhot("是");
-                    }
-                    if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
-                        user.setIfkesou("是");
-                    }
-                }
+			if (users == null) {
+				return ResponseUtil.fail(-2, "请上传正确的表格");
+			}
+		} else {
+			return ResponseUtil.fail(-2, "请上传表格");
+		}
 
-                user.setSigncount(0);
-                String strTime = "1970-01-01 00:00:00";
-                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime staTime = LocalDateTime.parse(strTime, df);
-                user.setLastsigntime(staTime);
-                user.setModifytime(LocalDateTime.now());
+		// 插入用户表
+		int count = 0;
+		int totalCount = users.size();
 
-                if (user.getArrivedate() != null) {
-                    user.setManagetime(user.getArrivedate().plusDays(1));
-                    user.setLefttimemodify(LocalDateTime.now());
-                    user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
-                    LocalDateTime endTime = user.getArrivedate().plusDays(15);
-                    LocalDateTime nowTime = LocalDateTime.now();
-                    Duration duration = Duration.between(nowTime, endTime);
-                    user.setLefttime((int) duration.toDays());
-                }
+		String failUser = "";
+		for (Whuser user : users) {
+			Whuser suser = null;
+			if (addsource.equals("公安") || addsource.equals("企业复工") || addsource.equals("宁归来")) {
+				suser = userService.findByIdcard(user.getIdcard());
+			} else {
+				suser = userService.findByPhone(user.getPhone());
+			}
+			if (suser == null) {
+				if (user.getHealthinfo() != null) {
+					if (user.getHealthinfo().indexOf("发热") >= 0) {
+						user.setIfhot("是");
+					}
+					if (user.getHealthinfo().indexOf("咳嗽") >= 0) {
+						user.setIfkesou("是");
+					}
+				}
 
-                user.setArea(admin.getArea());
-                user.setAddsource((addsource));
+				user.setSigncount(0);
+				String strTime = "1970-01-01 00:00:00";
+				DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime staTime = LocalDateTime.parse(strTime, df);
+				user.setLastsigntime(staTime);
+				user.setModifytime(LocalDateTime.now());
 
-                if (!StringUtils.isEmpty(user.getIdcard())
-                        && StringUtils.isEmpty(IdCardUtil.IDCardValidate(user.getIdcard()))) {
+				if (user.getArrivedate() != null) {
+					user.setManagetime(user.getArrivedate().plusDays(1));
+					user.setLefttimemodify(LocalDateTime.now());
+					user.setEndsigntime(user.getArrivedate().plusDays(15).minusMinutes(1));
+					LocalDateTime endTime = user.getArrivedate().plusDays(15);
+					LocalDateTime nowTime = LocalDateTime.now();
+					Duration duration = Duration.between(nowTime, endTime);
+					user.setLefttime((int) duration.toDays());
+				}
 
-                    Map<String, Object> idCardInfo = null;
-                    if (user.getIdcard().length() == 15) {
-                        idCardInfo = IdCardUtil.getCarInfo15W(user.getIdcard());
-                    } else {
-                        idCardInfo = IdCardUtil.getCarInfo(user.getIdcard());
-                    }
-                    user.setAge((int) idCardInfo.get("age"));
-                    user.setSex(idCardInfo.get("sex").toString());
-                }
+				user.setArea(admin.getArea());
+				user.setAddsource((addsource));
 
-                if (!StringUtils.isEmpty(user.getName())) {
-                    userService.add(user);
-                    count++;
-                }
+				if (!StringUtils.isEmpty(user.getIdcard())
+						&& StringUtils.isEmpty(IdCardUtil.IDCardValidate(user.getIdcard()))) {
 
-            } else {
-                // 追加addsouce
-                if (!suser.getAddsource().equals(addsource)) {
-                    suser.setAddsource(suser.getAddsource() + "," + addsource);
-                    userService.updateById(suser);
-                }
-                failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
-            }
-        }
+					Map<String, Object> idCardInfo = null;
+					if (user.getIdcard().length() == 15) {
+						idCardInfo = IdCardUtil.getCarInfo15W(user.getIdcard());
+					} else {
+						idCardInfo = IdCardUtil.getCarInfo(user.getIdcard());
+					}
+					user.setAge((int) idCardInfo.get("age"));
+					user.setSex(idCardInfo.get("sex").toString());
+				}
 
-        logHelper.logAdmin(3, "数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+				if (!StringUtils.isEmpty(user.getName())) {
+					userService.add(user);
+					count++;
+				}
 
-        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
-    }
+			} else {
+				if (!StringUtils.isEmpty(suser.getAddsource())) {
+					String[] addSources = suser.getAddsource().split(",");
+					boolean inArray = false;
+					for (String addSource : addSources) {
+						if (addSource.equals(addsource)) {
+							inArray = true;
+							break;
+						}
+					}
+					if (!inArray) {
+						suser.setAddsource(suser.getAddsource() + "," + addsource);
+						userService.updateById(suser);
+					}
+				} else {
+					suser.setAddsource(addsource);
+					userService.updateById(suser);
+				}
 
-    @RequiresPermissions("adminapi:user:uploadsjk")
-    @RequiresPermissionsDesc(menu = {"申报管理", "数据导入"}, button = "导入省疾控")
-    @GetMapping("/uploadsjk")
-    public Object uploadsjk(@RequestParam(defaultValue = "") String filename,
-                            @RequestParam(defaultValue = "") String addsource) {
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Whuser> users = new ArrayList<Whuser>();
-        if (!StringUtils.isEmpty(filename)) {
-            String rootPath = System.getProperty("user.dir");
-            String filePath = rootPath + "/storage/" + filename;
-            users = ExcelUtil.getSJKList(filePath);
+				failUser += "重复用户：" + suser.getName() + "/" + suser.getIdcard() + "<br/>";
+			}
+		}
 
-            if (users == null) {
-                return ResponseUtil.fail(-2, "请上传正确的表格");
-            }
-        } else {
-            return ResponseUtil.fail(-2, "请上传表格");
-        }
+		logHelper.logAdmin(3, "数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
 
-        // 插入用户表
-        int count = 0;
-        int totalCount = users.size();
-        String failUser = "";
-        for (Whuser user : users) {
+		return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
+	}
 
-            Whuser suser = userService.findByPhone(user.getPhone());
+	@RequiresPermissions("adminapi:user:uploadsjk")
+	@RequiresPermissionsDesc(menu = { "申报管理", "数据导入" }, button = "导入省疾控")
+	@GetMapping("/uploadsjk")
+	public Object uploadsjk(@RequestParam(defaultValue = "") String filename,
+			@RequestParam(defaultValue = "") String addsource) {
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+		List<Whuser> users = new ArrayList<Whuser>();
+		if (!StringUtils.isEmpty(filename)) {
+			String rootPath = System.getProperty("user.dir");
+			String filePath = rootPath + "/storage/" + filename;
+			users = ExcelUtil.getSJKList(filePath);
+
+			if (users == null) {
+				return ResponseUtil.fail(-2, "请上传正确的表格");
+			}
+		} else {
+			return ResponseUtil.fail(-2, "请上传表格");
+		}
+
+		// 插入用户表
+		int count = 0;
+		int totalCount = users.size();
+		String failUser = "";
+		for (Whuser user : users) {
+
+			Whuser suser = userService.findByPhone(user.getPhone());
 //            if (suser == null || !addsource.equals("公安")) {
-            if (suser == null) {
-                user.setIdcard("");
-                user.setSigncount(0);
-                String strTime = "1970-01-01 00:00:00";
-                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime staTime = LocalDateTime.parse(strTime, df);
-                user.setLastsigntime(staTime);
-                user.setModifytime(LocalDateTime.now());
+			if (suser == null) {
+				user.setIdcard("");
+				user.setSigncount(0);
+				String strTime = "1970-01-01 00:00:00";
+				DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime staTime = LocalDateTime.parse(strTime, df);
+				user.setLastsigntime(staTime);
+				user.setModifytime(LocalDateTime.now());
 
-                if (user.getLevel().equals("红色")) { // 只有红色设置管理时间
-                    LocalDateTime today_start = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-                    user.setManagetime(today_start);
-                }
+				if (user.getLevel().equals("红色")) { // 只有红色设置管理时间
+					LocalDateTime today_start = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+					user.setManagetime(today_start);
+				}
 
-                if (user.getManagetime() != null) {
-                    user.setLefttimemodify(LocalDateTime.now());
-                    user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
-                    LocalDateTime endTime = user.getManagetime().plusDays(15);
-                    LocalDateTime nowTime = LocalDateTime.now();
-                    Duration duration = Duration.between(nowTime, endTime);
-                    user.setLefttime((int) duration.toDays());
-                }
+				if (user.getManagetime() != null) {
+					user.setLefttimemodify(LocalDateTime.now());
+					user.setEndsigntime(user.getManagetime().plusDays(15).minusMinutes(1));
+					LocalDateTime endTime = user.getManagetime().plusDays(15);
+					LocalDateTime nowTime = LocalDateTime.now();
+					Duration duration = Duration.between(nowTime, endTime);
+					user.setLefttime((int) duration.toDays());
+				}
 
-                user.setAddsource((addsource));
-                userService.add(user);
-                count++;
-            } else {
-                failUser += "重复用户：" + suser.getName() + "/" + suser.getPhone() + "<br/>";
-            }
-        }
+				user.setAddsource((addsource));
+				userService.add(user);
+				count++;
+			} else {
+				failUser += "重复用户：" + suser.getName() + "/" + suser.getPhone() + "<br/>";
+			}
+		}
 
-        logHelper.logAdmin(3, "数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
+		logHelper.logAdmin(3, "数据导入", true, "总计：" + totalCount + "条,导入成功" + count + "条", filename);
 
-        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
-    }
+		return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
+	}
 
-    @RequiresPermissions("adminapi:user:download")
-    @RequiresPermissionsDesc(menu = {"申报管理", "用户查询"}, button = "导出")
-    @GetMapping("/download")
-    public void download(HttpServletResponse response, String username, String mobile,
-                         @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
-                         @RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order) {
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Whuser> userList = userService.querySelective(admin.getArea(), username, mobile, page, 1000000, sort,
-                order);
-        List<KnowledgeVo> xlslist = new ArrayList<KnowledgeVo>();
+	@RequiresPermissions("adminapi:user:download")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "导出")
+	@GetMapping("/download")
+	public void download(HttpServletResponse response, String username, String mobile,
+			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit,
+			@RequestParam(defaultValue = "addtime") String sort, @RequestParam(defaultValue = "desc") String order) {
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+		List<Whuser> userList = userService.querySelective(admin.getArea(), username, mobile, page, 1000000, sort,
+				order);
+		List<KnowledgeVo> xlslist = new ArrayList<KnowledgeVo>();
 //		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
 //		Date now = new Date();
 
-        for (Whuser m : userList) {
-            KnowledgeVo vo = new KnowledgeVo();
-            vo.setQrnumber(m.getName());
-            vo.setKnname(m.getIdcard());
-            vo.setUrl(m.getPhone().toString());
-            xlslist.add(vo);
-        }
-        response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-        response.setHeader("Content-disposition", "attachment;filename=登记列表.xls");
-        OutputStream ouputStream;
+		for (Whuser m : userList) {
+			KnowledgeVo vo = new KnowledgeVo();
+			vo.setQrnumber(m.getName());
+			vo.setKnname(m.getIdcard());
+			vo.setUrl(m.getPhone().toString());
+			xlslist.add(vo);
+		}
+		response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+		response.setHeader("Content-disposition", "attachment;filename=登记列表.xls");
+		OutputStream ouputStream;
 
-        try {
-            ouputStream = response.getOutputStream();
+		try {
+			ouputStream = response.getOutputStream();
 //            String[] headers = new String[]{"编号", "姓名", "身份证", "手机号", "民族", "性别", "生日", "目前居住地", "是否武汉", "交通方式", "交通班次", "出发地", "目的地", "离开日期", "武汉居住地", "停靠地点", "当前体温", "健康信息", "是否发热", "是否咳嗽", "是否接触发热人员", "是否接触感染人员", "同行人员姓名", "同行人员电话", "登记时间", "登记方式", "所属社区", "GPS定位信息", "微信openid", "登记人员编号"};
-            String[] headers = new String[]{"姓名", "身份证", "手机号",};
+			String[] headers = new String[] { "姓名", "身份证", "手机号", };
 
-            ExcelUtil<KnowledgeVo> util = new ExcelUtil<KnowledgeVo>();
-            util.exportExcel("登记列表", headers, xlslist, ouputStream, "xls");
+			ExcelUtil<KnowledgeVo> util = new ExcelUtil<KnowledgeVo>();
+			util.exportExcel("登记列表", headers, xlslist, ouputStream, "xls");
 
-        } catch (IOException e) {
-            System.out.println("error");
-            e.printStackTrace();
-        }
-    }
+		} catch (IOException e) {
+			System.out.println("error");
+			e.printStackTrace();
+		}
+	}
 
-    @RequiresPermissions("adminapi:user:nostreet")
-    @RequiresPermissionsDesc(menu = {"申报管理", "无街道用户"}, button = "查询")
-    @GetMapping("/nostreet")
-    public void nostreet() {
+	@RequiresPermissions("adminapi:user:nostreet")
+	@RequiresPermissionsDesc(menu = { "申报管理", "无街道用户" }, button = "查询")
+	@GetMapping("/nostreet")
+	public void nostreet() {
 
-    }
+	}
 
-    @RequiresPermissions("adminapi:user:nosign")
-    @RequiresPermissionsDesc(menu = {"申报管理", "今日未申报健康用户"}, button = "查询")
-    @GetMapping("/nosign")
-    public void nosign() {
+	@RequiresPermissions("adminapi:user:nosign")
+	@RequiresPermissionsDesc(menu = { "申报管理", "今日未申报健康用户" }, button = "查询")
+	@GetMapping("/nosign")
+	public void nosign() {
 
-    }
+	}
 
 //    @RequiresPermissions("adminapi:user:uploadnj")
 //    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入")
@@ -478,141 +499,141 @@ public class AdminUserController {
 //        return ResponseUtil.ok("总计：" + totalCount + "条,导入成功" + count + "条" + "<br/>" + failUser);
 //    }
 
-    @RequiresPermissions("adminapi:user:uploadnj")
-    @RequiresPermissionsDesc(menu = {"市申报管理", "每日数据导入"}, button = "导入市申报")
-    @GetMapping("/uploadnj")
-    public Object uploadnj(@RequestParam(defaultValue = "") String filename) {
-        Subject currentUser = SecurityUtils.getSubject();
-        LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
-        List<Ruser> users = new ArrayList<Ruser>();
-        if (!StringUtils.isEmpty(filename)) {
-            String rootPath = System.getProperty("user.dir");
-            String filePath = rootPath + "/storage/" + filename;
-            users = ExcelUtil.getRUserList(filePath);
+	@RequiresPermissions("adminapi:user:uploadnj")
+	@RequiresPermissionsDesc(menu = { "市申报管理", "每日数据导入" }, button = "导入市申报")
+	@GetMapping("/uploadnj")
+	public Object uploadnj(@RequestParam(defaultValue = "") String filename) {
+		Subject currentUser = SecurityUtils.getSubject();
+		LitemallAdmin admin = (LitemallAdmin) currentUser.getPrincipal();
+		List<Ruser> users = new ArrayList<Ruser>();
+		if (!StringUtils.isEmpty(filename)) {
+			String rootPath = System.getProperty("user.dir");
+			String filePath = rootPath + "/storage/" + filename;
+			users = ExcelUtil.getRUserList(filePath);
 
-            if (users == null) {
-                return ResponseUtil.fail(-2, "请上传正确的表格");
-            }
-        } else {
-            return ResponseUtil.fail(-2, "请上传表格");
-        }
+			if (users == null) {
+				return ResponseUtil.fail(-2, "请上传正确的表格");
+			}
+		} else {
+			return ResponseUtil.fail(-2, "请上传表格");
+		}
 
-        // 插入用户表
-        int count = 0;
-        int totalCount = users.size();
-        String failUser = "";
-        String op = "导入";
-        boolean doOp = true;
+		// 插入用户表
+		int count = 0;
+		int totalCount = users.size();
+		String failUser = "";
+		String op = "导入";
+		boolean doOp = true;
 
-        for (Ruser user : users) {
+		for (Ruser user : users) {
 
-            if (user.getId() != null) {
-                // 进行规则校验
-                if (!"常住".equals(user.getA13()) && !"暂住".equals(user.getA13())) {
-                    failUser += "【人员类别】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+			if (user.getId() != null) {
+				// 进行规则校验
+				if (!"常住".equals(user.getA13()) && !"暂住".equals(user.getA13())) {
+					failUser += "【人员类别】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                if (!"往来地区".equals(user.getA15()) && !"病例同乘".equals(user.getA15()) && !"其他1".equals(user.getA15())
-                        && !"其他2".equals(user.getA15())) {
-                    failUser += "【情况分类】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				if (!"往来地区".equals(user.getA15()) && !"病例同乘".equals(user.getA15()) && !"其他1".equals(user.getA15())
+						&& !"其他2".equals(user.getA15())) {
+					failUser += "【情况分类】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                List<String> removeStrList = new ArrayList<>();
-                removeStrList.add("新增隔离");
-                removeStrList.add("实际居住地不在本辖区、但在本市其他辖区");
-                removeStrList.add("查无此人");
-                removeStrList.add("已离开南京");
-                removeStrList.add("尚在核查");
-                removeStrList.add("已经实施居家隔离，非当日新增");
-                removeStrList.add("已经解除隔离");
-                removeStrList.add("居住在本市且不需要居家隔离");
-                removeStrList.add("其他");
+				List<String> removeStrList = new ArrayList<>();
+				removeStrList.add("新增隔离");
+				removeStrList.add("实际居住地不在本辖区、但在本市其他辖区");
+				removeStrList.add("查无此人");
+				removeStrList.add("已离开南京");
+				removeStrList.add("尚在核查");
+				removeStrList.add("已经实施居家隔离，非当日新增");
+				removeStrList.add("已经解除隔离");
+				removeStrList.add("居住在本市且不需要居家隔离");
+				removeStrList.add("其他");
 
-                if (!removeStrList.contains(user.getA19())) {
-                    failUser += "【排除类型】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				if (!removeStrList.contains(user.getA19())) {
+					failUser += "【排除类型】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && "移交中".equals(user.getA18())) {
-                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
-                if (!"尚在核查".equals(user.getA19()) && "核查中".equals(user.getA18())) {
-                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
-                if (("实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) || "尚在核查".equals(user.getA19()))
-                        && "完成".equals(user.getA18())) {
-                    failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && "移交中".equals(user.getA18())) {
+					failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
+				if (!"尚在核查".equals(user.getA19()) && "核查中".equals(user.getA18())) {
+					failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
+				if (("实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) || "尚在核查".equals(user.getA19()))
+						&& "完成".equals(user.getA18())) {
+					failUser += "【核查结果】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && !StringUtils.isEmpty(user.getA21())) {
-                    failUser += "【实际居住地址】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				if (!"实际居住地不在本辖区、但在本市其他辖区".equals(user.getA19()) && !StringUtils.isEmpty(user.getA21())) {
+					failUser += "【实际居住地址】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                // 实际居住地
-                if (user.getA22().equals(user.getA1())) {
-                    failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				// 实际居住地
+				if (user.getA22().equals(user.getA1())) {
+					failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                List<String> areaList = new ArrayList<>();
-                areaList.add("江宁区");
-                areaList.add("浦口区");
-                areaList.add("高淳区");
-                areaList.add("建邺区");
-                areaList.add("玄武区");
-                areaList.add("六合区");
-                areaList.add("溧水区");
-                areaList.add("鼓楼区");
-                areaList.add("栖霞区");
-                areaList.add("秦淮区");
-                areaList.add("雨花台区");
-                areaList.add("江北新区");
+				List<String> areaList = new ArrayList<>();
+				areaList.add("江宁区");
+				areaList.add("浦口区");
+				areaList.add("高淳区");
+				areaList.add("建邺区");
+				areaList.add("玄武区");
+				areaList.add("六合区");
+				areaList.add("溧水区");
+				areaList.add("鼓楼区");
+				areaList.add("栖霞区");
+				areaList.add("秦淮区");
+				areaList.add("雨花台区");
+				areaList.add("江北新区");
 
-                if (!areaList.contains(user.getA22())) {
-                    failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                    doOp = false;
-                }
+				if (!areaList.contains(user.getA22())) {
+					failUser += "【实际居住地（区）】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+					doOp = false;
+				}
 
-                if ("已经实施居家隔离，非当日新增".equals(user.getA19()) || "已经解除隔离".equals(user.getA19())) {
-                    if (StringUtils.isEmpty(user.getA26())) {
-                        failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                        doOp = false;
-                    }
-                }
+				if ("已经实施居家隔离，非当日新增".equals(user.getA19()) || "已经解除隔离".equals(user.getA19())) {
+					if (StringUtils.isEmpty(user.getA26())) {
+						failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+						doOp = false;
+					}
+				}
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("");
-                if ("新增隔离".equals(user.getA19())) {
-                    if (!dateFormat.format(new Date()).equals(user.getA26())) {
-                        failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
-                        doOp = false;
-                    }
-                }
-            }
+				SimpleDateFormat dateFormat = new SimpleDateFormat("");
+				if ("新增隔离".equals(user.getA19())) {
+					if (!dateFormat.format(new Date()).equals(user.getA26())) {
+						failUser += "【开始隔离时间】不符合要求：" + user.getA2() + "/" + user.getA3() + "/" + user.getA6() + "</br>";
+						doOp = false;
+					}
+				}
+			}
 
-            if (user.getId() == null) {
-                op = "导入";
-                rUserService.add(user);
-                count++;
-            } else {
-                op = "更新";
-                if (doOp) {
+			if (user.getId() == null) {
+				op = "导入";
+				rUserService.add(user);
+				count++;
+			} else {
+				op = "更新";
+				if (doOp) {
 //                if (true) {
-                    rUserService.updateById(user);
-                    count++;
-                } else {
-                    continue;
-                }
-            }
-        }
+					rUserService.updateById(user);
+					count++;
+				} else {
+					continue;
+				}
+			}
+		}
 
-        logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条," + op + "成功" + count + "条", filename);
+		logHelper.logAdmin(3, "每日数据导入", true, "总计：" + totalCount + "条," + op + "成功" + count + "条", filename);
 
-        return ResponseUtil.ok("总计：" + totalCount + "条," + op + "成功" + count + "条" + "<br/>" + failUser);
-    }
+		return ResponseUtil.ok("总计：" + totalCount + "条," + op + "成功" + count + "条" + "<br/>" + failUser);
+	}
 }
