@@ -33,7 +33,7 @@
         		</foreach>
         		</if>
 				AND ismanage = '是' 
-				AND lefttime <![CDATA[ > ]]> 0 UNION ALL
+				AND lefttime <![CDATA[ > ]]> 0 and (ifsafe is null or ifsafe = '居家观察') UNION ALL
 			SELECT
 				id 
 			FROM
