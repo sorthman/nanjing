@@ -1069,7 +1069,7 @@ public class ExcelUtil<T> {
 				}
 
 				// 身份证号所在列
-				Cell cell = row.getCell(3);
+				Cell cell = row.getCell(4);
 				try {
 					idCards.add(cell.toString());
 				} catch (Exception e) {
