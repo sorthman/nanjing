@@ -362,12 +362,18 @@
         fixed="right"
         align="center"
         label="操作"
-        width="250"
+        width="300"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handleDetail(scope.row)">详情查看</el-button>
           <el-button size="small" type="primary" @click="handleUpdate(scope.row)">编辑信息</el-button>
+          <el-button
+            v-permission="['POST /adminapi/user/delete']"
+            type="danger"
+            size="mini"
+            @click="handleDelete(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -586,7 +592,8 @@ import {
   download,
   listSign,
   updateUser,
-  createUser
+  createUser,
+  deleteUser
 } from "@/api/user";
 import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { formatDate } from "@/utils/time.js";
@@ -651,6 +658,7 @@ const zhuantaiMap = {
   居家观察: "居家观察",
   集中观察: "集中观察",
   确诊: "确诊",
+  核酸检测阴性解除隔离:"核酸检测阴性解除隔离",
   无: "无"
 };
 
@@ -945,6 +953,36 @@ export default {
             });
         }
       });
+    },
+    handleDelete(row) {
+
+      this.$confirm('此操作删除该用户,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let query = {
+          uid: row.id,
+          tag: "whuser",
+          remark: "后台删除"
+        }
+        deleteUser(query)
+        .then(response => {
+          this.$notify.success({
+            title: "成功",
+            message: "删除成功"
+          });
+          this.handleFilter()
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: "失败",
+            message: response.data.msg
+          });
+        });
+      })
+
+      
     },
     handleDownload() {
       this.downloadLoading = true;

@@ -214,6 +214,16 @@ export const asyncRouterMap = [
         }
       },
       {
+        path: 'hsjc',
+        component: () => import('@/views/user/hsjc'),
+        name: 'hsjc',
+        meta: {
+          perms: ['GET /adminapi/user/uploadhsjc'],
+          title: '核酸检测解除隔离',
+          noCache: true
+        }
+      },
+      {
         path: 'user',
         component: () => import('@/views/user/user'),
         name: 'user',

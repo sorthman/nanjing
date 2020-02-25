@@ -32,6 +32,14 @@ export function createUser(data) {
   })
 }
 
+export function deleteUser(query) {
+  return request({
+    url: '/user/delete',
+    method: 'get',
+    params: query
+  })
+}
+
 
 export function importUser(query) {
   return request({
@@ -52,6 +60,14 @@ export function importSJKUser(query) {
 export function importNjUser(query) {
   return request({
     url: '/user/uploadnj',
+    method: 'get',
+    params: query
+  })
+}
+
+export function importHsjc(query) {
+  return request({
+    url: '/user/uploadhsjc',
     method: 'get',
     params: query
   })

@@ -65,7 +65,7 @@
             <el-table-column
               prop="s8"
               width="70"
-              label="超过14天观察期解除管理累计人数"
+              label="解除关注累计人数"
             />
             <el-table-column prop="s25" width="70" label="待确认" />
             <el-table-column prop="followSum" width="70" label="查否数" />

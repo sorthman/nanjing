@@ -32,4 +32,11 @@ export function listUserSchool(query) {
   })
 }
 
+export function deleteUser(query) {
+  return request({
+    url: '/user/delete',
+    method: 'get',
+    params: query
+  })
+}
 
