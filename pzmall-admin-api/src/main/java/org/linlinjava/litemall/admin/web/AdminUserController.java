@@ -636,4 +636,48 @@ public class AdminUserController {
 
 		return ResponseUtil.ok("总计：" + totalCount + "条," + op + "成功" + count + "条" + "<br/>" + failUser);
 	}
+
+	@RequiresPermissions("adminapi:user:delete")
+	@RequiresPermissionsDesc(menu = { "申报管理", "用户查询" }, button = "删除用户")
+	@PostMapping("/delete")
+	public Object delete(Integer uid, String remark, String tag) {
+		if(!StringUtils.isEmpty(tag)) {
+			if("outsideuser".equals(tag)) {
+				userService.deleteOutSideUser(uid, remark);
+			}else if("whuser".equals(tag)) {
+				userService.deleteUser(uid, remark);
+			}
+		}else {
+			return ResponseUtil.fail(-2, "tag字段必传");
+		}
+		
+		return ResponseUtil.ok();
+	}
+
+	@RequiresPermissions("adminapi:user:upload")
+	@RequiresPermissionsDesc(menu = { "申报管理", "数据导入" }, button = "核酸检测解除隔离")
+	@GetMapping("/uploadHsjc")
+	public Object uploadHsjc(@RequestParam(defaultValue = "") String filename) throws Exception {
+		List<String> idCards = new ArrayList<String>();
+		if (!StringUtils.isEmpty(filename)) {
+			String rootPath = System.getProperty("user.dir");
+			String filePath = rootPath + "/storage/" + filename;
+			idCards = ExcelUtil.getIdCards(filePath);
+
+			if (idCards == null) {
+				return ResponseUtil.fail(-2, "请上传正确的表格");
+			}
+		} else {
+			return ResponseUtil.fail(-2, "请上传表格");
+		}
+
+		logger.info("文件有效记录数=" + idCards.size());
+
+		for (String idCard : idCards) {
+			userService.updateUserIsSafe(idCard);
+		}
+
+		return ResponseUtil.ok();
+	}
+
 }

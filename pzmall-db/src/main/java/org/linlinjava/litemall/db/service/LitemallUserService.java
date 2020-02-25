@@ -534,4 +534,32 @@ public class LitemallUserService {
 	public int updateByIdWithNull(Whuser user) {
 		return userMapper.updateByPrimaryKeySelectiveWithNull(user);
 	}
+	
+	public void deleteOutSideUser(Integer uid, String remark) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("remark", remark);
+		
+		// 1、备份被删除数据到outsideuser_history_delete 
+		exWhUserMapper.saveOutsideDeleteRecord(map);
+		// 2、删除数据
+		exWhUserMapper.deleteOutsideRecord(map);
+
+	}
+
+	public void deleteUser(Integer uid, String remark) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("uid", uid);
+		map.put("remark", remark);
+		
+		// 1、备份被删除数据到whuser_history_delete
+		exWhUserMapper.saveDeleteRecord(map);
+		// 2、删除数据
+		exWhUserMapper.deleteUserRecord(map);
+
+	}
+	
+	public void updateUserIsSafe(String idCard) {
+		exWhUserMapper.updateUserIsSafe(idCard);
+	}
 }

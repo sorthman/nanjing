@@ -53,4 +53,50 @@
 			)
     </select>
     
+    <update id="updateUserIsSafe" parameterType="java.lang.String">
+    	UPDATE whuser 
+		SET ifsafe = "核酸检测阴性解除隔离",
+		modifytime = NOW( ) 
+		WHERE
+			idcard = #{idCard}
+    </update>
+    
+    <insert id="saveDeleteRecord" parameterType="java.util.HashMap">
+    	INSERT INTO whuser_history_delete SELECT
+		*,
+		NOW( ),
+		#{remark}
+		FROM
+			whuser 
+		WHERE
+			id = #{uid}
+    </insert>
+    
+    <insert id="saveOutsideDeleteRecord" parameterType="java.util.HashMap">
+    	INSERT INTO outsideuser_history_delete SELECT
+		*,
+		NOW(),
+		#{remark}
+		FROM
+			outsideuser 
+		WHERE
+			id = #{uid}
+    </insert>
+    
+    <delete id="deleteUserRecord" parameterType="java.util.HashMap">
+    	DELETE 
+		FROM
+			whuser 
+		WHERE
+			id =#{uid}
+    </delete>
+    
+    <delete id="deleteOutsideRecord" parameterType="java.util.HashMap">
+    	DELETE 
+		FROM
+			outsideuser 
+		WHERE
+			id =#{uid}
+    </delete>
+    
 </mapper>
